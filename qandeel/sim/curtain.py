@@ -20,9 +20,12 @@ from dataclasses import dataclass
 
 import numpy as np
 
+from .forcing import load_site
+
 G = 9.81
-GAP_W = 300.0  # m, assumed gap width
-DEPTH = 8.0  # m, assumed water depth at the gap
+_SITE = load_site()
+GAP_W = float(_SITE["gap_width_m"])  # m, from site.json (measure on Google Earth)
+DEPTH = float(_SITE["gap_depth_m"])  # m, from site.json
 CURTAIN_Y = 5.0  # m seaward of the gap line
 
 
@@ -92,14 +95,19 @@ def run_hold(approach_speed=0.15, airflow=3.0, hours=3.0, n=500, swim_min=0.02,
     return HoldResult(approach_speed, airflow, n, entered, pos.copy(), ~alive, start)
 
 
-def hold_grid(speeds=(0.05, 0.10, 0.15, 0.20, 0.30, 0.40), airflows=(0.0, 1.5, 3.0, 4.5),
-              n=400, hours=3.0, seed=0):
-    """Share of jellyfish held outside the gap for each approach speed and airflow."""
+def hold_grid(speeds=(0.05, 0.10, 0.15, 0.20, 0.25, 0.30, 0.40), airflows=(0.0, 1.5, 3.0, 4.5),
+              swims=(0.10, 0.20), n=400, hours=3.0, seed=0):
+    """Share held outside the gap by approach speed, airflow and top swim speed.
+
+    swims: 0.10 m/s matches field data for >14 cm medusae; 0.20 m/s tests faster
+    30-45 cm adults, whose speed has never been measured.
+    """
     rows = []
-    for q in airflows:
-        for s in speeds:
-            res = run_hold(s, q, hours=hours, n=n, seed=seed)
-            rows.append({"airflow_l_s_m": q, "approach_m_s": s,
-                         "surface_current_m_s": round(bulson_surface_current(q), 3) if q else 0.0,
-                         "held_share": round(res.held_share, 3)})
+    for sw in swims:
+        for q in airflows:
+            for s in speeds:
+                res = run_hold(s, q, hours=hours, n=n, seed=seed, swim_max=sw)
+                rows.append({"swim_max_m_s": sw, "airflow_l_s_m": q, "approach_m_s": s,
+                             "surface_current_m_s": round(bulson_surface_current(q), 3) if q else 0.0,
+                             "held_share": round(res.held_share, 3)})
     return rows
