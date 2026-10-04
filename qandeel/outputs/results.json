@@ -1,0 +1,480 @@
+{
+  "conditions": {
+    "tide_amp": 0.3,
+    "tide_phase_h": 0.0,
+    "residual_u": 0.08,
+    "residual_v": 0.0,
+    "wind_speed": 6.0,
+    "wind_from_deg": 315.0
+  },
+  "alerts": [
+    {
+      "label": "Swarm 28 km W-NW",
+      "distance_km": 28,
+      "bearing_deg": 285,
+      "p_arrive": 0.86,
+      "arrival_p10_h": 24.8,
+      "arrival_p50_h": 30.3,
+      "arrival_p90_h": 53.5,
+      "switch_on_h": 21.8,
+      "section": "A"
+    },
+    {
+      "label": "Swarm 28 km N",
+      "distance_km": 28,
+      "bearing_deg": 0,
+      "p_arrive": 0.0,
+      "arrival_p10_h": null,
+      "arrival_p50_h": null,
+      "arrival_p90_h": null,
+      "switch_on_h": null,
+      "section": null
+    }
+  ],
+  "curtain_hold": [
+    {
+      "airflow_l_s_m": 0.0,
+      "approach_m_s": 0.05,
+      "surface_current_m_s": 0.0,
+      "held_share": 0.63
+    },
+    {
+      "airflow_l_s_m": 0.0,
+      "approach_m_s": 0.1,
+      "surface_current_m_s": 0.0,
+      "held_share": 0.005
+    },
+    {
+      "airflow_l_s_m": 0.0,
+      "approach_m_s": 0.15,
+      "surface_current_m_s": 0.0,
+      "held_share": 0.0
+    },
+    {
+      "airflow_l_s_m": 0.0,
+      "approach_m_s": 0.2,
+      "surface_current_m_s": 0.0,
+      "held_share": 0.0
+    },
+    {
+      "airflow_l_s_m": 0.0,
+      "approach_m_s": 0.3,
+      "surface_current_m_s": 0.0,
+      "held_share": 0.0
+    },
+    {
+      "airflow_l_s_m": 0.0,
+      "approach_m_s": 0.4,
+      "surface_current_m_s": 0.0,
+      "held_share": 0.0
+    },
+    {
+      "airflow_l_s_m": 1.5,
+      "approach_m_s": 0.05,
+      "surface_current_m_s": 0.358,
+      "held_share": 1.0
+    },
+    {
+      "airflow_l_s_m": 1.5,
+      "approach_m_s": 0.1,
+      "surface_current_m_s": 0.358,
+      "held_share": 0.995
+    },
+    {
+      "airflow_l_s_m": 1.5,
+      "approach_m_s": 0.15,
+      "surface_current_m_s": 0.358,
+      "held_share": 1.0
+    },
+    {
+      "airflow_l_s_m": 1.5,
+      "approach_m_s": 0.2,
+      "surface_current_m_s": 0.358,
+      "held_share": 0.92
+    },
+    {
+      "airflow_l_s_m": 1.5,
+      "approach_m_s": 0.3,
+      "surface_current_m_s": 0.358,
+      "held_share": 0.0
+    },
+    {
+      "airflow_l_s_m": 1.5,
+      "approach_m_s": 0.4,
+      "surface_current_m_s": 0.358,
+      "held_share": 0.0
+    },
+    {
+      "airflow_l_s_m": 3.0,
+      "approach_m_s": 0.05,
+      "surface_current_m_s": 0.451,
+      "held_share": 1.0
+    },
+    {
+      "airflow_l_s_m": 3.0,
+      "approach_m_s": 0.1,
+      "surface_current_m_s": 0.451,
+      "held_share": 0.998
+    },
+    {
+      "airflow_l_s_m": 3.0,
+      "approach_m_s": 0.15,
+      "surface_current_m_s": 0.451,
+      "held_share": 1.0
+    },
+    {
+      "airflow_l_s_m": 3.0,
+      "approach_m_s": 0.2,
+      "surface_current_m_s": 0.451,
+      "held_share": 1.0
+    },
+    {
+      "airflow_l_s_m": 3.0,
+      "approach_m_s": 0.3,
+      "surface_current_m_s": 0.451,
+      "held_share": 0.643
+    },
+    {
+      "airflow_l_s_m": 3.0,
+      "approach_m_s": 0.4,
+      "surface_current_m_s": 0.451,
+      "held_share": 0.0
+    },
+    {
+      "airflow_l_s_m": 4.5,
+      "approach_m_s": 0.05,
+      "surface_current_m_s": 0.516,
+      "held_share": 1.0
+    },
+    {
+      "airflow_l_s_m": 4.5,
+      "approach_m_s": 0.1,
+      "surface_current_m_s": 0.516,
+      "held_share": 0.998
+    },
+    {
+      "airflow_l_s_m": 4.5,
+      "approach_m_s": 0.15,
+      "surface_current_m_s": 0.516,
+      "held_share": 1.0
+    },
+    {
+      "airflow_l_s_m": 4.5,
+      "approach_m_s": 0.2,
+      "surface_current_m_s": 0.516,
+      "held_share": 1.0
+    },
+    {
+      "airflow_l_s_m": 4.5,
+      "approach_m_s": 0.3,
+      "surface_current_m_s": 0.516,
+      "held_share": 0.99
+    },
+    {
+      "airflow_l_s_m": 4.5,
+      "approach_m_s": 0.4,
+      "surface_current_m_s": 0.516,
+      "held_share": 0.03
+    }
+  ],
+  "release_options": [
+    {
+      "distance_km": 10,
+      "bearing_deg": 60,
+      "p_return": 0.0,
+      "p_beach": 0.975,
+      "p_beach_near": 0.0,
+      "tow_hours": 9.25925925925926,
+      "score": 0.0
+    },
+    {
+      "distance_km": 15,
+      "bearing_deg": 30,
+      "p_return": 0.0,
+      "p_beach": 0.9083333333333333,
+      "p_beach_near": 0.0,
+      "tow_hours": 13.88888888888889,
+      "score": 0.0
+    },
+    {
+      "distance_km": 15,
+      "bearing_deg": 45,
+      "p_return": 0.0,
+      "p_beach": 0.9166666666666666,
+      "p_beach_near": 0.0,
+      "tow_hours": 13.88888888888889,
+      "score": 0.0
+    },
+    {
+      "distance_km": 15,
+      "bearing_deg": 60,
+      "p_return": 0.0,
+      "p_beach": 0.95,
+      "p_beach_near": 0.0,
+      "tow_hours": 13.88888888888889,
+      "score": 0.0
+    },
+    {
+      "distance_km": 15,
+      "bearing_deg": 75,
+      "p_return": 0.0,
+      "p_beach": 0.9416666666666667,
+      "p_beach_near": 0.0,
+      "tow_hours": 13.88888888888889,
+      "score": 0.0
+    },
+    {
+      "distance_km": 10,
+      "bearing_deg": 45,
+      "p_return": 0.0,
+      "p_beach": 0.95,
+      "p_beach_near": 0.008333333333333333,
+      "tow_hours": 9.25925925925926,
+      "score": 0.004
+    },
+    {
+      "distance_km": 15,
+      "bearing_deg": 15,
+      "p_return": 0.0,
+      "p_beach": 0.8333333333333334,
+      "p_beach_near": 0.016666666666666666,
+      "tow_hours": 13.88888888888889,
+      "score": 0.008
+    },
+    {
+      "distance_km": 10,
+      "bearing_deg": 30,
+      "p_return": 0.0,
+      "p_beach": 0.9166666666666666,
+      "p_beach_near": 0.05,
+      "tow_hours": 9.25925925925926,
+      "score": 0.025
+    },
+    {
+      "distance_km": 15,
+      "bearing_deg": 0,
+      "p_return": 0.016666666666666666,
+      "p_beach": 0.8083333333333333,
+      "p_beach_near": 0.025,
+      "tow_hours": 13.88888888888889,
+      "score": 0.029
+    },
+    {
+      "distance_km": 10,
+      "bearing_deg": 15,
+      "p_return": 0.0,
+      "p_beach": 0.925,
+      "p_beach_near": 0.08333333333333333,
+      "tow_hours": 9.25925925925926,
+      "score": 0.042
+    },
+    {
+      "distance_km": 6,
+      "bearing_deg": 45,
+      "p_return": 0.0,
+      "p_beach": 0.9666666666666667,
+      "p_beach_near": 0.10833333333333334,
+      "tow_hours": 5.555555555555555,
+      "score": 0.054
+    },
+    {
+      "distance_km": 6,
+      "bearing_deg": 60,
+      "p_return": 0.0,
+      "p_beach": 0.975,
+      "p_beach_near": 0.14166666666666666,
+      "tow_hours": 5.555555555555555,
+      "score": 0.071
+    },
+    {
+      "distance_km": 6,
+      "bearing_deg": 30,
+      "p_return": 0.0,
+      "p_beach": 0.9333333333333333,
+      "p_beach_near": 0.15,
+      "tow_hours": 5.555555555555555,
+      "score": 0.075
+    },
+    {
+      "distance_km": 10,
+      "bearing_deg": 0,
+      "p_return": 0.0,
+      "p_beach": 0.8916666666666667,
+      "p_beach_near": 0.15833333333333333,
+      "tow_hours": 9.25925925925926,
+      "score": 0.079
+    },
+    {
+      "distance_km": 15,
+      "bearing_deg": 345,
+      "p_return": 0.03333333333333333,
+      "p_beach": 0.8166666666666667,
+      "p_beach_near": 0.15,
+      "tow_hours": 13.88888888888889,
+      "score": 0.108
+    },
+    {
+      "distance_km": 6,
+      "bearing_deg": 15,
+      "p_return": 0.0,
+      "p_beach": 0.9416666666666667,
+      "p_beach_near": 0.225,
+      "tow_hours": 5.555555555555555,
+      "score": 0.112
+    },
+    {
+      "distance_km": 10,
+      "bearing_deg": 345,
+      "p_return": 0.025,
+      "p_beach": 0.9,
+      "p_beach_near": 0.2833333333333333,
+      "tow_hours": 9.25925925925926,
+      "score": 0.167
+    },
+    {
+      "distance_km": 6,
+      "bearing_deg": 0,
+      "p_return": 0.008333333333333333,
+      "p_beach": 0.95,
+      "p_beach_near": 0.44166666666666665,
+      "tow_hours": 5.555555555555555,
+      "score": 0.229
+    },
+    {
+      "distance_km": 15,
+      "bearing_deg": 330,
+      "p_return": 0.10833333333333334,
+      "p_beach": 0.8,
+      "p_beach_near": 0.24166666666666667,
+      "tow_hours": 13.88888888888889,
+      "score": 0.229
+    },
+    {
+      "distance_km": 6,
+      "bearing_deg": 345,
+      "p_return": 0.058333333333333334,
+      "p_beach": 0.8916666666666667,
+      "p_beach_near": 0.4166666666666667,
+      "tow_hours": 5.555555555555555,
+      "score": 0.267
+    },
+    {
+      "distance_km": 10,
+      "bearing_deg": 330,
+      "p_return": 0.2,
+      "p_beach": 0.7333333333333333,
+      "p_beach_near": 0.2833333333333333,
+      "tow_hours": 9.25925925925926,
+      "score": 0.342
+    },
+    {
+      "distance_km": 6,
+      "bearing_deg": 330,
+      "p_return": 0.14166666666666666,
+      "p_beach": 0.8333333333333334,
+      "p_beach_near": 0.5333333333333333,
+      "tow_hours": 5.555555555555555,
+      "score": 0.408
+    },
+    {
+      "distance_km": 15,
+      "bearing_deg": 315,
+      "p_return": 0.3416666666666667,
+      "p_beach": 0.55,
+      "p_beach_near": 0.25833333333333336,
+      "tow_hours": 13.88888888888889,
+      "score": 0.471
+    },
+    {
+      "distance_km": 6,
+      "bearing_deg": 315,
+      "p_return": 0.30833333333333335,
+      "p_beach": 0.65,
+      "p_beach_near": 0.4666666666666667,
+      "tow_hours": 5.555555555555555,
+      "score": 0.542
+    },
+    {
+      "distance_km": 10,
+      "bearing_deg": 315,
+      "p_return": 0.45,
+      "p_beach": 0.48333333333333334,
+      "p_beach_near": 0.23333333333333334,
+      "tow_hours": 9.25925925925926,
+      "score": 0.567
+    },
+    {
+      "distance_km": 15,
+      "bearing_deg": 300,
+      "p_return": 0.6666666666666666,
+      "p_beach": 0.25,
+      "p_beach_near": 0.075,
+      "tow_hours": 13.88888888888889,
+      "score": 0.704
+    },
+    {
+      "distance_km": 10,
+      "bearing_deg": 300,
+      "p_return": 0.65,
+      "p_beach": 0.3333333333333333,
+      "p_beach_near": 0.14166666666666666,
+      "tow_hours": 9.25925925925926,
+      "score": 0.721
+    },
+    {
+      "distance_km": 6,
+      "bearing_deg": 300,
+      "p_return": 0.7916666666666666,
+      "p_beach": 0.18333333333333332,
+      "p_beach_near": 0.10833333333333334,
+      "tow_hours": 5.555555555555555,
+      "score": 0.846
+    },
+    {
+      "distance_km": 15,
+      "bearing_deg": 285,
+      "p_return": 0.9333333333333333,
+      "p_beach": 0.03333333333333333,
+      "p_beach_near": 0.008333333333333333,
+      "tow_hours": 13.88888888888889,
+      "score": 0.938
+    }
+  ],
+  "compressor": {
+    "curtain_m": 300.0,
+    "airflow_l_s_m": 3.0,
+    "air_m3_s": 0.9,
+    "air_m3_min": 54.0,
+    "discharge_bar_abs": 2.32,
+    "power_kw": 126.0,
+    "event_hours": 44,
+    "energy_mwh_per_event": 5.53,
+    "energy_cost_usd_per_event": 553.0
+  },
+  "boom": {
+    "swept_m3_s": 9.0,
+    "retention": 0.8,
+    "mass_kg": 2.0,
+    "rows": [
+      {
+        "density_per_m3": 0.1,
+        "jellyfish_per_h": 2600.0,
+        "tonnes_per_h": 5.2
+      },
+      {
+        "density_per_m3": 0.5,
+        "jellyfish_per_h": 13000.0,
+        "tonnes_per_h": 25.9
+      },
+      {
+        "density_per_m3": 1.0,
+        "jellyfish_per_h": 25900.0,
+        "tonnes_per_h": 51.8
+      }
+    ]
+  },
+  "mass_kg": {
+    "30 cm": 0.99,
+    "45 cm": 3.04
+  }
+}
