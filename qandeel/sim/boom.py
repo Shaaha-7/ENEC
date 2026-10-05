@@ -17,6 +17,12 @@ the skirt while held at the apex.
 
 DOWNFLOW_FRACTION is not known for jellyfish: it is a key quantity for the tank
 test. Results are shown for two values.
+
+Design option, closed-bottom retention bag: a soft fabric pocket hung at the
+apex (no mesh, so nothing tangles), BAG_DEPTH_M deep with a floor. Water still
+leaks through the fabric, so the apex downflow is cut to BAG_LEAK of its open
+value, and a jellyfish only escapes by going below the bag floor. Both numbers
+are design hypotheses for the tank test, not measurements.
 """
 from dataclasses import dataclass
 
@@ -27,6 +33,8 @@ APEX_ZONE_M = 3.0
 DOWNFLOW_FRACTION = 0.5
 DEPTH_MEAN_M = 0.35
 DEPTH_KEEPING = 0.7
+BAG_DEPTH_M = 3.0
+BAG_LEAK = 0.2
 
 
 @dataclass
@@ -36,10 +44,11 @@ class BoomResult:
     swim_max: float
     downflow_fraction: float
     retained_share: float
+    bag: bool = False
 
 
 def run_boom(tow_speed=0.3, skirt_m=1.5, swim_max=0.10, downflow_fraction=DOWNFLOW_FRACTION, minutes=60,
-             n=600, seed=0, dt=1.0) -> BoomResult:
+             n=600, seed=0, dt=1.0, bag=False) -> BoomResult:
     rng = np.random.default_rng(seed)
     x = rng.uniform(0, 5, n)
     z = np.minimum(rng.exponential(DEPTH_MEAN_M, n), 6.0)  # depth, m (positive down)
@@ -56,16 +65,18 @@ def run_boom(tow_speed=0.3, skirt_m=1.5, swim_max=0.10, downflow_fraction=DOWNFL
         keep = -np.tanh((z - DEPTH_MEAN_M) / 0.5)  # swim up when too deep
         w = s * ((1 - DEPTH_KEEPING) * np.sin(th) + DEPTH_KEEPING * keep)  # + = downward
         apex_frac = np.clip((x - (POCKET_M - APEX_ZONE_M)) / APEX_ZONE_M, 0, 1)
-        w = w + downflow_fraction * tow_speed * apex_frac
+        k = downflow_fraction * (BAG_LEAK if bag else 1.0)
+        w = w + k * tow_speed * apex_frac
         x = np.where(live, np.clip(x + u * dt, 0, POCKET_M), x)
         z = np.where(live, np.maximum(z + w * dt + rng.normal(0, mix_sd, n), 0.0), z)
-        out = live & (x >= POCKET_M - 0.5) & (z > skirt_m)
+        floor = BAG_DEPTH_M if bag else skirt_m
+        out = live & (x >= POCKET_M - 0.5) & (z > floor)
         escaped |= out
-    return BoomResult(tow_speed, skirt_m, swim_max, downflow_fraction, float(1 - escaped.mean()))
+    return BoomResult(tow_speed, skirt_m, swim_max, downflow_fraction, float(1 - escaped.mean()), bag)
 
 
 def boom_grid(speeds=(0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.45), skirts=(1.0, 1.5, 2.0), swims=(0.10, 0.20),
-              downflows=(0.25, 0.5), n=400, minutes=60):
+              downflows=(0.25, 0.5), n=400, minutes=30):
     rows = []
     for k in downflows:
         for sw in swims:
@@ -73,5 +84,9 @@ def boom_grid(speeds=(0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.45), skirts=(1.0, 1.5, 
                 for u in speeds:
                     r = run_boom(u, d, sw, k, minutes=minutes, n=n)
                     rows.append({"downflow_fraction": k, "swim_max_m_s": sw, "skirt_m": d, "tow_m_s": u,
-                                 "retained_share": round(r.retained_share, 3)})
+                                 "bag": False, "retained_share": round(r.retained_share, 3)})
+            for u in speeds:  # 2 m skirt with the closed-bottom retention bag
+                r = run_boom(u, 2.0, sw, k, minutes=minutes, n=n, bag=True)
+                rows.append({"downflow_fraction": k, "swim_max_m_s": sw, "skirt_m": 2.0, "tow_m_s": u,
+                             "bag": True, "retained_share": round(r.retained_share, 3)})
     return rows

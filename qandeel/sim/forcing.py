@@ -1,9 +1,15 @@
 """Surface-drift forcing for the planner: real Gulf record if present, else assumed.
 
 Velocity series have shape (steps, runs, 2) in m/s (east, north), one series per
-Monte Carlo run. With a real record, each run starts at a random hour of the
-bloom-season record (an "analogue ensemble" of real past conditions) plus a
-small forecast error. Without it, runs use the assumed tidal model in env.py.
+Monte Carlo run. Three sources, best first:
+
+* Live forecast (data/forecast.csv): every run starts at the alert hour of the
+  forecast; the spread comes from forecast error that grows with lead time.
+  This is how the planner would run in operation.
+* Season record (data/gulf_forcing.csv): each run starts at a random hour of the
+  bloom season (an "analogue ensemble" of real past conditions), giving a
+  climatology-like spread.
+* Assumed tidal model in env.py, when neither file exists.
 """
 import csv
 import json
@@ -16,6 +22,7 @@ from .env import TIDAL_PERIOD_H, WIND_DRIFT_FACTOR, Conditions, perturb
 
 ROOT = Path(__file__).resolve().parent.parent
 DATA_CSV = ROOT / "data" / "gulf_forcing.csv"
+FORECAST_CSV = ROOT / "data" / "forecast.csv"
 
 
 def load_site() -> dict:
@@ -27,10 +34,20 @@ class Record:
     time: list
     current: np.ndarray  # (hours, 2) m/s
     wind_drift: np.ndarray  # (hours, 2) m/s, 3% of wind, blowing downwind
+    kind: str = "season"  # "season" or "forecast"
 
     @property
     def label(self) -> str:
+        if self.kind == "forecast":
+            return f"live forecast (Copernicus currents + wind) from {self.time[0][:13].replace('T', ' ')} UTC"
         return f"Copernicus SMOC currents + ERA5 wind, {self.time[0][:10]} to {self.time[-1][:10]}"
+
+
+def load_forecast(path=FORECAST_CSV) -> "Record | None":
+    rec = load_record(path)
+    if rec is not None:
+        rec.kind = "forecast"
+    return rec
 
 
 def load_record(path=DATA_CSV) -> Record | None:
@@ -52,9 +69,21 @@ def source_label(record: Record | None) -> str:
 
 
 def velocity_series(hours: float, dt_s: float, runs: int, rng: np.random.Generator,
-                    cond: Conditions | None = None, record: Record | None = None) -> np.ndarray:
+                    cond: Conditions | None = None, record: Record | None = None,
+                    start_hour: float = 0.0) -> np.ndarray:
     steps = int(hours * 3600 / dt_s)
     t_h = np.arange(steps) * dt_s / 3600
+    if record is not None and record.kind == "forecast":
+        total = record.current + record.wind_drift
+        n_h = len(total)
+        start_hour = min(max(0.0, start_hour), max(0.0, n_h - 2.0))
+        idx = np.clip(start_hour + t_h, 0, n_h - 1.001)[:, None] * np.ones((1, runs))
+        lo = np.floor(idx).astype(int)
+        frac = (idx - lo)[..., None]
+        v = total[lo] * (1 - frac) + total[lo + 1] * frac  # beyond the forecast: hold the last hour
+        # forecast error growing with lead time: 15% strength plus a drifting bias (random walk)
+        bias = np.cumsum(rng.normal(0, 0.004 * np.sqrt(dt_s / 3600), (steps, runs, 2)), axis=0)
+        return v * rng.normal(1.0, 0.15, (1, runs, 1)) + rng.normal(0, 0.01, (1, runs, 2)) + bias
     if record is not None:
         total = record.current + record.wind_drift  # (H, 2)
         n_h = len(total)

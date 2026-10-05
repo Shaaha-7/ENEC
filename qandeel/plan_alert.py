@@ -9,7 +9,7 @@ For the visual version run: streamlit run qandeel/dashboard.py
 import argparse
 
 from qandeel.sim.env import Conditions
-from qandeel.sim.forcing import load_record, source_label
+from qandeel.sim.forcing import load_forecast, load_record, source_label
 from qandeel.sim.planning import forecast_arrival, plan_release, switch_on_time
 
 
@@ -35,7 +35,7 @@ def plan(distance_km, bearing_deg, cond=None, record=None, swim_max=0.10, runs=4
         f"Curtain switch-on:                  in {t_on:.0f} h (earliest arrival minus 3 h buffer)",
         f"Swarm approaches from the:          {fc.side} side; stage the boom crew there",
         f"Release point:                      {best.distance_km:g} km {compass(best.bearing_deg)} of the gap, "
-        f"~{best.tow_hours:.0f} h with the boom at <=0.1 m/s through the water",
+        f"~{best.tow_hours:.0f} h tow, boom + retention bag at <=0.2 m/s through the water",
         f"Simulated return within 72 h:       {best.p_return:.0%} (curtain handles them again: "
         f"{best.load_factor:.2f}x load); strandings near the plant: {best.p_beach_near:.0%}",
         "Backup: gap camera switches the curtain on at once if jellyfish arrive early.",
@@ -48,11 +48,14 @@ def main():
     ap.add_argument("--distance", type=float, required=True, help="km from the gap")
     ap.add_argument("--bearing", type=float, required=True, help="compass bearing from the gap, degrees")
     ap.add_argument("--swim", type=float, default=0.10, help="top jellyfish swim speed, m/s")
-    ap.add_argument("--assumed", action="store_true", help="ignore the real data file, use assumed conditions")
+    ap.add_argument("--assumed", action="store_true", help="ignore the real data files, use assumed conditions")
+    ap.add_argument("--forecast", action="store_true", help="use the live forecast (data/forecast.csv), alert = now")
     ap.add_argument("--wind", type=float, default=6.0, help="(assumed mode) wind speed m/s")
     ap.add_argument("--wind-from", type=float, default=315.0, help="(assumed mode) wind from, degrees")
     a = ap.parse_args()
-    record = None if a.assumed else load_record()
+    record = None if a.assumed else (load_forecast() if a.forecast else load_record())
+    if a.forecast and record is None:
+        raise SystemExit("No forecast file: run python -m qandeel.data_fetch --forecast")
     cond = Conditions(wind_speed=a.wind, wind_from_deg=a.wind_from)
     print(plan(a.distance, a.bearing, cond=cond, record=record, swim_max=a.swim))
 

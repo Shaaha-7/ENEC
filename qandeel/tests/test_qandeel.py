@@ -80,3 +80,37 @@ def test_sizing_numbers():
     assert jellyfish_mass_kg(30) == pytest.approx(0.99, abs=0.02)
     assert jellyfish_mass_kg(45) == pytest.approx(3.04, abs=0.03)
     assert math.isfinite(c["energy_mwh_per_event"])
+
+
+def test_gap_tool_distance_and_parsing():
+    from qandeel.measure_gap import haversine_m, parse_point
+    a, b = parse_point("23.9612 N, 52.2301 E"), parse_point("23.9612, 52.2330")
+    assert a == (23.9612, 52.2301)
+    assert haversine_m(a, b) == pytest.approx(295, abs=3)
+
+
+def test_forecast_mode_starts_at_alert_hour(tmp_path):
+    from qandeel.sim.forcing import load_forecast
+    path = tmp_path / "forecast.csv"
+    with path.open("w", newline="") as f:
+        w = csv.writer(f)
+        w.writerow(["time", "current_u", "current_v", "wind_speed", "wind_from_deg"])
+        for h in range(120):
+            w.writerow([f"t{h}", "0.30" if h >= 24 else "0.0", "0.0", "0", "0"])
+    rec = load_forecast(path)
+    assert rec.kind == "forecast"
+    v = velocity_series(12, 600, 200, np.random.default_rng(0), record=rec, start_hour=30)
+    assert np.mean(v[..., 0]) == pytest.approx(0.30, abs=0.05)  # starts inside the 0.3 m/s part
+
+
+def test_retention_bag_beats_open_boom():
+    open_ = run_boom(0.20, 2.0, 0.10, 0.25, minutes=30, n=300).retained_share
+    bag = run_boom(0.20, 2.0, 0.10, 0.25, minutes=30, n=300, bag=True).retained_share
+    assert bag > open_ + 0.3
+
+
+def test_tank_scaling_is_froude_consistent():
+    from qandeel.sim.curtain import bulson_surface_current
+    full = bulson_surface_current(3.0)
+    model = bulson_surface_current(3.0 / 20 ** 1.5)
+    assert model == pytest.approx(full / math.sqrt(20), rel=1e-6)

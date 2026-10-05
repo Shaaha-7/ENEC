@@ -50,7 +50,7 @@ class HoldResult:
         return 1.0 - self.entered / self.n
 
 
-def run_hold(approach_speed=0.15, airflow=3.0, hours=3.0, n=500, swim_min=0.02,
+def run_hold(approach_speed=0.15, airflow=3.0, hours=3.0, n=500, swim_min=0.02, depth=None, gap_w=None,
              swim_max=0.10, alongshore_amp=0.08, seed=0, dt=2.0) -> HoldResult:
     rng = np.random.default_rng(seed)
     pos = np.column_stack([rng.uniform(-400, 400, n), rng.uniform(150, 500, n)])
@@ -58,8 +58,8 @@ def run_hold(approach_speed=0.15, airflow=3.0, hours=3.0, n=500, swim_min=0.02,
     swim = rng.uniform(swim_min, swim_max, n)
     heading = rng.uniform(0, 2 * np.pi, n)
     u0 = bulson_surface_current(airflow) if airflow > 0 else 0.0
-    decay = 2 * DEPTH
-    half = GAP_W / 2
+    decay = 2 * (depth or DEPTH)
+    half = (gap_w or GAP_W) / 2
     alive = np.ones(n, bool)  # still outside the gap
     turn_sd = np.sqrt(dt / 120.0)  # heading wanders over ~2 minutes
     diff_sd = np.sqrt(2 * 0.05 * dt)

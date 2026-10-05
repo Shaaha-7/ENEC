@@ -20,6 +20,7 @@ from qandeel.sim.curtain import CURTAIN_Y, GAP_W, bulson_surface_current, hold_g
 from qandeel.sim.env import Conditions, bearing_to_xy  # noqa: E402
 from qandeel.sim.forcing import load_record, load_site, source_label  # noqa: E402
 from qandeel.sim.planning import forecast_arrival, plan_release, switch_on_time  # noqa: E402
+from qandeel.sim.sensitivity import tornado  # noqa: E402
 from qandeel.sim.sizing import boom_throughput, compressor, jellyfish_mass_kg  # noqa: E402
 
 OUT = Path(__file__).parent / "outputs"
@@ -29,6 +30,7 @@ INK, INK2, MUTED, GRID = "#0b0b0b", "#52514e", "#898781", "#e4e3df"
 GREY, ACCENT = "#b9b8b2", "#2a78d6"
 BLUES = {0.0: GREY, 1.5: "#86b6ef", 3.0: "#2a78d6", 4.5: "#104281"}
 SKIRT_BLUES = {1.0: "#86b6ef", 1.5: "#2a78d6", 2.0: "#104281"}
+GOOD_GREEN = "#0ca30c"
 SURFACE = "#fcfcfb"
 
 ALERTS = [  # (label, distance km, bearing deg)
@@ -36,7 +38,7 @@ ALERTS = [  # (label, distance km, bearing deg)
     ("Swarm 28 km WNW", 28, 285),
     ("Swarm 28 km N", 28, 0),
 ]
-RELATIVE_TOW = 0.10  # m/s through the water, chosen from the boom simulation
+RELATIVE_TOW = 0.20  # m/s through the water with the retention bag, from the boom simulation
 DESIGN_SKIRT = 2.0
 
 
@@ -175,9 +177,15 @@ def fig_boom(rows):
     fig, axes = plt.subplots(1, 2, figsize=(12, 4.6), facecolor=SURFACE, sharey=True)
     for ax, sw in zip(axes, (0.10, 0.20)):
         for d in (1.0, 1.5, 2.0):
-            rr = [r for r in rows if r["swim_max_m_s"] == sw and r["skirt_m"] == d and r["downflow_fraction"] == 0.25]
+            rr = [r for r in rows if r["swim_max_m_s"] == sw and r["skirt_m"] == d
+                  and r["downflow_fraction"] == 0.25 and not r["bag"]]
             ax.plot([r["tow_m_s"] for r in rr], [100 * r["retained_share"] for r in rr], color=SKIRT_BLUES[d],
-                    lw=2, marker="o", ms=5, label=f"{d:g} m skirt")
+                    lw=2, marker="o", ms=5, label=f"{d:g} m skirt, open")
+        for k, ls in ((0.25, "-"), (0.5, ":")):
+            rr = [r for r in rows if r["swim_max_m_s"] == sw and r["bag"] and r["downflow_fraction"] == k]
+            ax.plot([r["tow_m_s"] for r in rr], [100 * r["retained_share"] for r in rr], color=GOOD_GREEN,
+                    lw=2.5, ls=ls, marker="s", ms=5,
+                    label="2 m skirt + retention bag" + (" (pessimistic downflow)" if k == 0.5 else ""))
         ax.axvline(0.35, color=MUTED, lw=1, ls="--")
         ax.text(0.355, 92, "oil-boom\nlimit", fontsize=8, color=INK2)
         ax.set_ylim(-3, 105)
@@ -185,10 +193,39 @@ def fig_boom(rows):
         _style(ax, f"Jellyfish swimming up to {sw * 100:.0f} cm/s", "30 min in the boom pocket")
     axes[0].set_ylabel("jellyfish kept in the boom (%)", color=INK2, fontsize=9)
     axes[1].legend(frameon=False, fontsize=8.5, loc="center left", bbox_to_anchor=(1.01, 0.5), labelcolor=INK2)
-    fig.suptitle("Jellyfish do not float like oil: even at 0.1 m/s an open boom keeps only 60-80% for 30 min",
+    fig.suptitle("Open booms leak jellyfish; a closed-bottom retention bag keeps over 90% up to 0.3 m/s (model)",
                  x=0.01, ha="left", fontsize=12, fontweight="bold", color=INK)
     fig.tight_layout()
     fig.savefig(OUT / "fig5_boom_retention.png", dpi=160)
+    plt.close(fig)
+
+
+def fig_tornado(rows):
+    outcomes = list(dict.fromkeys(r["outcome"] for r in rows))
+    fig, axes = plt.subplots(len(outcomes), 1, figsize=(10, 2.0 + 1.25 * len(rows) / len(outcomes) * len(outcomes) / 1.6),
+                             facecolor=SURFACE)
+    for ax, oc in zip(axes, outcomes):
+        rr = [r for r in rows if r["outcome"] == oc]
+        rr.sort(key=lambda r: abs(r["high_value"] - r["low_value"]))
+        base = float(rr[0]["base"])
+        for i, r in enumerate(rr):
+            lo, hi = float(r["low_value"]), float(r["high_value"])
+            ax.plot([min(lo, hi), max(lo, hi)], [i, i], color=ACCENT if r is rr[-1] else GREY, lw=9,
+                    solid_capstyle="butt")
+            if abs(hi - lo) < 0.02 * max(abs(base), 1):
+                ax.text(base, i, "  little effect", va="center", fontsize=7.5, color=INK2)
+            else:
+                ax.text(lo, i + 0.32, f"{r['low']:g}", ha="center", fontsize=7.5, color=INK2)
+                ax.text(hi, i + 0.32, f"{r['high']:g}", ha="center", fontsize=7.5, color=INK2)
+        ax.axvline(base, color=INK, lw=1, ls="--")
+        ax.set_yticks(range(len(rr)))
+        ax.set_yticklabels([r["unknown"] for r in rr], fontsize=9, color=INK)
+        ax.set_ylim(-0.6, len(rr) - 0.2)
+        _style(ax, oc, f"base case {base:g}; bar = result at low and high value of each unknown")
+    fig.suptitle("What to measure first: approach current, apex downflow and gap width drive the results",
+                 x=0.01, ha="left", fontsize=12, fontweight="bold", color=INK)
+    fig.tight_layout(rect=(0, 0, 1, 0.97))
+    fig.savefig(OUT / "fig6_sensitivity.png", dpi=160)
     plt.close(fig)
 
 
@@ -224,11 +261,16 @@ def main():
     results["boom_retention"] = brows
     fig_boom(brows)
 
+    trows = [r | {"low_value": float(r["low_value"]), "high_value": float(r["high_value"]), "base": float(r["base"])}
+             for r in tornado()]
+    results["sensitivity"] = trows
+    fig_tornado(trows)
+
     a = results["alerts"][0]
     event_h = (a["window_end_h"] - a["switch_on_h"]) + 12
     results["compressor"] = compressor(curtain_m=GAP_W, airflow_l_s_m=3.0, depth_m=float(site["gap_depth_m"]),
                                        hours=round(event_h))
-    retained = run_boom(RELATIVE_TOW, DESIGN_SKIRT, 0.10, 0.25, minutes=30, n=600).retained_share
+    retained = run_boom(RELATIVE_TOW, DESIGN_SKIRT, 0.10, 0.25, minutes=30, n=600, bag=True).retained_share
     results["boom"] = boom_throughput(tow_m_s=RELATIVE_TOW, retention=round(retained, 2))
     results["mass_kg"] = {f"{d} cm": round(jellyfish_mass_kg(d), 2) for d in (30, 45)}
 

@@ -18,7 +18,7 @@ import streamlit as st  # noqa: E402
 
 from qandeel.plan_alert import compass  # noqa: E402
 from qandeel.sim.env import bearing_to_xy  # noqa: E402
-from qandeel.sim.forcing import load_record, load_site, source_label  # noqa: E402
+from qandeel.sim.forcing import load_forecast, load_record, load_site, source_label  # noqa: E402
 from qandeel.sim.planning import ARRIVE_RADIUS_M, forecast_arrival, plan_release, switch_on_time  # noqa: E402
 
 INK, INK2, GRID, GREY, ACCENT, SURFACE = "#0b0b0b", "#52514e", "#e4e3df", "#b9b8b2", "#2a78d6", "#fcfcfb"
@@ -29,11 +29,13 @@ st.set_page_config(page_title="Qandeel response dashboard", layout="wide")
 
 
 @st.cache_data(show_spinner="Simulating 400 possible drifts of the swarm...")
-def run_plan(distance, bearing, swim, use_real):
-    record = load_record() if use_real else None
-    fc = forecast_arrival(distance, bearing, record=record, runs=400, horizon_h=96, swim_max=swim)
+def run_plan(distance, bearing, swim, mode, start_hour):
+    record = {"forecast": load_forecast, "season": load_record}.get(mode, lambda: None)()
+    fc = forecast_arrival(distance, bearing, record=record, runs=400, horizon_h=96, swim_max=swim,
+                          start_hour=start_hour)
     t_on = switch_on_time(fc)
-    best = plan_release(record=record)[0] if t_on is not None else None
+    release_hour = start_hour + (fc.p50_h or 0)
+    best = plan_release(record=record, start_hour=release_hour)[0] if t_on is not None else None
     return {
         "p_arrive": fc.p_arrive, "share": fc.share_reaching, "p10": fc.p10_h, "p50": fc.p50_h, "p90": fc.p90_h,
         "t_on": t_on, "side": fc.side, "hourly": fc.cloud.hourly[: HORIZON_H + 1], "start": fc.start_xy,
@@ -122,28 +124,41 @@ def draw_timeline(p, t):
 
 
 site = load_site()
-has_real = load_record() is not None
+forecast = load_forecast()
+modes = {}
+if forecast is not None:
+    modes["forecast"] = "Live forecast (operational mode)"
+if load_record() is not None:
+    modes["season"] = "Replay of 2025 bloom season"
+modes["assumed"] = "Assumed conditions"
+fc_start = datetime.strptime(forecast.time[0][:16], "%Y-%m-%dT%H:%M") if forecast else None
 with st.sidebar:
     st.header("Early-warning alert")
-    distance = st.number_input("Distance from intake gap (km)", 2.0, 60.0, 28.0, 1.0)
-    bearing = st.number_input("Bearing from gap (degrees, 0 = north)", 0.0, 359.0, 285.0, 5.0)
+    qp = st.query_params  # e.g. ?d=15&b=330&t=30 for a ready-made demo
+    distance = st.number_input("Distance from intake gap (km)", 2.0, 60.0, float(qp.get("d", 15)), 1.0)
+    bearing = st.number_input("Bearing from gap (degrees, 0 = north)", 0.0, 359.0, float(qp.get("b", 330)), 5.0)
     st.caption(f"= {compass(bearing)}")
-    alert_date = st.date_input("Alert date", datetime(2026, 7, 14))
+    mode = st.radio("Ocean data", list(modes), format_func=modes.get,
+                    help="Download with `python -m qandeel.data_fetch` (season) or `--forecast` (live).")
+    default_day = fc_start if (mode == "forecast" and fc_start) else datetime(2026, 7, 14, 6, 0)
+    alert_date = st.date_input("Alert date (UTC)", default_day.date())
     times = [f"{h:02d}:{m:02d}" for h in range(24) for m in (0, 30)]
-    alert_clock = datetime.strptime(st.selectbox("Alert time", times, index=12), "%H:%M").time()
+    alert_clock = datetime.strptime(st.selectbox("Alert time (UTC)", times, index=default_day.hour * 2), "%H:%M").time()
     swim = st.select_slider("Top jellyfish swim speed", [0.10, 0.15, 0.20], 0.10,
                             format_func=lambda v: f"{v * 100:.0f} cm/s")
-    use_real = st.toggle("Use real Gulf currents and wind", value=has_real, disabled=not has_real,
-                         help="Run `python -m qandeel.data_fetch` on your computer to download them.")
     st.divider()
     st.caption(f"Site: {site['site_name']}. Gap {site['gap_width_m']} m "
                f"({'measured' if site['gap_width_measured'] else 'assumed'}).")
 
-p = run_plan(distance, bearing, swim, use_real)
 alert_at = datetime.combine(alert_date, alert_clock)
+start_hour = (alert_at - fc_start).total_seconds() / 3600 if (mode == "forecast" and fc_start) else 0.0
+if mode == "forecast" and not 0 <= start_hour <= 72:
+    st.sidebar.warning("Alert time is outside the forecast; using the forecast start.")
+    start_hour = 0.0
+p = run_plan(distance, bearing, swim, mode, round(start_hour, 1))
 
 st.title("Qandeel response dashboard")
-st.caption(f"Forcing: {p['source']}. Simulation of the concept, not an operational forecast.")
+st.caption(f"Forcing: {p['source']}. Concept demonstration; operational use needs ENEC detection data and validation.")
 
 c1, c2, c3, c4 = st.columns(4)
 def tile(col, label, value, note=""):
@@ -183,7 +198,7 @@ def render(t):
         f"### {now:%a %d %b, %H:%M}\n"
         f"<div style='font-size:28px;font-weight:700;color:{colour}'>Curtain {status}</div>\n\n{msg}\n\n"
         + (f"- Swarm approaches from the **{p['side']}** side: stage the boom crew there\n"
-           "- Boom drifts with the current, at most 0.1 m/s through the water\n"
+           "- Boom with closed-bottom retention bag, at most 0.2 m/s through the water\n"
            "- Gap camera switches the curtain on at once if jellyfish arrive early"
            if p["t_on"] is not None else ""),
         unsafe_allow_html=True)

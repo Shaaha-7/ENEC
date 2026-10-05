@@ -20,7 +20,7 @@ LEAD_SHARE = 0.05  # the swarm "arrives" when 5% of it is at the gap
 SWITCH_ON_BUFFER_H = 3.0
 MIN_ARRIVAL_PROB = 0.10  # below this, the curtain stays off
 NEAR_COAST_KM = 10.0
-TRANSIT_SPEED = 0.2  # m/s over ground: boom at <=0.1 m/s through the water plus ~0.1 m/s current (assumed)
+TRANSIT_SPEED = 0.2  # m/s over ground, conservative: boom + retention bag at <=0.2 m/s through the water
 MAX_TOW_H = 24.0  # longer tows are impractical for a boom crew
 
 
@@ -34,8 +34,9 @@ class Cloud:
 
 
 def simulate_cloud(start_xy, hours, rng, runs=400, n_particles=60, spread_m=1500.0, swim_max=0.10,
-                   cond: Conditions | None = None, record: Record | None = None, keep_runs=20) -> Cloud:
-    vel = velocity_series(hours, DT_S, runs, rng, cond=cond, record=record)
+                   cond: Conditions | None = None, record: Record | None = None, keep_runs=20,
+                   start_hour: float = 0.0) -> Cloud:
+    vel = velocity_series(hours, DT_S, runs, rng, cond=cond, record=record, start_hour=start_hour)
     steps = vel.shape[0]
     shape = (runs, n_particles)
     pos = np.asarray(start_xy, float) + rng.normal(0, spread_m, shape + (2,))
@@ -83,10 +84,13 @@ class ArrivalForecast:
 
 
 def forecast_arrival(distance_km, bearing_deg, cond: Conditions | None = None, record: Record | None = None,
-                     runs=400, horizon_h=96.0, seed=0, n_particles=60, swim_max=0.10) -> ArrivalForecast:
+                     runs=400, horizon_h=96.0, seed=0, n_particles=60, swim_max=0.10,
+                     start_hour: float = 0.0) -> ArrivalForecast:
+    """start_hour: hours from the start of a forecast file to the alert (forecast mode only)."""
     rng = np.random.default_rng(seed)
     start = bearing_to_xy(distance_km, bearing_deg)
-    c = simulate_cloud(start, horizon_h, rng, runs, n_particles, swim_max=swim_max, cond=cond, record=record)
+    c = simulate_cloud(start, horizon_h, rng, runs, n_particles, swim_max=swim_max, cond=cond, record=record,
+                       start_hour=start_hour)
     k_lead = max(1, int(np.ceil(LEAD_SHARE * n_particles)))
     lead = np.sort(c.arrive_h, axis=1)[:, k_lead - 1]  # nan sorts last
     ok = ~np.isnan(lead)
@@ -133,7 +137,7 @@ class ReleaseOption:
 
 def plan_release(cond: Conditions | None = None, record: Record | None = None, distances_km=(6, 10, 15),
                  bearings_deg=range(-75, 76, 15), runs=60, n_particles=30, horizon_h=72.0,
-                 min_coast_km=3.0, seed=1):
+                 min_coast_km=3.0, seed=1, start_hour: float = 0.0):
     """Score candidate release points by simulating released jellyfish for 72 h.
 
     Strandings far from the plant are reported but treated like a bloom's
@@ -149,7 +153,7 @@ def plan_release(cond: Conditions | None = None, record: Record | None = None, d
             if start[1] < min_coast_km * 1000 or tow_h > MAX_TOW_H:
                 continue
             c = simulate_cloud(start, horizon_h, rng, runs, n_particles, spread_m=200.0,
-                               cond=cond, record=record, keep_runs=0)
+                               cond=cond, record=record, keep_runs=0, start_hour=start_hour + tow_h)
             returned = ~np.isnan(c.arrive_h)
             beached = ~np.isnan(c.beach_x) & ~returned
             near = beached & (np.abs(np.nan_to_num(c.beach_x, nan=1e9)) <= NEAR_COAST_KM * 1000)

@@ -1,5 +1,5 @@
 {
-  "_note": "Site settings for the simulation. Values marked measured=false are assumptions. Measure the gap on Google Earth (see README) and set gap_width_measured to true.",
+  "_note": "Site settings. Measure the gap with: python -m qandeel.measure_gap --a 'lat, lon' --b 'lat, lon' (see README).",
   "site_name": "Barakah area (example site)",
   "lat": 23.96,
   "lon": 52.23,
@@ -8,6 +8,7 @@
   "data_lon": 52.23,
   "gap_width_m": 300,
   "gap_width_measured": false,
-  "gap_depth_m": 8,
-  "gap_depth_measured": false
+  "gap_depth_m": 9.5,
+  "gap_depth_measured": false,
+  "gap_depth_source": "Public marine-works description of the Barakah intake channel: dredged to -5.5 to -9.5 m MSL; deepest value used (not a survey)."
 }

@@ -1,7 +1,7 @@
 {
   "forcing": "Copernicus SMOC currents + ERA5 wind, 2025-06-01 to 2025-09-30",
   "site": {
-    "_note": "Site settings for the simulation. Values marked measured=false are assumptions. Measure the gap on Google Earth (see README) and set gap_width_measured to true.",
+    "_note": "Site settings. Measure the gap with: python -m qandeel.measure_gap --a 'lat, lon' --b 'lat, lon' (see README).",
     "site_name": "Barakah area (example site)",
     "lat": 23.96,
     "lon": 52.23,
@@ -10,8 +10,9 @@
     "data_lon": 52.23,
     "gap_width_m": 300,
     "gap_width_measured": false,
-    "gap_depth_m": 8,
-    "gap_depth_measured": false
+    "gap_depth_m": 9.5,
+    "gap_depth_measured": false,
+    "gap_depth_source": "Public marine-works description of the Barakah intake channel: dredged to -5.5 to -9.5 m MSL; deepest value used (not a survey)."
   },
   "alerts": [
     {
@@ -113,7 +114,7 @@
       "airflow_l_s_m": 1.5,
       "approach_m_s": 0.1,
       "surface_current_m_s": 0.358,
-      "held_share": 0.995
+      "held_share": 0.998
     },
     {
       "swim_max_m_s": 0.1,
@@ -127,14 +128,14 @@
       "airflow_l_s_m": 1.5,
       "approach_m_s": 0.2,
       "surface_current_m_s": 0.358,
-      "held_share": 0.92
+      "held_share": 0.965
     },
     {
       "swim_max_m_s": 0.1,
       "airflow_l_s_m": 1.5,
       "approach_m_s": 0.25,
       "surface_current_m_s": 0.358,
-      "held_share": 0.223
+      "held_share": 0.34
     },
     {
       "swim_max_m_s": 0.1,
@@ -183,14 +184,14 @@
       "airflow_l_s_m": 3.0,
       "approach_m_s": 0.25,
       "surface_current_m_s": 0.451,
-      "held_share": 0.988
+      "held_share": 1.0
     },
     {
       "swim_max_m_s": 0.1,
       "airflow_l_s_m": 3.0,
       "approach_m_s": 0.3,
       "surface_current_m_s": 0.451,
-      "held_share": 0.643
+      "held_share": 0.755
     },
     {
       "swim_max_m_s": 0.1,
@@ -239,14 +240,14 @@
       "airflow_l_s_m": 4.5,
       "approach_m_s": 0.3,
       "surface_current_m_s": 0.516,
-      "held_share": 0.99
+      "held_share": 1.0
     },
     {
       "swim_max_m_s": 0.1,
       "airflow_l_s_m": 4.5,
       "approach_m_s": 0.4,
       "surface_current_m_s": 0.516,
-      "held_share": 0.03
+      "held_share": 0.095
     },
     {
       "swim_max_m_s": 0.2,
@@ -302,35 +303,35 @@
       "airflow_l_s_m": 1.5,
       "approach_m_s": 0.05,
       "surface_current_m_s": 0.358,
-      "held_share": 0.983
+      "held_share": 0.988
     },
     {
       "swim_max_m_s": 0.2,
       "airflow_l_s_m": 1.5,
       "approach_m_s": 0.1,
       "surface_current_m_s": 0.358,
-      "held_share": 0.958
+      "held_share": 0.978
     },
     {
       "swim_max_m_s": 0.2,
       "airflow_l_s_m": 1.5,
       "approach_m_s": 0.15,
       "surface_current_m_s": 0.358,
-      "held_share": 0.89
+      "held_share": 0.897
     },
     {
       "swim_max_m_s": 0.2,
       "airflow_l_s_m": 1.5,
       "approach_m_s": 0.2,
       "surface_current_m_s": 0.358,
-      "held_share": 0.47
+      "held_share": 0.54
     },
     {
       "swim_max_m_s": 0.2,
       "airflow_l_s_m": 1.5,
       "approach_m_s": 0.25,
       "surface_current_m_s": 0.358,
-      "held_share": 0.1
+      "held_share": 0.17
     },
     {
       "swim_max_m_s": 0.2,
@@ -351,7 +352,7 @@
       "airflow_l_s_m": 3.0,
       "approach_m_s": 0.05,
       "surface_current_m_s": 0.451,
-      "held_share": 0.985
+      "held_share": 0.99
     },
     {
       "swim_max_m_s": 0.2,
@@ -372,21 +373,21 @@
       "airflow_l_s_m": 3.0,
       "approach_m_s": 0.2,
       "surface_current_m_s": 0.451,
-      "held_share": 0.953
+      "held_share": 0.968
     },
     {
       "swim_max_m_s": 0.2,
       "airflow_l_s_m": 3.0,
       "approach_m_s": 0.25,
       "surface_current_m_s": 0.451,
-      "held_share": 0.615
+      "held_share": 0.722
     },
     {
       "swim_max_m_s": 0.2,
       "airflow_l_s_m": 3.0,
       "approach_m_s": 0.3,
       "surface_current_m_s": 0.451,
-      "held_share": 0.262
+      "held_share": 0.35
     },
     {
       "swim_max_m_s": 0.2,
@@ -400,14 +401,14 @@
       "airflow_l_s_m": 4.5,
       "approach_m_s": 0.05,
       "surface_current_m_s": 0.516,
-      "held_share": 0.988
+      "held_share": 0.985
     },
     {
       "swim_max_m_s": 0.2,
       "airflow_l_s_m": 4.5,
       "approach_m_s": 0.1,
       "surface_current_m_s": 0.516,
-      "held_share": 0.97
+      "held_share": 0.963
     },
     {
       "swim_max_m_s": 0.2,
@@ -428,21 +429,21 @@
       "airflow_l_s_m": 4.5,
       "approach_m_s": 0.25,
       "surface_current_m_s": 0.516,
-      "held_share": 0.948
+      "held_share": 0.98
     },
     {
       "swim_max_m_s": 0.2,
       "airflow_l_s_m": 4.5,
       "approach_m_s": 0.3,
       "surface_current_m_s": 0.516,
-      "held_share": 0.627
+      "held_share": 0.745
     },
     {
       "swim_max_m_s": 0.2,
       "airflow_l_s_m": 4.5,
       "approach_m_s": 0.4,
       "surface_current_m_s": 0.516,
-      "held_share": 0.017
+      "held_share": 0.057
     }
   ],
   "release_options": [
@@ -743,13 +744,15 @@
       "swim_max_m_s": 0.1,
       "skirt_m": 1.0,
       "tow_m_s": 0.1,
-      "retained_share": 0.142
+      "bag": false,
+      "retained_share": 0.19
     },
     {
       "downflow_fraction": 0.25,
       "swim_max_m_s": 0.1,
       "skirt_m": 1.0,
       "tow_m_s": 0.15,
+      "bag": false,
       "retained_share": 0.0
     },
     {
@@ -757,6 +760,7 @@
       "swim_max_m_s": 0.1,
       "skirt_m": 1.0,
       "tow_m_s": 0.2,
+      "bag": false,
       "retained_share": 0.0
     },
     {
@@ -764,6 +768,7 @@
       "swim_max_m_s": 0.1,
       "skirt_m": 1.0,
       "tow_m_s": 0.25,
+      "bag": false,
       "retained_share": 0.0
     },
     {
@@ -771,6 +776,7 @@
       "swim_max_m_s": 0.1,
       "skirt_m": 1.0,
       "tow_m_s": 0.3,
+      "bag": false,
       "retained_share": 0.0
     },
     {
@@ -778,6 +784,7 @@
       "swim_max_m_s": 0.1,
       "skirt_m": 1.0,
       "tow_m_s": 0.35,
+      "bag": false,
       "retained_share": 0.0
     },
     {
@@ -785,6 +792,7 @@
       "swim_max_m_s": 0.1,
       "skirt_m": 1.0,
       "tow_m_s": 0.45,
+      "bag": false,
       "retained_share": 0.0
     },
     {
@@ -792,27 +800,31 @@
       "swim_max_m_s": 0.1,
       "skirt_m": 1.5,
       "tow_m_s": 0.1,
-      "retained_share": 0.52
+      "bag": false,
+      "retained_share": 0.55
     },
     {
       "downflow_fraction": 0.25,
       "swim_max_m_s": 0.1,
       "skirt_m": 1.5,
       "tow_m_s": 0.15,
-      "retained_share": 0.085
+      "bag": false,
+      "retained_share": 0.135
     },
     {
       "downflow_fraction": 0.25,
       "swim_max_m_s": 0.1,
       "skirt_m": 1.5,
       "tow_m_s": 0.2,
-      "retained_share": 0.0
+      "bag": false,
+      "retained_share": 0.002
     },
     {
       "downflow_fraction": 0.25,
       "swim_max_m_s": 0.1,
       "skirt_m": 1.5,
       "tow_m_s": 0.25,
+      "bag": false,
       "retained_share": 0.0
     },
     {
@@ -820,6 +832,7 @@
       "swim_max_m_s": 0.1,
       "skirt_m": 1.5,
       "tow_m_s": 0.3,
+      "bag": false,
       "retained_share": 0.0
     },
     {
@@ -827,6 +840,7 @@
       "swim_max_m_s": 0.1,
       "skirt_m": 1.5,
       "tow_m_s": 0.35,
+      "bag": false,
       "retained_share": 0.0
     },
     {
@@ -834,6 +848,7 @@
       "swim_max_m_s": 0.1,
       "skirt_m": 1.5,
       "tow_m_s": 0.45,
+      "bag": false,
       "retained_share": 0.0
     },
     {
@@ -841,27 +856,31 @@
       "swim_max_m_s": 0.1,
       "skirt_m": 2.0,
       "tow_m_s": 0.1,
-      "retained_share": 0.62
+      "bag": false,
+      "retained_share": 0.662
     },
     {
       "downflow_fraction": 0.25,
       "swim_max_m_s": 0.1,
       "skirt_m": 2.0,
       "tow_m_s": 0.15,
-      "retained_share": 0.245
+      "bag": false,
+      "retained_share": 0.307
     },
     {
       "downflow_fraction": 0.25,
       "swim_max_m_s": 0.1,
       "skirt_m": 2.0,
       "tow_m_s": 0.2,
-      "retained_share": 0.0
+      "bag": false,
+      "retained_share": 0.022
     },
     {
       "downflow_fraction": 0.25,
       "swim_max_m_s": 0.1,
       "skirt_m": 2.0,
       "tow_m_s": 0.25,
+      "bag": false,
       "retained_share": 0.0
     },
     {
@@ -869,6 +888,7 @@
       "swim_max_m_s": 0.1,
       "skirt_m": 2.0,
       "tow_m_s": 0.3,
+      "bag": false,
       "retained_share": 0.0
     },
     {
@@ -876,6 +896,7 @@
       "swim_max_m_s": 0.1,
       "skirt_m": 2.0,
       "tow_m_s": 0.35,
+      "bag": false,
       "retained_share": 0.0
     },
     {
@@ -883,398 +904,679 @@
       "swim_max_m_s": 0.1,
       "skirt_m": 2.0,
       "tow_m_s": 0.45,
+      "bag": false,
       "retained_share": 0.0
+    },
+    {
+      "downflow_fraction": 0.25,
+      "swim_max_m_s": 0.1,
+      "skirt_m": 2.0,
+      "tow_m_s": 0.1,
+      "bag": true,
+      "retained_share": 1.0
+    },
+    {
+      "downflow_fraction": 0.25,
+      "swim_max_m_s": 0.1,
+      "skirt_m": 2.0,
+      "tow_m_s": 0.15,
+      "bag": true,
+      "retained_share": 1.0
+    },
+    {
+      "downflow_fraction": 0.25,
+      "swim_max_m_s": 0.1,
+      "skirt_m": 2.0,
+      "tow_m_s": 0.2,
+      "bag": true,
+      "retained_share": 1.0
+    },
+    {
+      "downflow_fraction": 0.25,
+      "swim_max_m_s": 0.1,
+      "skirt_m": 2.0,
+      "tow_m_s": 0.25,
+      "bag": true,
+      "retained_share": 0.995
+    },
+    {
+      "downflow_fraction": 0.25,
+      "swim_max_m_s": 0.1,
+      "skirt_m": 2.0,
+      "tow_m_s": 0.3,
+      "bag": true,
+      "retained_share": 0.965
+    },
+    {
+      "downflow_fraction": 0.25,
+      "swim_max_m_s": 0.1,
+      "skirt_m": 2.0,
+      "tow_m_s": 0.35,
+      "bag": true,
+      "retained_share": 0.885
+    },
+    {
+      "downflow_fraction": 0.25,
+      "swim_max_m_s": 0.1,
+      "skirt_m": 2.0,
+      "tow_m_s": 0.45,
+      "bag": true,
+      "retained_share": 0.77
     },
     {
       "downflow_fraction": 0.25,
       "swim_max_m_s": 0.2,
       "skirt_m": 1.0,
       "tow_m_s": 0.1,
+      "bag": false,
+      "retained_share": 0.665
+    },
+    {
+      "downflow_fraction": 0.25,
+      "swim_max_m_s": 0.2,
+      "skirt_m": 1.0,
+      "tow_m_s": 0.15,
+      "bag": false,
+      "retained_share": 0.39
+    },
+    {
+      "downflow_fraction": 0.25,
+      "swim_max_m_s": 0.2,
+      "skirt_m": 1.0,
+      "tow_m_s": 0.2,
+      "bag": false,
+      "retained_share": 0.09
+    },
+    {
+      "downflow_fraction": 0.25,
+      "swim_max_m_s": 0.2,
+      "skirt_m": 1.0,
+      "tow_m_s": 0.25,
+      "bag": false,
+      "retained_share": 0.005
+    },
+    {
+      "downflow_fraction": 0.25,
+      "swim_max_m_s": 0.2,
+      "skirt_m": 1.0,
+      "tow_m_s": 0.3,
+      "bag": false,
+      "retained_share": 0.002
+    },
+    {
+      "downflow_fraction": 0.25,
+      "swim_max_m_s": 0.2,
+      "skirt_m": 1.0,
+      "tow_m_s": 0.35,
+      "bag": false,
+      "retained_share": 0.0
+    },
+    {
+      "downflow_fraction": 0.25,
+      "swim_max_m_s": 0.2,
+      "skirt_m": 1.0,
+      "tow_m_s": 0.45,
+      "bag": false,
+      "retained_share": 0.0
+    },
+    {
+      "downflow_fraction": 0.25,
+      "swim_max_m_s": 0.2,
+      "skirt_m": 1.5,
+      "tow_m_s": 0.1,
+      "bag": false,
+      "retained_share": 0.81
+    },
+    {
+      "downflow_fraction": 0.25,
+      "swim_max_m_s": 0.2,
+      "skirt_m": 1.5,
+      "tow_m_s": 0.15,
+      "bag": false,
       "retained_share": 0.63
     },
     {
       "downflow_fraction": 0.25,
       "swim_max_m_s": 0.2,
-      "skirt_m": 1.0,
-      "tow_m_s": 0.15,
-      "retained_share": 0.37
+      "skirt_m": 1.5,
+      "tow_m_s": 0.2,
+      "bag": false,
+      "retained_share": 0.453
     },
     {
       "downflow_fraction": 0.25,
       "swim_max_m_s": 0.2,
+      "skirt_m": 1.5,
+      "tow_m_s": 0.25,
+      "bag": false,
+      "retained_share": 0.265
+    },
+    {
+      "downflow_fraction": 0.25,
+      "swim_max_m_s": 0.2,
+      "skirt_m": 1.5,
+      "tow_m_s": 0.3,
+      "bag": false,
+      "retained_share": 0.042
+    },
+    {
+      "downflow_fraction": 0.25,
+      "swim_max_m_s": 0.2,
+      "skirt_m": 1.5,
+      "tow_m_s": 0.35,
+      "bag": false,
+      "retained_share": 0.005
+    },
+    {
+      "downflow_fraction": 0.25,
+      "swim_max_m_s": 0.2,
+      "skirt_m": 1.5,
+      "tow_m_s": 0.45,
+      "bag": false,
+      "retained_share": 0.002
+    },
+    {
+      "downflow_fraction": 0.25,
+      "swim_max_m_s": 0.2,
+      "skirt_m": 2.0,
+      "tow_m_s": 0.1,
+      "bag": false,
+      "retained_share": 0.845
+    },
+    {
+      "downflow_fraction": 0.25,
+      "swim_max_m_s": 0.2,
+      "skirt_m": 2.0,
+      "tow_m_s": 0.15,
+      "bag": false,
+      "retained_share": 0.718
+    },
+    {
+      "downflow_fraction": 0.25,
+      "swim_max_m_s": 0.2,
+      "skirt_m": 2.0,
+      "tow_m_s": 0.2,
+      "bag": false,
+      "retained_share": 0.545
+    },
+    {
+      "downflow_fraction": 0.25,
+      "swim_max_m_s": 0.2,
+      "skirt_m": 2.0,
+      "tow_m_s": 0.25,
+      "bag": false,
+      "retained_share": 0.35
+    },
+    {
+      "downflow_fraction": 0.25,
+      "swim_max_m_s": 0.2,
+      "skirt_m": 2.0,
+      "tow_m_s": 0.3,
+      "bag": false,
+      "retained_share": 0.177
+    },
+    {
+      "downflow_fraction": 0.25,
+      "swim_max_m_s": 0.2,
+      "skirt_m": 2.0,
+      "tow_m_s": 0.35,
+      "bag": false,
+      "retained_share": 0.01
+    },
+    {
+      "downflow_fraction": 0.25,
+      "swim_max_m_s": 0.2,
+      "skirt_m": 2.0,
+      "tow_m_s": 0.45,
+      "bag": false,
+      "retained_share": 0.0
+    },
+    {
+      "downflow_fraction": 0.25,
+      "swim_max_m_s": 0.2,
+      "skirt_m": 2.0,
+      "tow_m_s": 0.1,
+      "bag": true,
+      "retained_share": 1.0
+    },
+    {
+      "downflow_fraction": 0.25,
+      "swim_max_m_s": 0.2,
+      "skirt_m": 2.0,
+      "tow_m_s": 0.15,
+      "bag": true,
+      "retained_share": 1.0
+    },
+    {
+      "downflow_fraction": 0.25,
+      "swim_max_m_s": 0.2,
+      "skirt_m": 2.0,
+      "tow_m_s": 0.2,
+      "bag": true,
+      "retained_share": 1.0
+    },
+    {
+      "downflow_fraction": 0.25,
+      "swim_max_m_s": 0.2,
+      "skirt_m": 2.0,
+      "tow_m_s": 0.25,
+      "bag": true,
+      "retained_share": 0.998
+    },
+    {
+      "downflow_fraction": 0.25,
+      "swim_max_m_s": 0.2,
+      "skirt_m": 2.0,
+      "tow_m_s": 0.3,
+      "bag": true,
+      "retained_share": 0.983
+    },
+    {
+      "downflow_fraction": 0.25,
+      "swim_max_m_s": 0.2,
+      "skirt_m": 2.0,
+      "tow_m_s": 0.35,
+      "bag": true,
+      "retained_share": 0.96
+    },
+    {
+      "downflow_fraction": 0.25,
+      "swim_max_m_s": 0.2,
+      "skirt_m": 2.0,
+      "tow_m_s": 0.45,
+      "bag": true,
+      "retained_share": 0.902
+    },
+    {
+      "downflow_fraction": 0.5,
+      "swim_max_m_s": 0.1,
+      "skirt_m": 1.0,
+      "tow_m_s": 0.1,
+      "bag": false,
+      "retained_share": 0.0
+    },
+    {
+      "downflow_fraction": 0.5,
+      "swim_max_m_s": 0.1,
+      "skirt_m": 1.0,
+      "tow_m_s": 0.15,
+      "bag": false,
+      "retained_share": 0.0
+    },
+    {
+      "downflow_fraction": 0.5,
+      "swim_max_m_s": 0.1,
       "skirt_m": 1.0,
       "tow_m_s": 0.2,
-      "retained_share": 0.06
+      "bag": false,
+      "retained_share": 0.0
     },
     {
-      "downflow_fraction": 0.25,
-      "swim_max_m_s": 0.2,
+      "downflow_fraction": 0.5,
+      "swim_max_m_s": 0.1,
       "skirt_m": 1.0,
       "tow_m_s": 0.25,
+      "bag": false,
       "retained_share": 0.0
     },
     {
-      "downflow_fraction": 0.25,
-      "swim_max_m_s": 0.2,
+      "downflow_fraction": 0.5,
+      "swim_max_m_s": 0.1,
       "skirt_m": 1.0,
       "tow_m_s": 0.3,
+      "bag": false,
       "retained_share": 0.0
     },
     {
-      "downflow_fraction": 0.25,
-      "swim_max_m_s": 0.2,
+      "downflow_fraction": 0.5,
+      "swim_max_m_s": 0.1,
       "skirt_m": 1.0,
       "tow_m_s": 0.35,
+      "bag": false,
       "retained_share": 0.0
     },
     {
-      "downflow_fraction": 0.25,
-      "swim_max_m_s": 0.2,
+      "downflow_fraction": 0.5,
+      "swim_max_m_s": 0.1,
       "skirt_m": 1.0,
       "tow_m_s": 0.45,
+      "bag": false,
       "retained_share": 0.0
     },
     {
-      "downflow_fraction": 0.25,
-      "swim_max_m_s": 0.2,
+      "downflow_fraction": 0.5,
+      "swim_max_m_s": 0.1,
       "skirt_m": 1.5,
       "tow_m_s": 0.1,
-      "retained_share": 0.795
+      "bag": false,
+      "retained_share": 0.012
     },
     {
-      "downflow_fraction": 0.25,
-      "swim_max_m_s": 0.2,
+      "downflow_fraction": 0.5,
+      "swim_max_m_s": 0.1,
       "skirt_m": 1.5,
       "tow_m_s": 0.15,
+      "bag": false,
+      "retained_share": 0.0
+    },
+    {
+      "downflow_fraction": 0.5,
+      "swim_max_m_s": 0.1,
+      "skirt_m": 1.5,
+      "tow_m_s": 0.2,
+      "bag": false,
+      "retained_share": 0.0
+    },
+    {
+      "downflow_fraction": 0.5,
+      "swim_max_m_s": 0.1,
+      "skirt_m": 1.5,
+      "tow_m_s": 0.25,
+      "bag": false,
+      "retained_share": 0.0
+    },
+    {
+      "downflow_fraction": 0.5,
+      "swim_max_m_s": 0.1,
+      "skirt_m": 1.5,
+      "tow_m_s": 0.3,
+      "bag": false,
+      "retained_share": 0.0
+    },
+    {
+      "downflow_fraction": 0.5,
+      "swim_max_m_s": 0.1,
+      "skirt_m": 1.5,
+      "tow_m_s": 0.35,
+      "bag": false,
+      "retained_share": 0.0
+    },
+    {
+      "downflow_fraction": 0.5,
+      "swim_max_m_s": 0.1,
+      "skirt_m": 1.5,
+      "tow_m_s": 0.45,
+      "bag": false,
+      "retained_share": 0.0
+    },
+    {
+      "downflow_fraction": 0.5,
+      "swim_max_m_s": 0.1,
+      "skirt_m": 2.0,
+      "tow_m_s": 0.1,
+      "bag": false,
+      "retained_share": 0.03
+    },
+    {
+      "downflow_fraction": 0.5,
+      "swim_max_m_s": 0.1,
+      "skirt_m": 2.0,
+      "tow_m_s": 0.15,
+      "bag": false,
+      "retained_share": 0.0
+    },
+    {
+      "downflow_fraction": 0.5,
+      "swim_max_m_s": 0.1,
+      "skirt_m": 2.0,
+      "tow_m_s": 0.2,
+      "bag": false,
+      "retained_share": 0.0
+    },
+    {
+      "downflow_fraction": 0.5,
+      "swim_max_m_s": 0.1,
+      "skirt_m": 2.0,
+      "tow_m_s": 0.25,
+      "bag": false,
+      "retained_share": 0.0
+    },
+    {
+      "downflow_fraction": 0.5,
+      "swim_max_m_s": 0.1,
+      "skirt_m": 2.0,
+      "tow_m_s": 0.3,
+      "bag": false,
+      "retained_share": 0.0
+    },
+    {
+      "downflow_fraction": 0.5,
+      "swim_max_m_s": 0.1,
+      "skirt_m": 2.0,
+      "tow_m_s": 0.35,
+      "bag": false,
+      "retained_share": 0.0
+    },
+    {
+      "downflow_fraction": 0.5,
+      "swim_max_m_s": 0.1,
+      "skirt_m": 2.0,
+      "tow_m_s": 0.45,
+      "bag": false,
+      "retained_share": 0.0
+    },
+    {
+      "downflow_fraction": 0.5,
+      "swim_max_m_s": 0.1,
+      "skirt_m": 2.0,
+      "tow_m_s": 0.1,
+      "bag": true,
+      "retained_share": 1.0
+    },
+    {
+      "downflow_fraction": 0.5,
+      "swim_max_m_s": 0.1,
+      "skirt_m": 2.0,
+      "tow_m_s": 0.15,
+      "bag": true,
+      "retained_share": 0.955
+    },
+    {
+      "downflow_fraction": 0.5,
+      "swim_max_m_s": 0.1,
+      "skirt_m": 2.0,
+      "tow_m_s": 0.2,
+      "bag": true,
+      "retained_share": 0.843
+    },
+    {
+      "downflow_fraction": 0.5,
+      "swim_max_m_s": 0.1,
+      "skirt_m": 2.0,
+      "tow_m_s": 0.25,
+      "bag": true,
+      "retained_share": 0.748
+    },
+    {
+      "downflow_fraction": 0.5,
+      "swim_max_m_s": 0.1,
+      "skirt_m": 2.0,
+      "tow_m_s": 0.3,
+      "bag": true,
       "retained_share": 0.6
     },
     {
-      "downflow_fraction": 0.25,
+      "downflow_fraction": 0.5,
+      "swim_max_m_s": 0.1,
+      "skirt_m": 2.0,
+      "tow_m_s": 0.35,
+      "bag": true,
+      "retained_share": 0.488
+    },
+    {
+      "downflow_fraction": 0.5,
+      "swim_max_m_s": 0.1,
+      "skirt_m": 2.0,
+      "tow_m_s": 0.45,
+      "bag": true,
+      "retained_share": 0.177
+    },
+    {
+      "downflow_fraction": 0.5,
+      "swim_max_m_s": 0.2,
+      "skirt_m": 1.0,
+      "tow_m_s": 0.1,
+      "bag": false,
+      "retained_share": 0.19
+    },
+    {
+      "downflow_fraction": 0.5,
+      "swim_max_m_s": 0.2,
+      "skirt_m": 1.0,
+      "tow_m_s": 0.15,
+      "bag": false,
+      "retained_share": 0.007
+    },
+    {
+      "downflow_fraction": 0.5,
+      "swim_max_m_s": 0.2,
+      "skirt_m": 1.0,
+      "tow_m_s": 0.2,
+      "bag": false,
+      "retained_share": 0.0
+    },
+    {
+      "downflow_fraction": 0.5,
+      "swim_max_m_s": 0.2,
+      "skirt_m": 1.0,
+      "tow_m_s": 0.25,
+      "bag": false,
+      "retained_share": 0.0
+    },
+    {
+      "downflow_fraction": 0.5,
+      "swim_max_m_s": 0.2,
+      "skirt_m": 1.0,
+      "tow_m_s": 0.3,
+      "bag": false,
+      "retained_share": 0.0
+    },
+    {
+      "downflow_fraction": 0.5,
+      "swim_max_m_s": 0.2,
+      "skirt_m": 1.0,
+      "tow_m_s": 0.35,
+      "bag": false,
+      "retained_share": 0.0
+    },
+    {
+      "downflow_fraction": 0.5,
+      "swim_max_m_s": 0.2,
+      "skirt_m": 1.0,
+      "tow_m_s": 0.45,
+      "bag": false,
+      "retained_share": 0.0
+    },
+    {
+      "downflow_fraction": 0.5,
+      "swim_max_m_s": 0.2,
+      "skirt_m": 1.5,
+      "tow_m_s": 0.1,
+      "bag": false,
+      "retained_share": 0.463
+    },
+    {
+      "downflow_fraction": 0.5,
+      "swim_max_m_s": 0.2,
+      "skirt_m": 1.5,
+      "tow_m_s": 0.15,
+      "bag": false,
+      "retained_share": 0.075
+    },
+    {
+      "downflow_fraction": 0.5,
       "swim_max_m_s": 0.2,
       "skirt_m": 1.5,
       "tow_m_s": 0.2,
-      "retained_share": 0.412
+      "bag": false,
+      "retained_share": 0.0
     },
     {
-      "downflow_fraction": 0.25,
+      "downflow_fraction": 0.5,
       "swim_max_m_s": 0.2,
       "skirt_m": 1.5,
       "tow_m_s": 0.25,
-      "retained_share": 0.235
+      "bag": false,
+      "retained_share": 0.0
     },
     {
-      "downflow_fraction": 0.25,
+      "downflow_fraction": 0.5,
       "swim_max_m_s": 0.2,
       "skirt_m": 1.5,
       "tow_m_s": 0.3,
-      "retained_share": 0.02
+      "bag": false,
+      "retained_share": 0.0
     },
     {
-      "downflow_fraction": 0.25,
+      "downflow_fraction": 0.5,
       "swim_max_m_s": 0.2,
       "skirt_m": 1.5,
       "tow_m_s": 0.35,
+      "bag": false,
       "retained_share": 0.0
     },
     {
-      "downflow_fraction": 0.25,
+      "downflow_fraction": 0.5,
       "swim_max_m_s": 0.2,
       "skirt_m": 1.5,
       "tow_m_s": 0.45,
+      "bag": false,
       "retained_share": 0.0
     },
     {
-      "downflow_fraction": 0.25,
+      "downflow_fraction": 0.5,
       "swim_max_m_s": 0.2,
       "skirt_m": 2.0,
       "tow_m_s": 0.1,
-      "retained_share": 0.828
+      "bag": false,
+      "retained_share": 0.547
     },
     {
-      "downflow_fraction": 0.25,
+      "downflow_fraction": 0.5,
       "swim_max_m_s": 0.2,
       "skirt_m": 2.0,
       "tow_m_s": 0.15,
-      "retained_share": 0.68
+      "bag": false,
+      "retained_share": 0.208
     },
     {
-      "downflow_fraction": 0.25,
+      "downflow_fraction": 0.5,
       "swim_max_m_s": 0.2,
       "skirt_m": 2.0,
       "tow_m_s": 0.2,
-      "retained_share": 0.512
-    },
-    {
-      "downflow_fraction": 0.25,
-      "swim_max_m_s": 0.2,
-      "skirt_m": 2.0,
-      "tow_m_s": 0.25,
-      "retained_share": 0.33
-    },
-    {
-      "downflow_fraction": 0.25,
-      "swim_max_m_s": 0.2,
-      "skirt_m": 2.0,
-      "tow_m_s": 0.3,
-      "retained_share": 0.113
-    },
-    {
-      "downflow_fraction": 0.25,
-      "swim_max_m_s": 0.2,
-      "skirt_m": 2.0,
-      "tow_m_s": 0.35,
-      "retained_share": 0.0
-    },
-    {
-      "downflow_fraction": 0.25,
-      "swim_max_m_s": 0.2,
-      "skirt_m": 2.0,
-      "tow_m_s": 0.45,
-      "retained_share": 0.0
-    },
-    {
-      "downflow_fraction": 0.5,
-      "swim_max_m_s": 0.1,
-      "skirt_m": 1.0,
-      "tow_m_s": 0.1,
-      "retained_share": 0.0
-    },
-    {
-      "downflow_fraction": 0.5,
-      "swim_max_m_s": 0.1,
-      "skirt_m": 1.0,
-      "tow_m_s": 0.15,
-      "retained_share": 0.0
-    },
-    {
-      "downflow_fraction": 0.5,
-      "swim_max_m_s": 0.1,
-      "skirt_m": 1.0,
-      "tow_m_s": 0.2,
-      "retained_share": 0.0
-    },
-    {
-      "downflow_fraction": 0.5,
-      "swim_max_m_s": 0.1,
-      "skirt_m": 1.0,
-      "tow_m_s": 0.25,
-      "retained_share": 0.0
-    },
-    {
-      "downflow_fraction": 0.5,
-      "swim_max_m_s": 0.1,
-      "skirt_m": 1.0,
-      "tow_m_s": 0.3,
-      "retained_share": 0.0
-    },
-    {
-      "downflow_fraction": 0.5,
-      "swim_max_m_s": 0.1,
-      "skirt_m": 1.0,
-      "tow_m_s": 0.35,
-      "retained_share": 0.0
-    },
-    {
-      "downflow_fraction": 0.5,
-      "swim_max_m_s": 0.1,
-      "skirt_m": 1.0,
-      "tow_m_s": 0.45,
-      "retained_share": 0.0
-    },
-    {
-      "downflow_fraction": 0.5,
-      "swim_max_m_s": 0.1,
-      "skirt_m": 1.5,
-      "tow_m_s": 0.1,
-      "retained_share": 0.0
-    },
-    {
-      "downflow_fraction": 0.5,
-      "swim_max_m_s": 0.1,
-      "skirt_m": 1.5,
-      "tow_m_s": 0.15,
-      "retained_share": 0.0
-    },
-    {
-      "downflow_fraction": 0.5,
-      "swim_max_m_s": 0.1,
-      "skirt_m": 1.5,
-      "tow_m_s": 0.2,
-      "retained_share": 0.0
-    },
-    {
-      "downflow_fraction": 0.5,
-      "swim_max_m_s": 0.1,
-      "skirt_m": 1.5,
-      "tow_m_s": 0.25,
-      "retained_share": 0.0
-    },
-    {
-      "downflow_fraction": 0.5,
-      "swim_max_m_s": 0.1,
-      "skirt_m": 1.5,
-      "tow_m_s": 0.3,
-      "retained_share": 0.0
-    },
-    {
-      "downflow_fraction": 0.5,
-      "swim_max_m_s": 0.1,
-      "skirt_m": 1.5,
-      "tow_m_s": 0.35,
-      "retained_share": 0.0
-    },
-    {
-      "downflow_fraction": 0.5,
-      "swim_max_m_s": 0.1,
-      "skirt_m": 1.5,
-      "tow_m_s": 0.45,
-      "retained_share": 0.0
-    },
-    {
-      "downflow_fraction": 0.5,
-      "swim_max_m_s": 0.1,
-      "skirt_m": 2.0,
-      "tow_m_s": 0.1,
+      "bag": false,
       "retained_share": 0.005
     },
     {
       "downflow_fraction": 0.5,
-      "swim_max_m_s": 0.1,
-      "skirt_m": 2.0,
-      "tow_m_s": 0.15,
-      "retained_share": 0.0
-    },
-    {
-      "downflow_fraction": 0.5,
-      "swim_max_m_s": 0.1,
-      "skirt_m": 2.0,
-      "tow_m_s": 0.2,
-      "retained_share": 0.0
-    },
-    {
-      "downflow_fraction": 0.5,
-      "swim_max_m_s": 0.1,
+      "swim_max_m_s": 0.2,
       "skirt_m": 2.0,
       "tow_m_s": 0.25,
+      "bag": false,
       "retained_share": 0.0
     },
     {
       "downflow_fraction": 0.5,
-      "swim_max_m_s": 0.1,
+      "swim_max_m_s": 0.2,
       "skirt_m": 2.0,
       "tow_m_s": 0.3,
+      "bag": false,
       "retained_share": 0.0
     },
     {
       "downflow_fraction": 0.5,
-      "swim_max_m_s": 0.1,
+      "swim_max_m_s": 0.2,
       "skirt_m": 2.0,
       "tow_m_s": 0.35,
+      "bag": false,
       "retained_share": 0.0
     },
     {
       "downflow_fraction": 0.5,
-      "swim_max_m_s": 0.1,
+      "swim_max_m_s": 0.2,
       "skirt_m": 2.0,
       "tow_m_s": 0.45,
-      "retained_share": 0.0
-    },
-    {
-      "downflow_fraction": 0.5,
-      "swim_max_m_s": 0.2,
-      "skirt_m": 1.0,
-      "tow_m_s": 0.1,
-      "retained_share": 0.142
-    },
-    {
-      "downflow_fraction": 0.5,
-      "swim_max_m_s": 0.2,
-      "skirt_m": 1.0,
-      "tow_m_s": 0.15,
-      "retained_share": 0.0
-    },
-    {
-      "downflow_fraction": 0.5,
-      "swim_max_m_s": 0.2,
-      "skirt_m": 1.0,
-      "tow_m_s": 0.2,
-      "retained_share": 0.0
-    },
-    {
-      "downflow_fraction": 0.5,
-      "swim_max_m_s": 0.2,
-      "skirt_m": 1.0,
-      "tow_m_s": 0.25,
-      "retained_share": 0.0
-    },
-    {
-      "downflow_fraction": 0.5,
-      "swim_max_m_s": 0.2,
-      "skirt_m": 1.0,
-      "tow_m_s": 0.3,
-      "retained_share": 0.0
-    },
-    {
-      "downflow_fraction": 0.5,
-      "swim_max_m_s": 0.2,
-      "skirt_m": 1.0,
-      "tow_m_s": 0.35,
-      "retained_share": 0.0
-    },
-    {
-      "downflow_fraction": 0.5,
-      "swim_max_m_s": 0.2,
-      "skirt_m": 1.0,
-      "tow_m_s": 0.45,
-      "retained_share": 0.0
-    },
-    {
-      "downflow_fraction": 0.5,
-      "swim_max_m_s": 0.2,
-      "skirt_m": 1.5,
-      "tow_m_s": 0.1,
-      "retained_share": 0.427
-    },
-    {
-      "downflow_fraction": 0.5,
-      "swim_max_m_s": 0.2,
-      "skirt_m": 1.5,
-      "tow_m_s": 0.15,
-      "retained_share": 0.035
-    },
-    {
-      "downflow_fraction": 0.5,
-      "swim_max_m_s": 0.2,
-      "skirt_m": 1.5,
-      "tow_m_s": 0.2,
-      "retained_share": 0.0
-    },
-    {
-      "downflow_fraction": 0.5,
-      "swim_max_m_s": 0.2,
-      "skirt_m": 1.5,
-      "tow_m_s": 0.25,
-      "retained_share": 0.0
-    },
-    {
-      "downflow_fraction": 0.5,
-      "swim_max_m_s": 0.2,
-      "skirt_m": 1.5,
-      "tow_m_s": 0.3,
-      "retained_share": 0.0
-    },
-    {
-      "downflow_fraction": 0.5,
-      "swim_max_m_s": 0.2,
-      "skirt_m": 1.5,
-      "tow_m_s": 0.35,
-      "retained_share": 0.0
-    },
-    {
-      "downflow_fraction": 0.5,
-      "swim_max_m_s": 0.2,
-      "skirt_m": 1.5,
-      "tow_m_s": 0.45,
+      "bag": false,
       "retained_share": 0.0
     },
     {
@@ -1282,49 +1584,157 @@
       "swim_max_m_s": 0.2,
       "skirt_m": 2.0,
       "tow_m_s": 0.1,
-      "retained_share": 0.518
+      "bag": true,
+      "retained_share": 1.0
     },
     {
       "downflow_fraction": 0.5,
       "swim_max_m_s": 0.2,
       "skirt_m": 2.0,
       "tow_m_s": 0.15,
-      "retained_share": 0.16
+      "bag": true,
+      "retained_share": 0.98
     },
     {
       "downflow_fraction": 0.5,
       "swim_max_m_s": 0.2,
       "skirt_m": 2.0,
       "tow_m_s": 0.2,
-      "retained_share": 0.0
+      "bag": true,
+      "retained_share": 0.927
     },
     {
       "downflow_fraction": 0.5,
       "swim_max_m_s": 0.2,
       "skirt_m": 2.0,
       "tow_m_s": 0.25,
-      "retained_share": 0.0
+      "bag": true,
+      "retained_share": 0.873
     },
     {
       "downflow_fraction": 0.5,
       "swim_max_m_s": 0.2,
       "skirt_m": 2.0,
       "tow_m_s": 0.3,
-      "retained_share": 0.0
+      "bag": true,
+      "retained_share": 0.815
     },
     {
       "downflow_fraction": 0.5,
       "swim_max_m_s": 0.2,
       "skirt_m": 2.0,
       "tow_m_s": 0.35,
-      "retained_share": 0.0
+      "bag": true,
+      "retained_share": 0.78
     },
     {
       "downflow_fraction": 0.5,
       "swim_max_m_s": 0.2,
       "skirt_m": 2.0,
       "tow_m_s": 0.45,
-      "retained_share": 0.0
+      "bag": true,
+      "retained_share": 0.657
+    }
+  ],
+  "sensitivity": [
+    {
+      "outcome": "Curtain: % held outside the gap",
+      "unknown": "Approach current at the gap",
+      "low": 0.1,
+      "low_value": 99.7,
+      "high": 0.3,
+      "high_value": 70.3,
+      "base": 100.0
+    },
+    {
+      "outcome": "Curtain: % held outside the gap",
+      "unknown": "Jellyfish top swim speed",
+      "low": 0.05,
+      "low_value": 100.0,
+      "high": 0.2,
+      "high_value": 99.0,
+      "base": 100.0
+    },
+    {
+      "outcome": "Curtain: % held outside the gap",
+      "unknown": "Bubble airflow (L/s per m)",
+      "low": 1.5,
+      "low_value": 96.7,
+      "high": 4.5,
+      "high_value": 100.0,
+      "base": 100.0
+    },
+    {
+      "outcome": "Curtain: % held outside the gap",
+      "unknown": "Water depth at gap",
+      "low": 6.0,
+      "low_value": 100.0,
+      "high": 12.0,
+      "high_value": 100.0,
+      "base": 100.0
+    },
+    {
+      "outcome": "Boom + bag: % kept for 30 min",
+      "unknown": "Apex downflow fraction",
+      "low": 0.15,
+      "low_value": 100.0,
+      "high": 0.5,
+      "high_value": 87.7,
+      "base": 100.0
+    },
+    {
+      "outcome": "Boom + bag: % kept for 30 min",
+      "unknown": "Bag fabric leak",
+      "low": 0.1,
+      "low_value": 100.0,
+      "high": 0.4,
+      "high_value": 87.7,
+      "base": 100.0
+    },
+    {
+      "outcome": "Boom + bag: % kept for 30 min",
+      "unknown": "Jellyfish top swim speed",
+      "low": 0.05,
+      "low_value": 100.0,
+      "high": 0.2,
+      "high_value": 100.0,
+      "base": 100.0
+    },
+    {
+      "outcome": "Boom + bag: % kept for 30 min",
+      "unknown": "Tow speed through water (m/s)",
+      "low": 0.1,
+      "low_value": 100.0,
+      "high": 0.3,
+      "high_value": 96.7,
+      "base": 100.0
+    },
+    {
+      "outcome": "Compressor power (kW)",
+      "unknown": "Gap width (m)",
+      "low": 150.0,
+      "low_value": 68.0,
+      "high": 600.0,
+      "high_value": 271.0,
+      "base": 135.0
+    },
+    {
+      "outcome": "Compressor power (kW)",
+      "unknown": "Bubble airflow (L/s per m)",
+      "low": 2.4,
+      "low_value": 108.0,
+      "high": 3.6,
+      "high_value": 162.0,
+      "base": 135.0
+    },
+    {
+      "outcome": "Compressor power (kW)",
+      "unknown": "Water depth at gap (m)",
+      "low": 6.0,
+      "low_value": 112.0,
+      "high": 12.0,
+      "high_value": 150.0,
+      "base": 135.0
     }
   ],
   "compressor": {
@@ -1332,31 +1742,31 @@
     "airflow_l_s_m": 3.0,
     "air_m3_s": 0.9,
     "air_m3_min": 54.0,
-    "discharge_bar_abs": 2.32,
-    "power_kw": 126.0,
+    "discharge_bar_abs": 2.47,
+    "power_kw": 135.0,
     "event_hours": 82,
-    "energy_mwh_per_event": 10.31,
-    "energy_cost_usd_per_event": 1031.0
+    "energy_mwh_per_event": 11.1,
+    "energy_cost_usd_per_event": 1110.0
   },
   "boom": {
-    "swept_m3_s": 3.0,
-    "retention": 0.62,
+    "swept_m3_s": 6.0,
+    "retention": 1.0,
     "mass_kg": 2.0,
     "rows": [
       {
         "density_per_m3": 0.1,
-        "jellyfish_per_h": 700.0,
-        "tonnes_per_h": 1.3
+        "jellyfish_per_h": 2200.0,
+        "tonnes_per_h": 4.3
       },
       {
         "density_per_m3": 0.5,
-        "jellyfish_per_h": 3300.0,
-        "tonnes_per_h": 6.7
+        "jellyfish_per_h": 10800.0,
+        "tonnes_per_h": 21.6
       },
       {
         "density_per_m3": 1.0,
-        "jellyfish_per_h": 6700.0,
-        "tonnes_per_h": 13.4
+        "jellyfish_per_h": 21600.0,
+        "tonnes_per_h": 43.2
       }
     ]
   },
