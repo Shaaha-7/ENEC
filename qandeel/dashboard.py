@@ -15,6 +15,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))  # allow `stream
 import matplotlib.pyplot as plt  # noqa: E402
 import streamlit as st  # noqa: E402
 
+from qandeel.data_fetch import download  # noqa: E402
 from qandeel.plan_alert import compass  # noqa: E402
 from qandeel.sim.env import bearing_to_xy  # noqa: E402
 from qandeel.sim.forcing import load_forecast, load_record, load_site, source_label  # noqa: E402
@@ -28,7 +29,7 @@ st.set_page_config(page_title="Qandeel response dashboard", layout="wide")
 
 
 @st.cache_data(show_spinner="Simulating 400 possible drifts of the swarm...")
-def run_plan(distance, bearing, swim, mode, start_hour):
+def run_plan(distance, bearing, swim, mode, start_hour, data_key=None):
     record = {"forecast": load_forecast, "season": load_record}.get(mode, lambda: None)()
     fc = forecast_arrival(distance, bearing, record=record, runs=400, horizon_h=96, swim_max=swim,
                           start_hour=start_hour)
@@ -122,13 +123,23 @@ def draw_timeline(p, t):
     return fig
 
 
+@st.cache_data(ttl=6 * 3600, show_spinner="Downloading the live current and wind forecast...")
+def refresh_forecast(lat, lon):
+    """Fetch a fresh 7-day forecast at most every 6 hours (keeps the hosted app live). False if offline."""
+    try:
+        return download(lat, lon, forecast=True)[1][0]
+    except (Exception, SystemExit):
+        return False
+
+
 site = load_site()
+refresh_forecast(site["data_lat"], site["data_lon"])
 forecast = load_forecast()
 modes = {}
+if load_record() is not None:
+    modes["season"] = "Replay of 2025 bloom season (results in the deck)"
 if forecast is not None:
     modes["forecast"] = "Live forecast (operational mode)"
-if load_record() is not None:
-    modes["season"] = "Replay of 2025 bloom season"
 modes["assumed"] = "Assumed conditions"
 fc_start = datetime.strptime(forecast.time[0][:16], "%Y-%m-%dT%H:%M") if forecast else None
 with st.sidebar:
@@ -154,7 +165,7 @@ start_hour = (alert_at - fc_start).total_seconds() / 3600 if (mode == "forecast"
 if mode == "forecast" and not 0 <= start_hour <= 72:
     st.sidebar.warning("Alert time is outside the forecast; using the forecast start.")
     start_hour = 0.0
-p = run_plan(distance, bearing, swim, mode, round(start_hour, 1))
+p = run_plan(distance, bearing, swim, mode, round(start_hour, 1), fc_start if mode == "forecast" else None)
 
 st.title("Qandeel response dashboard")
 st.caption(f"Forcing: {p['source']}. Concept demonstration; operational use needs ENEC detection data and validation.")

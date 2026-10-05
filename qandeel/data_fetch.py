@@ -74,20 +74,12 @@ def fetch_wind(lat, lon, start, end, forecast_days=None):
             if s is not None and d is not None}
 
 
-def main():
-    site = json.loads((HERE / "site.json").read_text())
-    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--start", default="2025-06-01")
-    ap.add_argument("--end", default="2025-09-30")
-    ap.add_argument("--lat", type=float, default=site["data_lat"])
-    ap.add_argument("--lon", type=float, default=site["data_lon"])
-    ap.add_argument("--forecast", action="store_true", help="download the live 7-day forecast instead")
-    a = ap.parse_args()
-
-    days = 7 if a.forecast else None
-    out = OUT_FORECAST if a.forecast else OUT
-    cur = fetch_currents(a.lat, a.lon, a.start, a.end, forecast_days=days)
-    wind = fetch_wind(a.lat, a.lon, min(cur)[:10], max(cur)[:10], forecast_days=days)
+def download(lat, lon, start="2025-06-01", end="2025-09-30", forecast=False):
+    """Fetch currents + wind and write the CSV. Returns (path, hours, mean speed, max speed)."""
+    days = 7 if forecast else None
+    out = OUT_FORECAST if forecast else OUT
+    cur = fetch_currents(lat, lon, start, end, forecast_days=days)
+    wind = fetch_wind(lat, lon, min(cur)[:10], max(cur)[:10], forecast_days=days)
     times = sorted(set(cur) & set(wind))
     if len(times) < 72:
         raise SystemExit(f"Only {len(times)} matching hours; try another date range.")
@@ -100,10 +92,22 @@ def main():
             s, d = wind[t]
             w.writerow([t, f"{u:.4f}", f"{v:.4f}", f"{s:.2f}", f"{d:.0f}"])
     spd = [math.hypot(*cur[t]) for t in times]
-    print(f"Wrote {len(times)} hours ({times[0]} to {times[-1]}) to {out}")
-    print(f"Current speed: mean {sum(spd) / len(spd):.2f} m/s, max {max(spd):.2f} m/s")
-    print("Re-run: python -m qandeel.run_all")
+    return out, times, sum(spd) / len(spd), max(spd)
 
+
+def main():
+    site = json.loads((HERE / "site.json").read_text())
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("--start", default="2025-06-01")
+    ap.add_argument("--end", default="2025-09-30")
+    ap.add_argument("--lat", type=float, default=site["data_lat"])
+    ap.add_argument("--lon", type=float, default=site["data_lon"])
+    ap.add_argument("--forecast", action="store_true", help="download the live 7-day forecast instead")
+    a = ap.parse_args()
+    out, times, mean, top = download(a.lat, a.lon, a.start, a.end, forecast=a.forecast)
+    print(f"Wrote {len(times)} hours ({times[0]} to {times[-1]}) to {out}")
+    print(f"Current speed: mean {mean:.2f} m/s, max {top:.2f} m/s")
+    print("Re-run: python -m qandeel.run_all")
 
 if __name__ == "__main__":
     main()
