@@ -1,0 +1,329 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Team Qandeel – ENEC challenge proposal</title>
+<style>
+  @font-face { font-family: Inter; font-weight: 400; src: url(../video/node_modules/@fontsource/inter/files/inter-latin-400-normal.woff2); }
+  @font-face { font-family: Inter; font-weight: 600; src: url(../video/node_modules/@fontsource/inter/files/inter-latin-600-normal.woff2); }
+  @font-face { font-family: Inter; font-weight: 800; src: url(../video/node_modules/@fontsource/inter/files/inter-latin-800-normal.woff2); }
+  @page { size: 1920px 1080px; margin: 0; }
+  :root { --ink: #0f1b2b; --ink2: #4a5566; --line: #dfe5ec; --accent: #2a78d6; --navy: #0b2340; --orange: #ff8a1f;
+          --green: #13a35b; --pale: #f3f7fb; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; font-family: Inter, sans-serif; color: var(--ink); background: #fff; }
+  .slide { width: 1920px; height: 1080px; position: relative; overflow: hidden; page-break-after: always; padding: 84px 104px 96px; }
+  .slide:last-child { page-break-after: auto; }
+  h1 { font-size: 64px; font-weight: 800; letter-spacing: -0.5px; margin: 0 0 14px; line-height: 1.08; }
+  h2 { font-size: 30px; font-weight: 600; color: var(--accent); margin: 0 0 10px; letter-spacing: 0.3px; }
+  .lead { font-size: 30px; color: var(--ink2); margin: 0 0 40px; line-height: 1.35; max-width: 1600px; }
+  p, li { font-size: 26px; line-height: 1.42; }
+  ul { margin: 0; padding-left: 28px; }
+  li { margin-bottom: 10px; }
+  b { font-weight: 600; }
+  .kicker { font-size: 20px; font-weight: 600; letter-spacing: 4px; text-transform: uppercase; color: var(--accent); margin-bottom: 18px; }
+  .foot { position: absolute; left: 104px; right: 104px; bottom: 34px; display: flex; justify-content: space-between;
+          font-size: 17px; color: #8a95a5; border-top: 1px solid var(--line); padding-top: 14px; }
+  .cols { display: grid; gap: 48px; }
+  .c2 { grid-template-columns: 1fr 1fr; }
+  .c3 { grid-template-columns: 1fr 1fr 1fr; }
+  .c64 { grid-template-columns: 1.15fr 0.85fr; }
+  .card { background: var(--pale); border-radius: 18px; padding: 24px 30px; }
+  .card h3 { margin: 0 0 10px; font-size: 26px; }
+  .card p { margin: 0; font-size: 23px; color: var(--ink2); }
+  .num { font-size: 66px; font-weight: 800; color: var(--accent); line-height: 1; }
+  .numt { font-size: 22px; color: var(--ink2); margin-top: 8px; line-height: 1.35; }
+  img.fig { width: 100%; border-radius: 12px; border: 1px solid var(--line); display: block; }
+  .src { font-size: 16px; color: #8a95a5; margin-top: 8px; }
+  table { border-collapse: collapse; width: 100%; font-size: 22px; }
+  th { text-align: left; font-weight: 600; color: var(--ink2); border-bottom: 2px solid var(--line); padding: 10px 12px; font-size: 19px; text-transform: uppercase; letter-spacing: 1px; }
+  td { border-bottom: 1px solid var(--line); padding: 12px 12px; vertical-align: top; line-height: 1.32; }
+  .pill { display: inline-block; font-size: 18px; font-weight: 600; padding: 4px 12px; border-radius: 999px; background: #e7f0fb; color: var(--accent); }
+  .dark { background: var(--navy); color: #fff; }
+  .dark .foot { color: #9fb3c8; border-color: rgba(255,255,255,.18); }
+  .hero { position: absolute; inset: 0; background-size: cover; background-position: center; }
+  .shade { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(6,22,42,.92) 0%, rgba(6,22,42,.70) 45%, rgba(6,22,42,.05) 80%); }
+  .step { display: grid; grid-template-columns: 54px 1fr; gap: 16px; margin-bottom: 16px; align-items: start; }
+  .step .n { width: 46px; height: 46px; border-radius: 50%; background: var(--accent); color: #fff; font-weight: 800; font-size: 22px;
+             display: flex; align-items: center; justify-content: center; }
+  .step p { margin: 6px 0 0; font-size: 23px; }
+  .tag { font-weight: 600; }
+</style>
+</head>
+<body>
+
+<!-- 1. Title and team -->
+<section class="slide dark">
+  <div class="hero" style="background-image:url(img/hero.jpg)"></div>
+  <div class="shade"></div>
+  <div style="position:relative; max-width: 1050px; margin-top: 90px">
+    <div class="kicker" style="color:#7fd0ff">ATRC Advanced Technology Pioneers 2026 · ENEC track</div>
+    <h1 style="font-size:120px; letter-spacing:10px; margin-bottom:0">QANDEEL</h1>
+    <div style="font-size:56px; font-weight:600; opacity:.9; margin: 4px 0 26px">قنديل</div>
+    <p style="font-size:38px; line-height:1.3; margin:0 0 46px">Herd, don’t harvest: live-release management of Blue Blubber jellyfish swarms after ENEC’s early warning</p>
+    <div style="font-size:24px; line-height:1.7; color:#cfe0f0">
+      <b style="color:#fff">Team Qandeel</b><br>
+      [Member 1 – name, university, role] · [Member 2 – name, university, role]<br>
+      [Member 3 – name, university, role] · [Member 4 – name, university, role]<br>
+      Contact: [email]
+    </div>
+  </div>
+  <div class="foot"><span>Team Qandeel · Proposal for the ENEC jellyfish challenge</span><span>1</span></div>
+</section>
+
+<!-- 2. Executive summary -->
+<section class="slide">
+  <div class="kicker">Executive summary</div>
+  <h1>We keep swarms out of the intake and return them to the sea alive</h1>
+  <div class="cols c64" style="margin-top:22px">
+    <div>
+      <div class="card" style="margin-bottom:14px"><h3>Problem</h3><p>Blue Blubber swarms (30–45 cm, 1–3 kg) drift onto seawater intakes. Clearing them takes heavy manual work and almost none survive.</p></div>
+      <div class="card" style="margin-bottom:14px"><h3>Solution</h3><p>After ENEC’s alert, software plans the response; a bubble curtain at the breakwater gap holds the swarm out; a boom with a closed-bottom retention bag gathers it in the water; it is released alive down-current.</p></div>
+      <div class="card" style="margin-bottom:14px"><h3>Evidence</h3><p>Working simulation on real 2025 Copernicus currents and ERA5 wind; dashboard; 16 automated tests; open code.</p></div>
+      <div class="card"><h3>Next</h3><p>A 1:20 tank test (AED 300 kit) to measure what the model assumes, then a sea pilot with ENEC.</p></div>
+    </div>
+    <div style="display:grid; grid-template-rows: repeat(4, 1fr); gap: 22px">
+      <div><div class="num">39 / 39</div><div class="numt">swarms that truly arrived were covered, in a hindcast of 100 alerts on real 2025 Gulf data</div></div>
+      <div><div class="num">77%</div><div class="numt">fewer curtain running hours than switching on for every alert</div></div>
+      <div><div class="num">88–100%</div><div class="numt">of jellyfish kept by the boom with our retention bag (model), vs 0–54% for an open oil-spill boom</div></div>
+      <div><div class="num">46%</div><div class="numt">of the energy of a fixed airflow, by setting air hour by hour from real currents and wind</div></div>
+    </div>
+  </div>
+  <div class="foot"><span>Team Qandeel · ENEC track · ATP 2026</span><span>2</span></div>
+</section>
+
+<!-- 3. The problem -->
+<section class="slide">
+  <div class="kicker">The problem after the warning</div>
+  <h1>A large, local, hard-to-handle jellyfish</h1>
+  <p class="lead">ENEC already detects swarms offshore. The open question is what to do next: manage high volumes with less manual work and less harm.</p>
+  <div class="cols c3">
+    <div class="card"><h3>The target: Blue Blubber</h3>
+      <ul style="font-size:23px; color:var(--ink2)">
+        <li>One of the two dominant outbreak species on the UAE coast; reproduces year-round <span class="src">(Aravind 2024)</span></li>
+        <li>30–45 cm bell, ~1–3 kg each <span class="src">(Yang et al. 2018 mass formula)</span></li>
+        <li>87–100% sit in the top 1 m by day <span class="src">(Pitt &amp; Kingsford)</span></li>
+        <li>Large adults swim &gt;10 cm/s: not just passive drifters</li>
+      </ul></div>
+    <div class="card"><h3>What happens at intakes</h3>
+      <ul style="font-size:23px; color:var(--ink2)">
+        <li>Swarms follow the intake flow through the breakwater opening and pile on screens</li>
+        <li>Worldwide this has forced power reductions and shutdowns (e.g. Torness 2011, Oskarshamn 2013)</li>
+        <li>In the region, ~300 t of jellyfish clogged intakes in Oman</li>
+      </ul></div>
+    <div class="card"><h3>Why it is hard</h3>
+      <ul style="font-size:23px; color:var(--ink2)">
+        <li>Manual raking and trucking, sometimes for days</li>
+        <li>Jellyfish crushed on screens or discarded: almost none survive</li>
+        <li>Cutting robots (e.g. JEROS) shred them into fragments</li>
+        <li>No management method has ever been tested on this species</li>
+      </ul></div>
+  </div>
+  <div class="foot"><span>Team Qandeel · ENEC track · ATP 2026</span><span>3</span></div>
+</section>
+
+<!-- 4. Solution overview -->
+<section class="slide">
+  <div class="kicker">Our solution</div>
+  <h1>Guard the one gap, move the water, keep every jellyfish in the sea</h1>
+  <svg viewBox="0 0 1712 520" width="1712" height="520" style="margin-top:6px; font-family:Inter">
+    <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0L10 5L0 10z" fill="#8a95a5"/></marker></defs>
+    <g font-size="22">
+      <rect x="0" y="40" width="240" height="180" rx="18" fill="#fff4e6" stroke="#ff8a1f" stroke-width="2"/>
+      <text x="120" y="95" text-anchor="middle" font-weight="800" font-size="26">ENEC alert</text>
+      <text x="120" y="135" text-anchor="middle" fill="#4a5566">swarm position</text>
+      <text x="120" y="166" text-anchor="middle" fill="#4a5566">(existing system)</text>
+
+      <rect x="300" y="20" width="480" height="220" rx="18" fill="#e7f0fb" stroke="#2a78d6" stroke-width="2.5"/>
+      <text x="540" y="66" text-anchor="middle" font-weight="800" font-size="28">Qandeel planner</text>
+      <text x="330" y="106" fill="#4a5566">• chance of arrival and window</text>
+      <text x="330" y="140" fill="#4a5566">• curtain switch-on time</text>
+      <text x="330" y="174" fill="#4a5566">• airflow, crew side, release point</text>
+      <text x="330" y="208" fill="#4a5566">• live current and wind forecast</text>
+
+      <rect x="840" y="40" width="300" height="180" rx="18" fill="#fff" stroke="#8a95a5" stroke-width="2"/>
+      <text x="990" y="95" text-anchor="middle" font-weight="800" font-size="26">Bubble curtain</text>
+      <text x="990" y="135" text-anchor="middle" fill="#4a5566">at the breakwater gap,</text>
+      <text x="990" y="166" text-anchor="middle" fill="#4a5566">only when needed</text>
+
+      <rect x="1200" y="40" width="290" height="180" rx="18" fill="#e9f7ef" stroke="#13a35b" stroke-width="2"/>
+      <text x="1345" y="95" text-anchor="middle" font-weight="800" font-size="26">Boom + bag</text>
+      <text x="1345" y="135" text-anchor="middle" fill="#4a5566">gathers the swarm</text>
+      <text x="1345" y="166" text-anchor="middle" fill="#4a5566">in the water, no mesh</text>
+
+      <rect x="1540" y="40" width="172" height="180" rx="18" fill="#2a78d6"/>
+      <text x="1626" y="105" text-anchor="middle" font-weight="800" font-size="26" fill="#fff">Live</text>
+      <text x="1626" y="140" text-anchor="middle" font-weight="800" font-size="26" fill="#fff">release</text>
+      <text x="1626" y="176" text-anchor="middle" fill="#dbe9fb">down-current</text>
+
+      <g stroke="#8a95a5" stroke-width="2.5" fill="none">
+        <path d="M240 130H292" marker-end="url(#ar)"/><path d="M780 130H832" marker-end="url(#ar)"/>
+        <path d="M1140 130H1192" marker-end="url(#ar)"/><path d="M1490 130H1532" marker-end="url(#ar)"/>
+        <path d="M990 220V300H540V248" stroke-dasharray="7 6" marker-end="url(#ar)"/>
+      </g>
+      <text x="765" y="290" text-anchor="middle" fill="#8a95a5" font-size="20">gap camera + pressure sensors feed back</text>
+    </g>
+    <g font-size="23">
+      <rect x="0" y="350" width="540" height="160" rx="18" fill="#f3f7fb"/>
+      <text x="28" y="395" font-weight="800" font-size="25">1 · The gap is a chokepoint</text>
+      <text x="28" y="435" fill="#4a5566">Seawater, and the swarm, can only reach</text>
+      <text x="28" y="468" fill="#4a5566">the intake through one opening.</text>
+      <rect x="586" y="350" width="540" height="160" rx="18" fill="#f3f7fb"/>
+      <text x="614" y="395" font-weight="800" font-size="25">2 · Move the water, not the animal</text>
+      <text x="614" y="435" fill="#4a5566">A rising-bubble current holds them out;</text>
+      <text x="614" y="468" fill="#4a5566">nothing is cut, pumped or netted.</text>
+      <rect x="1172" y="350" width="540" height="160" rx="18" fill="#f3f7fb"/>
+      <text x="1200" y="395" font-weight="800" font-size="25">3 · Borrow proven oil-spill tools</text>
+      <text x="1200" y="435" fill="#4a5566">Booms and boats exist today; we found</text>
+      <text x="1200" y="468" fill="#4a5566">and fixed why they leak jellyfish.</text>
+    </g>
+  </svg>
+  <div style="display:grid; grid-template-columns: 1.6fr 1fr; gap:26px; align-items:center; margin-top:4px">
+    <img src="img/aerial.jpg" style="width:100%; height:230px; object-fit:cover; object-position: 50% 35%; border-radius:12px">
+    <p style="font-size:22px; color:var(--ink2); margin:0">The breakwater leaves one opening to the intake. A swarm offshore must pass through it, so that is the one place we act. Image: our 3D model (stylised; not to scale).</p>
+  </div>
+  <div class="foot"><span>Team Qandeel · ENEC track · ATP 2026</span><span>4</span></div>
+</section>
+
+<!-- 5. How it works -->
+<section class="slide">
+  <div class="kicker">How it works</div>
+  <h1>One swarm, from alert to live release</h1>
+  <div class="cols c64" style="margin-top:28px">
+    <div>
+      <div class="step"><div class="n">1</div><div><span class="tag">Alert.</span><p>ENEC reports a swarm, e.g. 15 km NNW. The planner receives it automatically.</p></div></div>
+      <div class="step"><div class="n">2</div><div><span class="tag">Plan.</span><p>400 simulated drifts of 60 swimming jellyfish each, on the live current and wind forecast: 54% chance of arrival, window 10–77 h.</p></div></div>
+      <div class="step"><div class="n">3</div><div><span class="tag">Prepare.</span><p>Curtain on at +7 h; crew staged on the approach side; release point chosen.</p></div></div>
+      <div class="step"><div class="n">4</div><div><span class="tag">Deflect.</span><p>Curtain across the gap holds the swarm outside; airflow follows the current.</p></div></div>
+      <div class="step"><div class="n">5</div><div><span class="tag">Gather.</span><p>Two boats close a U-boom with a closed-bottom retention bag around them.</p></div></div>
+      <div class="step"><div class="n">6</div><div><span class="tag">Release.</span><p>Move with the current at ≤0.2 m/s through the water; open the boom down-current.</p></div></div>
+      <div class="step"><div class="n">7</div><div><span class="tag">Learn.</span><p>Camera and sensor data improve the next plan. Backup: the gap camera starts the curtain at once if jellyfish arrive early.</p></div></div>
+    </div>
+    <div>
+      <img class="fig" src="img/dashboard.png">
+      <div class="src">Qandeel operator dashboard (working prototype, Streamlit): chance of arrival, window, switch-on clock time, swarm map, curtain status, release point. Data: Copernicus SMOC currents + ERA5 wind, summer 2025.</div>
+    </div>
+  </div>
+  <div class="foot"><span>Team Qandeel · ENEC track · ATP 2026</span><span>5</span></div>
+</section>
+
+<!-- 6. Evidence: planning on real data -->
+<section class="slide">
+  <div class="kicker">Evidence 1 · real Gulf data</div>
+  <h1>The planner runs the curtain only when it matters</h1>
+  <div class="cols c2" style="margin-top:24px; gap:40px">
+    <div><img class="fig" src="../qandeel/outputs/fig1_arrival_window.png">
+      <div class="src">Swarm 15 km NNW: 400 runs on real June–September 2025 conditions.</div></div>
+    <div><img class="fig" src="../qandeel/outputs/fig7_smart_operation.png">
+      <div class="src">Hindcast of 100 alerts at random times and places in the real 2025 season.</div></div>
+  </div>
+  <div class="cols c3" style="margin-top:30px; gap:28px">
+    <div class="card"><h3>39 / 39 covered</h3><p>Every swarm that truly reached the gap was covered by the plan; the curtain stayed off for 45 of 61 that did not arrive.</p></div>
+    <div class="card"><h3>77% fewer hours</h3><p>Versus switching on for every alert. A live forecast narrows the window further (10–77 h → ~10–20 h in tests).</p></div>
+    <div class="card"><h3>46% of the energy</h3><p>Adaptive airflow follows real currents and wind. ~8% of hours need more air than the design maximum: flagged for the crew.</p></div>
+  </div>
+  <div class="foot"><span>Team Qandeel · ENEC track · ATP 2026</span><span>6</span></div>
+</section>
+
+<!-- 7. Evidence: curtain and boom -->
+<section class="slide">
+  <div class="kicker">Evidence 2 · curtain and boom</div>
+  <h1>Our finding: oil-spill booms leak jellyfish, and a bag fixes it</h1>
+  <div class="cols c2" style="margin-top:24px; gap:40px">
+    <div><img class="fig" src="../qandeel/outputs/fig2_curtain_hold.png">
+      <div class="src">400 individually simulated jellyfish per point; surface current from Bulson’s pneumatic-barrier relation.</div></div>
+    <div><img class="fig" src="../qandeel/outputs/fig5_boom_retention.png">
+      <div class="src">Jellyfish depth from field data; apex downflow 25% (pessimistic 50%) of tow speed.</div></div>
+  </div>
+  <div class="cols c2" style="margin-top:30px; gap:40px">
+    <div class="card"><h3>Curtain holds the swarm</h3><p>At 3 L/s of air per metre it holds 100% up to 0.2 m/s approach current, 95% even if adults swim 20 cm/s; real currents average 0.08 m/s. It fails above ~0.3 m/s, matching field trials.</p></div>
+    <div class="card"><h3>Why the bag matters</h3><p>Oil floats back up; neutrally buoyant jellyfish are dragged under the skirt far below the 0.35 m/s oil-boom limit (0–54% kept at 0.2 m/s). A closed-bottom fabric bag keeps 88–100% in the model.</p></div>
+  </div>
+  <div class="foot"><span>Team Qandeel · ENEC track · ATP 2026</span><span>7</span></div>
+</section>
+
+<!-- 8. Environment and feasibility -->
+<section class="slide">
+  <div class="kicker">Environment and feasibility</div>
+  <h1>Gentle on marine life, built from parts that exist today</h1>
+  <div class="cols c2" style="margin-top:30px; gap:48px">
+    <div>
+      <h2>Marine-life protection</h2>
+      <table>
+        <tr><th>Risk</th><th>How we reduce it</th></tr>
+        <tr><td>Jellyfish killed</td><td>Kept in the water and released alive; no cutting, pumping or mesh</td></tr>
+        <tr><td>Turtles, dolphins in the boom</td><td>Escape gap, slow tow, camera watch, stop on sighting</td></tr>
+        <tr><td>Seabed, sediment</td><td>Pipe on legs 0.5–1 m above the bed, routed away from coral and seagrass</td></tr>
+        <tr><td>Bubble noise, fish</td><td>Runs only during events; measured in the pilot</td></tr>
+        <tr><td>Released swarm returns</td><td>Release point simulated for 72 h; returners meet the curtain again (~1.3× load)</td></tr>
+        <tr><td>Carbon</td><td>~11 MWh per event: ~4.4 t CO₂ on a gas grid, ~0.1 t on the plant’s own power</td></tr>
+      </table>
+    </div>
+    <div>
+      <h2>Feasibility</h2>
+      <table>
+        <tr><th>Item</th><th>Estimate (300 m gap)</th></tr>
+        <tr><td>Compressed air</td><td>0.9 m³/s, ~135 kW, oil-free (ISO 8573-1 Class 0)</td></tr>
+        <tr><td>Capital (indicative)</td><td>USD 0.4–1.3 M: curtain, compressor + standby, boom, bags, boats, sensors</td></tr>
+        <tr><td>Running cost</td><td>~USD 1,100 of energy per event</td></tr>
+        <tr><td>Value</td><td>One avoided 12 h unit outage (~USD 0.5 M, EPRI figure) pays back a third to all of it</td></tr>
+        <tr><td>Capacity</td><td>One boom pair: ~2,200–21,600 jellyfish/h (4–43 t/h) vs 0.9 t/h for a cutting robot</td></tr>
+        <tr><td>Gulf hardening</td><td>Membrane diffusers, foul-release coating, modular sections, lifted out off-season</td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="foot"><span>Team Qandeel · ENEC track · ATP 2026</span><span>8</span></div>
+</section>
+
+<!-- 9. Assumptions and limitations -->
+<section class="slide">
+  <div class="kicker">Assumptions and limitations</div>
+  <h1>What we assume, what we don’t know yet, and what we measure first</h1>
+  <div class="cols c64" style="margin-top:26px; gap:44px">
+    <div>
+      <table>
+        <tr><th>Assumption</th><th>Basis</th><th>If wrong</th></tr>
+        <tr><td>Intake behind a breakwater with one gap, ~300 m, ~9.5 m deep</td><td>Brief; public channel depth</td><td>Curtain size scales; measure on satellite images</td></tr>
+        <tr><td>Alert gives position, hours of notice</td><td>Brief: “time to prepare”</td><td>Camera trigger switches the curtain on</td></tr>
+        <tr><td>Swarm in top 1 m; adults swim ≤10–20 cm/s</td><td>Field and lab studies (Australia)</td><td>Deeper skirt; tested at 20 cm/s</td></tr>
+        <tr><td>Swarm density 0.1–1 per m³</td><td>No published figure</td><td>Capacity scales linearly</td></tr>
+        <tr><td>Apex downflow 25–50% of tow speed; bag passes 20%</td><td>Model hypothesis</td><td>Measured in the tank test</td></tr>
+      </table>
+      <p style="font-size:22px; color:var(--ink2); margin-top:22px"><b>Limitations:</b> no management method has been tested on Blue Blubbers; bubble curtains weaken in strong currents (~8% of hours need extra air); ~23% of released jellyfish may drift back within 3 days; uncrewed boats are a later phase.</p>
+    </div>
+    <div><img class="fig" src="../qandeel/outputs/fig6_sensitivity.png" style="max-height:620px; object-fit:contain; background:#fff">
+      <div class="src">Sensitivity: approach current, bag leakage / apex downflow and gap width drive the results, so we measure them first.</div></div>
+  </div>
+  <div class="foot"><span>Team Qandeel · ENEC track · ATP 2026</span><span>9</span></div>
+</section>
+
+<!-- 10. Test and demonstration plan -->
+<section class="slide">
+  <div class="kicker">If shortlisted</div>
+  <h1>From simulation to sea, one measured step at a time</h1>
+  <div class="cols" style="grid-template-columns: repeat(4, 1fr); gap: 26px; margin-top: 34px">
+    <div class="card" style="border-top:6px solid var(--green)"><span class="pill" style="background:#e3f6ec;color:#13a35b">Done</span>
+      <h3 style="margin-top:14px">1 · Simulation</h3><p>Real-data planner, curtain, boom and release models; dashboard; hindcast; 16 tests.</p></div>
+    <div class="card" style="border-top:6px solid var(--accent)"><span class="pill">Weeks 1–2</span>
+      <h3 style="margin-top:14px">2 · 1:20 tank test</h3><p>AED 300 kit: aquarium air line, pump, neutrally buoyant agar mock jellyfish. Measure curtain hold, apex downflow, bag retention.</p></div>
+    <div class="card" style="border-top:6px solid var(--accent)"><span class="pill">With ENEC</span>
+      <h3 style="margin-top:14px">3 · Sea pilot</h3><p>One curtain section and one boom trial in bloom season: jellyfish deflected and released, survival, energy, effects on other species.</p></div>
+    <div class="card" style="border-top:6px solid var(--accent)"><span class="pill">Then</span>
+      <h3 style="margin-top:14px">4 · Scale-up</h3><p>Full gap; live ENEC alerts into the planner; assisted, then shore-supervised uncrewed boats.</p></div>
+  </div>
+  <div class="cols c2" style="margin-top:40px; gap:48px">
+    <div><h2>Pass marks</h2>
+      <ul><li>Tank: ≥95% held at the scaled 0.2 m/s current</li><li>Tank: bag keeps ≥90% at the scaled 0.2 m/s tow</li><li>Pilot: no harm to non-target species; fewer screen-clearing hours</li></ul></div>
+    <div><h2>Open work and AI use</h2>
+      <p style="font-size:23px; color:var(--ink2); margin:0 0 18px">Code, data and tests: github.com/Shaaha-7/ENEC. AI assistants helped search and summarise literature, check claims, draft text and write simulation code; the team reviewed every decision, assumption and figure, and can explain each in our own words.</p></div>
+  </div>
+  <div style="display:grid; grid-template-columns: 1fr 1fr 1.2fr; gap:22px; margin-top:26px; align-items:center">
+    <img src="img/hero.jpg" style="width:100%; height:190px; object-fit:cover; border-radius:12px">
+    <img src="img/underwater.jpg" style="width:100%; height:190px; object-fit:cover; border-radius:12px">
+    <p style="font-size:22px; color:var(--ink2); margin:0">Stills from our 3D explainer video: the curtain holding a swarm outside the gap, and the bubble wall seen underwater.</p>
+  </div>
+  <div class="foot"><span>Team Qandeel · ENEC track · ATP 2026</span><span>10</span></div>
+</section>
+
+</body>
+</html>

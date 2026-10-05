@@ -64,7 +64,15 @@ URL presets for demos: `http://localhost:8501/?d=15&b=330&t=30`
 (distance km, bearing degrees, hour). A recorded run is in
 `media/dashboard_demo.mp4`.
 
-## 4. Tank test
+## 4. Deck and video
+
+- `deck/Qandeel_Deck.pdf`: the 10-slide proposal deck (16:9), with slide previews in `deck/preview/`.
+  Source `deck/deck.html`; rebuild with `node deck/build.js` while `python -m http.server 8700` runs at the repo root.
+  Fill in the team details on slide 1 before submitting.
+- `media/Qandeel_explainer.mp4`: the 3D explainer (about 1 min 40 s) with captions; narration script and rebuild steps in `video/VIDEO_SCRIPT.md`.
+  The 3D scene (`video/scene.html`, three.js) reads its numbers from `qandeel/outputs/results.json`.
+
+## 5. Tank test
 
 `docs/TANK_TEST.md` is a step-by-step 1:20 tank test for under about AED 300.
 `python -m qandeel.tank_scale --scale 20` prints every model-scale value

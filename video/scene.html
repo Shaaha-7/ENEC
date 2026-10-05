@@ -1,0 +1,473 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Qandeel 3D explainer</title>
+<style>
+  @font-face { font-family: Inter; font-weight: 400; src: url(node_modules/@fontsource/inter/files/inter-latin-400-normal.woff2); }
+  @font-face { font-family: Inter; font-weight: 600; src: url(node_modules/@fontsource/inter/files/inter-latin-600-normal.woff2); }
+  @font-face { font-family: Inter; font-weight: 800; src: url(node_modules/@fontsource/inter/files/inter-latin-800-normal.woff2); }
+  html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: #000; font-family: Inter, sans-serif; }
+  canvas { display: block; }
+  .hud { position: absolute; inset: 0; pointer-events: none; color: #fff; }
+  .brand { position: absolute; top: 44px; left: 56px; font-weight: 800; letter-spacing: 6px; font-size: 26px; opacity: .92;
+           text-shadow: 0 2px 12px rgba(0,0,0,.45); }
+  .brand small { display: block; font-weight: 400; letter-spacing: 1px; font-size: 16px; opacity: .85; margin-top: 4px; }
+  .caption { position: absolute; left: 50%; bottom: 72px; transform: translateX(-50%); max-width: 1500px; text-align: center;
+             font-size: 42px; font-weight: 600; line-height: 1.25; text-shadow: 0 3px 18px rgba(0,0,0,.65); transition: none; }
+  .caption .sub { display: block; font-size: 26px; font-weight: 400; opacity: .9; margin-top: 10px; }
+  .title { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+           text-align: center; text-shadow: 0 4px 30px rgba(0,0,0,.55); }
+  .title h1 { font-size: 150px; font-weight: 800; letter-spacing: 18px; margin: 0; }
+  .title p { font-size: 40px; font-weight: 400; margin: 18px 0 0; }
+  .title .ar { font-size: 56px; font-weight: 600; margin-top: 8px; opacity: .9; }
+  .panel { position: absolute; top: 120px; right: 64px; width: 600px; background: rgba(8,22,38,.78); border: 1px solid rgba(120,190,255,.35);
+           border-radius: 18px; padding: 28px 32px; font-size: 26px; line-height: 1.5; box-shadow: 0 12px 40px rgba(0,0,0,.35); }
+  .panel h3 { margin: 0 0 12px; font-size: 22px; letter-spacing: 3px; color: #ffb547; }
+  .panel b { color: #7fd0ff; }
+  .cards { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); display: grid; grid-template-columns: repeat(2, 640px);
+           gap: 28px; }
+  .card { background: rgba(8,22,38,.82); border: 1px solid rgba(120,190,255,.35); border-radius: 22px; padding: 30px 34px; }
+  .card .n { font-size: 76px; font-weight: 800; color: #7fd0ff; line-height: 1; }
+  .card .t { font-size: 27px; margin-top: 12px; line-height: 1.35; }
+  .tag { position: absolute; font-size: 22px; font-weight: 600; padding: 6px 14px; border-radius: 999px; background: rgba(8,22,38,.75);
+         border: 1px solid rgba(255,255,255,.35); white-space: nowrap; transform: translate(-50%, -50%); }
+  .fade { opacity: 0; }
+</style>
+</head>
+<body>
+<div class="hud">
+  <div class="brand" id="brand">QANDEEL<small>ATRC Advanced Technology Pioneers 2026 · ENEC track</small></div>
+  <div class="title fade" id="title"><h1>QANDEEL</h1><div class="ar">قنديل</div><p>Herd, don't harvest: live-release jellyfish management</p></div>
+  <div class="caption fade" id="caption"></div>
+  <div class="panel fade" id="panel"></div>
+  <div class="cards fade" id="cards"></div>
+  <div class="tag fade" id="tag-curtain">Bubble curtain</div>
+  <div class="tag fade" id="tag-gap">Intake gap</div>
+  <div class="tag fade" id="tag-release">Release point</div>
+</div>
+<script type="importmap">{ "imports": { "three": "./node_modules/three/build/three.module.js" } }</script>
+<script type="module">
+import * as THREE from 'three';
+
+const W = 1920, H = 1080, DURATION = 92;
+const R = await (await fetch('../qandeel/outputs/results.json')).json();
+const A = R.alerts[0];
+const SW = R.smart_switching || {};
+const BEST = R.release_options[0];
+
+// ---------- deterministic random ----------
+let seed = 12345;
+const rnd = () => ((seed = (seed * 16807) % 2147483647) - 1) / 2147483646;
+
+// ---------- renderer, scene, camera ----------
+const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+renderer.setSize(W, H);
+renderer.setPixelRatio(1);
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.05;
+document.body.prepend(renderer.domElement);
+const scene = new THREE.Scene();
+const SKY = new THREE.Color('#9fd4f2'), DEEP = new THREE.Color('#0b4a5c');
+scene.background = SKY.clone();
+scene.fog = new THREE.Fog(SKY.clone(), 250, 850);
+const camera = new THREE.PerspectiveCamera(42, W / H, 0.5, 20000);
+
+scene.add(new THREE.HemisphereLight('#dff3ff', '#2a5560', 1.25));
+const sun = new THREE.DirectionalLight('#fff4dd', 2.2);
+sun.position.set(-300, 400, 200);
+scene.add(sun);
+
+// ---------- sky gradient dome ----------
+{
+  const g = new THREE.SphereGeometry(15000, 32, 16);
+  const m = new THREE.ShaderMaterial({
+    side: THREE.BackSide, depthWrite: false, fog: false,
+    uniforms: { top: { value: new THREE.Color('#3f8fd6') }, bottom: { value: new THREE.Color('#9fd4f2') } },
+    vertexShader: 'varying vec3 p; void main(){ p = position; gl_Position = projectionMatrix*modelViewMatrix*vec4(position,1.); }',
+    fragmentShader: 'uniform vec3 top; uniform vec3 bottom; varying vec3 p; void main(){ float h = clamp(normalize(p).y*1.6, 0., 1.); gl_FragColor = vec4(mix(bottom, top, h), 1.); }',
+  });
+  var skyDome = new THREE.Mesh(g, m);
+  scene.add(skyDome);
+}
+
+// ---------- sea ----------
+const seaGeo = new THREE.PlaneGeometry(2400, 2400, 180, 180);
+seaGeo.rotateX(-Math.PI / 2);
+const seaBase = seaGeo.attributes.position.array.slice();
+const seaMat = new THREE.MeshStandardMaterial({ color: '#1f7fa3', roughness: 0.18, metalness: 0.15, transparent: true,
+  opacity: 0.78, side: THREE.DoubleSide });
+const sea = new THREE.Mesh(seaGeo, seaMat);
+scene.add(sea);
+const farSea = new THREE.Mesh(new THREE.RingGeometry(1050, 15000, 64).rotateX(-Math.PI / 2),
+  new THREE.MeshStandardMaterial({ color: '#1f7fa3', roughness: 0.3 }));
+farSea.position.y = -0.3;
+scene.add(farSea);
+function waves(t) {
+  const p = seaGeo.attributes.position.array;
+  for (let i = 0; i < p.length; i += 3) {
+    const x = seaBase[i], z = seaBase[i + 2];
+    p[i + 1] = 0.55 * Math.sin(x * 0.045 + t * 1.1) + 0.4 * Math.sin(z * 0.06 - t * 0.9) + 0.18 * Math.sin((x + z) * 0.15 + t * 2.0);
+  }
+  seaGeo.attributes.position.needsUpdate = true;
+  seaGeo.computeVertexNormals();
+}
+const seabed = new THREE.Mesh(new THREE.PlaneGeometry(2400, 2400).rotateX(-Math.PI / 2),
+  new THREE.MeshStandardMaterial({ color: '#c9b98a', roughness: 1 }));
+seabed.position.y = -14;
+scene.add(seabed);
+
+// ---------- land and plant (stylised, generic) ----------
+const land = new THREE.Mesh(new THREE.BoxGeometry(2400, 6, 900), new THREE.MeshStandardMaterial({ color: '#e3cf9c', roughness: 1 }));
+land.position.set(0, -1.2, 470);
+scene.add(land);
+const concrete = new THREE.MeshStandardMaterial({ color: '#eef0f2', roughness: 0.7 });
+const roofMat = new THREE.MeshStandardMaterial({ color: '#c7ccd2', roughness: 0.6 });
+for (let i = 0; i < 4; i++) {
+  const x = -90 + i * 60;
+  const cyl = new THREE.Mesh(new THREE.CylinderGeometry(13, 13, 26, 40), concrete);
+  cyl.position.set(x, 13, 95);
+  const dome = new THREE.Mesh(new THREE.SphereGeometry(13, 40, 20, 0, Math.PI * 2, 0, Math.PI / 2), concrete);
+  dome.position.set(x, 26, 95);
+  const hall = new THREE.Mesh(new THREE.BoxGeometry(40, 16, 26), roofMat);
+  hall.position.set(x, 8, 132);
+  scene.add(cyl, dome, hall);
+}
+
+// ---------- breakwater with an intake gap ----------
+const GAP_HALF = 15, BW_Z = -40;
+const rockMat = new THREE.MeshStandardMaterial({ color: '#8b8678', roughness: 0.95, flatShading: true });
+const rockGeo = new THREE.DodecahedronGeometry(3.2, 0);
+const rocks = [];
+function arm(points) {
+  for (let s = 0; s < points.length - 1; s++) {
+    const [a, b] = [points[s], points[s + 1]];
+    const len = Math.hypot(b[0] - a[0], b[1] - a[1]);
+    for (let d = 0; d < len; d += 2.6) {
+      const f = d / len;
+      rocks.push([a[0] + (b[0] - a[0]) * f, a[1] + (b[1] - a[1]) * f]);
+    }
+  }
+}
+arm([[-130, 30], [-130, BW_Z], [-GAP_HALF, BW_Z]]);
+arm([[130, 30], [130, BW_Z], [GAP_HALF, BW_Z]]);
+const rockMesh = new THREE.InstancedMesh(rockGeo, rockMat, rocks.length * 3);
+{
+  const m = new THREE.Matrix4(), q = new THREE.Quaternion(), e = new THREE.Euler();
+  let k = 0;
+  for (const [x, z] of rocks) for (let j = 0; j < 3; j++) {
+    e.set(rnd() * 3, rnd() * 3, rnd() * 3); q.setFromEuler(e);
+    const s = 0.8 + rnd() * 0.6;
+    m.compose(new THREE.Vector3(x + (rnd() - .5) * 3, 0.4 + j * 0.9 - 1.2, z + (rnd() - .5) * 4), q, new THREE.Vector3(s, s * 0.8, s));
+    rockMesh.setMatrixAt(k++, m);
+  }
+}
+scene.add(rockMesh);
+// intake structure at the shore inside the basin
+const intake = new THREE.Mesh(new THREE.BoxGeometry(60, 6, 10), roofMat);
+intake.position.set(0, 1, 20);
+scene.add(intake);
+
+// ---------- bubble curtain ----------
+const CURT_Z = BW_Z - 3;
+const NB = 3400;
+const bubGeo = new THREE.BufferGeometry();
+const bubPos = new Float32Array(NB * 3), bubSeed = new Float32Array(NB * 3);
+for (let i = 0; i < NB; i++) { bubSeed[i * 3] = (rnd() * 2 - 1) * GAP_HALF; bubSeed[i * 3 + 1] = rnd(); bubSeed[i * 3 + 2] = rnd(); }
+bubGeo.setAttribute('position', new THREE.BufferAttribute(bubPos, 3));
+const dot = (() => { const c = document.createElement('canvas'); c.width = c.height = 64; const g = c.getContext('2d');
+  const r = g.createRadialGradient(32, 32, 4, 32, 32, 30); r.addColorStop(0, 'rgba(255,255,255,1)');
+  r.addColorStop(0.6, 'rgba(230,246,255,0.65)'); r.addColorStop(1, 'rgba(230,246,255,0)');
+  g.fillStyle = r; g.beginPath(); g.arc(32, 32, 30, 0, Math.PI * 2); g.fill(); return new THREE.CanvasTexture(c); })();
+const bubMat = new THREE.PointsMaterial({ color: '#ffffff', size: 1.0, map: dot, transparent: true, opacity: 0.0, depthWrite: false });
+const bubbles = new THREE.Points(bubGeo, bubMat);
+scene.add(bubbles);
+const pipe = new THREE.Mesh(new THREE.CylinderGeometry(0.35, 0.35, GAP_HALF * 2, 12).rotateZ(Math.PI / 2),
+  new THREE.MeshStandardMaterial({ color: '#2b2b2b' }));
+pipe.position.set(0, -12.5, CURT_Z);
+scene.add(pipe);
+const foam = new THREE.Mesh(new THREE.PlaneGeometry(GAP_HALF * 2 + 8, 11).rotateX(-Math.PI / 2),
+  new THREE.MeshBasicMaterial({ color: '#ffffff', transparent: true, opacity: 0, depthWrite: false }));
+foam.position.set(0, 0.9, CURT_Z);
+scene.add(foam);
+function updateBubbles(t, level) {
+  bubMat.opacity = 0.85 * level;
+  foam.material.opacity = 0.8 * level * (0.85 + 0.15 * Math.sin(t * 6));
+  for (let i = 0; i < NB; i++) {
+    const ph = (bubSeed[i * 3 + 1] + t * (0.35 + bubSeed[i * 3 + 2] * 0.25)) % 1;
+    bubPos[i * 3] = bubSeed[i * 3] + Math.sin(t * 3 + i) * 0.25;
+    bubPos[i * 3 + 1] = -12.5 + ph * 13.2;
+    bubPos[i * 3 + 2] = CURT_Z + Math.sin(i * 1.7 + t * 2) * (0.4 + ph * 1.6);
+  }
+  bubGeo.attributes.position.needsUpdate = true;
+}
+
+// ---------- jellyfish ----------
+const NJ = 320;
+const bellGeo = new THREE.SphereGeometry(1.0, 20, 10, 0, Math.PI * 2, 0, Math.PI / 2);
+const bellMat = new THREE.MeshPhysicalMaterial({ color: '#7fb6ff', emissive: '#3f7fe0', emissiveIntensity: 0.95,
+  transparent: true, opacity: 0.82, roughness: 0.25, transmission: 0.2, side: THREE.DoubleSide });
+const bells = new THREE.InstancedMesh(bellGeo, bellMat, NJ);
+const armGeo = new THREE.ConeGeometry(0.55, 1.7, 8).rotateX(Math.PI);
+const armMat = new THREE.MeshStandardMaterial({ color: '#cfe4ff', emissive: '#4f7fc0', emissiveIntensity: 0.4, transparent: true, opacity: 0.75 });
+const arms = new THREE.InstancedMesh(armGeo, armMat, NJ);
+bells.frustumCulled = false;
+arms.frustumCulled = false;
+scene.add(bells, arms);
+
+// Story timeline (seconds)
+const T = { problemEnd: 17, alert: 17, curtainOn: 27, underwaterStart: 33, underwaterEnd: 41,
+            boomStart: 41, boomClosed: 51, towEnd: 64, release: 64, numbers: 72, outro: 84 };
+const GAP = new THREE.Vector2(0, BW_Z);
+const RELEASE = new THREE.Vector2(330, -330);
+const START = new THREE.Vector2(-130, -260);
+
+const jelly = [];
+for (let i = 0; i < NJ; i++) {
+  const a = rnd() * Math.PI * 2, r = Math.sqrt(rnd()) * 52;
+  jelly.push({ x: START.x + Math.cos(a) * r, z: START.y + Math.sin(a) * r * 0.7, sp: 7.5 + rnd() * 2.5,
+    depth: 1.0 + rnd() * 1.6, size: 2.0 + rnd() * 1.2, ph: rnd() * 6.28, hold: CURT_Z - 7 - rnd() * 18,
+    off: null, rel: rnd() * 6.28, relr: 6 + rnd() * 30 });
+}
+
+// Boom path: two boats sweep around the held swarm, close the U, tow to the release point
+const boatA = new THREE.Group(), boatB = new THREE.Group();
+function makeBoat(g, color) {
+  const hull = new THREE.Mesh(new THREE.BoxGeometry(7, 1.6, 2.8), new THREE.MeshStandardMaterial({ color: '#f5f7fa' }));
+  hull.position.y = 0.6;
+  const cab = new THREE.Mesh(new THREE.BoxGeometry(2.6, 1.6, 2.2), new THREE.MeshStandardMaterial({ color }));
+  cab.position.set(-0.8, 2.0, 0);
+  g.add(hull, cab);
+  scene.add(g);
+}
+makeBoat(boatA, '#1f6fd1');
+makeBoat(boatB, '#1f6fd1');
+const boomMat = new THREE.MeshStandardMaterial({ color: '#ff8a1f', roughness: 0.5, emissive: '#7a2e00', emissiveIntensity: 0.25 });
+const bagMat = new THREE.MeshStandardMaterial({ color: '#33b36b', transparent: true, opacity: 0.45, side: THREE.DoubleSide });
+let boomMesh = null;
+const bag = new THREE.Mesh(new THREE.SphereGeometry(9, 24, 12, 0, Math.PI * 2, Math.PI / 2, Math.PI / 2), bagMat);
+scene.add(bag);
+
+const ease = (x) => x <= 0 ? 0 : x >= 1 ? 1 : x * x * (3 - 2 * x);
+const lerp = (a, b, f) => a + (b - a) * f;
+const seg = (t, a, b) => ease((t - a) / (b - a));
+
+let heldCenter = new THREE.Vector2(0, CURT_Z - 12);
+function boomState(t) {
+  // centre of the boom's U and opening heading
+  if (t < T.boomStart) return null;
+  const close = seg(t, T.boomStart, T.boomClosed);
+  const tow = seg(t, T.boomClosed + 1, T.towEnd);
+  const c = new THREE.Vector2(lerp(heldCenter.x, RELEASE.x, tow), lerp(heldCenter.y, RELEASE.y, tow));
+  const spread = lerp(70, 26, close);
+  const ang = Math.atan2(RELEASE.y - heldCenter.y, RELEASE.x - heldCenter.x);
+  return { c, spread, close, tow, ang, open: seg(t, T.release, T.release + 4) };
+}
+function updateBoom(t) {
+  const s = boomState(t);
+  boatA.visible = boatB.visible = bag.visible = !!s;
+  if (boomMesh) { scene.remove(boomMesh); boomMesh.geometry.dispose(); boomMesh = null; }
+  if (!s) return;
+  const dir = new THREE.Vector2(Math.cos(s.ang), Math.sin(s.ang));
+  const nrm = new THREE.Vector2(-dir.y, dir.x);
+  const arrive = seg(t, T.boomStart, T.boomStart + 4);
+  const lead = (k) => s.c.clone().add(dir.clone().multiplyScalar(14)).add(nrm.clone().multiplyScalar(k * s.spread * (1 + s.open * 1.6)));
+  const pa = lead(1), pb = lead(-1);
+  // boats come in from the east
+  const enter = new THREE.Vector2(260, -120);
+  const A2 = new THREE.Vector2(lerp(enter.x, pa.x, arrive), lerp(enter.y, pa.y, arrive));
+  const B2 = new THREE.Vector2(lerp(enter.x + 20, pb.x, arrive), lerp(enter.y + 10, pb.y, arrive));
+  const apex = s.c.clone().sub(dir.clone().multiplyScalar(18 + 10 * s.close));
+  const pts = [A2, s.c.clone().add(nrm.clone().multiplyScalar(s.spread * 0.9)).sub(dir.clone().multiplyScalar(4)), apex,
+               s.c.clone().sub(nrm.clone().multiplyScalar(s.spread * 0.9)).sub(dir.clone().multiplyScalar(4)), B2]
+    .map(v => new THREE.Vector3(v.x, 0.6, v.y));
+  const curve = new THREE.CatmullRomCurve3(pts);
+  boomMesh = new THREE.Mesh(new THREE.TubeGeometry(curve, 80, 0.75, 8, false), boomMat);
+  scene.add(boomMesh);
+  for (const [b, p] of [[boatA, A2], [boatB, B2]]) {
+    b.position.set(p.x, 0, p.y);
+    b.rotation.y = -s.ang;
+  }
+  bag.position.set(apex.x, 0.2, apex.y);
+  bag.material.opacity = 0.45 * (1 - s.open);
+  return s;
+}
+
+function updateJelly(t, dt, curtain) {
+  const m = new THREE.Matrix4(), q = new THREE.Quaternion(), e = new THREE.Euler();
+  const s = boomState(t);
+  if (s && s.close >= 1 && jelly[0].off === null) {
+    let cx = 0, cz = 0; for (const j of jelly) { cx += j.x; cz += j.z; }
+    cx /= NJ; cz /= NJ;
+    for (const j of jelly) j.off = new THREE.Vector2((j.x - cx) * 1.1 + (rnd() - .5) * 14, (j.z - cz) * 1.1 + (rnd() - .5) * 14);
+  }
+  let cx = 0, cz = 0;
+  jelly.forEach((j, i) => {
+    if (j.off && s) {
+      const spreadOut = 1 + s.open * 6;
+      const back = 6 * (1 - s.open);  // sit toward the bag at the apex while held
+      const tx = s.c.x - Math.cos(s.ang) * back + j.off.x * spreadOut + Math.cos(j.rel) * j.relr * s.open;
+      const tz = s.c.y - Math.sin(s.ang) * back + j.off.y * spreadOut + Math.sin(j.rel) * j.relr * s.open;
+      j.x = lerp(j.x, tx, 0.12); j.z = lerp(j.z, tz, 0.12);
+    } else {
+      const toGap = new THREE.Vector2(GAP.x - j.x, GAP.y - 8 - j.z);
+      const d = toGap.length();
+      toGap.normalize();
+      let vx = toGap.x * j.sp + Math.sin(t * 0.7 + j.ph) * 1.5, vz = toGap.y * j.sp;
+      j.x += vx * dt; j.z += vz * dt;
+      if (curtain > 0.5 && j.z > j.hold) j.z = lerp(j.z, j.hold, 0.25);  // pushed back by the curtain current
+      if (j.z > CURT_Z - 1 && curtain < 0.5 && Math.abs(j.x) < GAP_HALF) j.z = Math.min(j.z, CURT_Z - 1);
+    }
+    cx += j.x; cz += j.z;
+    const pulse = 1 + 0.12 * Math.sin(t * 5 + j.ph);
+    const caught = j.off ? 1 : 0;
+    const y = -j.depth * (caught ? 0.35 : 1) + Math.sin(t * 1.3 + j.ph) * 0.25;
+    e.set(Math.sin(t + j.ph) * 0.15, j.ph, Math.cos(t * 0.8 + j.ph) * 0.15); q.setFromEuler(e);
+    m.compose(new THREE.Vector3(j.x, y, j.z), q, new THREE.Vector3(j.size * pulse, j.size / pulse * 0.9, j.size * pulse));
+    bells.setMatrixAt(i, m);
+    m.compose(new THREE.Vector3(j.x, y - 0.95 * j.size, j.z), q, new THREE.Vector3(j.size, j.size * (1.1 + 0.2 * Math.sin(t * 5 + j.ph)), j.size));
+    arms.setMatrixAt(i, m);
+  });
+  bells.instanceMatrix.needsUpdate = arms.instanceMatrix.needsUpdate = true;
+  if (!s) heldCenter.set(cx / NJ, cz / NJ);
+}
+
+// ---------- camera path ----------
+function shot(t) {
+  const P = (x, y, z) => new THREE.Vector3(x, y, z);
+  const keys = [
+    [0, P(-420, 260, -620), P(-60, 0, -120)],
+    [9, P(-300, 150, -420), P(-80, 0, -180)],
+    [17, P(-220, 120, -330), P(-60, 0, -150)],
+    [27, P(-120, 60, -150), P(0, 0, -60)],
+    [33, P(-30, 14, -95), P(0, 0, -48)],
+    [35, P(-20, -6, -88), P(0, -5, -50)],
+    [41, P(14, -6, -78), P(0, -4, -50)],
+    [44, P(-60, 90, -200), P(30, 0, -90)],
+    [51, P(-50, 85, -170), P(20, 0, -80)],
+    [57, P(30, 70, -200), P(120, 0, -170)],
+    [64, P(200, 75, -250), P(320, 0, -320)],
+    [72, P(-200, 300, -700), P(80, 0, -200)],
+    [84, P(-300, 260, -760), P(40, 0, -160)],
+    [93, P(-420, 300, -820), P(0, 0, -120)],
+  ];
+  let k = 0; while (k < keys.length - 2 && t > keys[k + 1][0]) k++;
+  const [t0, p0, l0] = keys[k], [t1, p1, l1] = keys[k + 1];
+  const f = ease((t - t0) / (t1 - t0));
+  camera.position.copy(p0).lerp(p1, f);
+  camera.lookAt(l0.clone().lerp(l1, f));
+}
+
+// ---------- HUD ----------
+const $ = (id) => document.getElementById(id);
+const show = (id, on) => { $(id).style.opacity = on; };
+function fadeIn(t, a, b, dur = 0.8) { return Math.max(0, Math.min(1, (t - a) / dur, (b - t) / dur)); }
+const fmt = (x) => Math.round(x);
+const CAPS = [
+  [8.5, 17, 'Every summer, Blue Blubber swarms drift toward coastal seawater intakes',
+   'They block intake screens. Crews rake them out by hand, and almost none survive.'],
+  [17, 26.5, 'ENEC’s early warning spots the swarm offshore',
+   'Qandeel takes that alert and simulates hundreds of possible drifts on real Gulf currents and wind'],
+  [27, 33, 'The bubble curtain switches on only when the swarm is due',
+   'Rising air creates a surface current that holds jellyfish outside the gap'],
+  [33.5, 41, 'Nothing is cut, pumped or netted', 'No mesh, no chemicals: the water itself does the work'],
+  [41.5, 51, 'A boom with a closed-bottom retention bag gathers the swarm, still in the water',
+   'Our model found open oil-spill booms leak jellyfish; the bag keeps 88–100%'],
+  [51.5, 63.5, `Towed with the current and released alive, ${BEST.distance_km} km down-current`,
+   'The release point is chosen by simulating where jellyfish drift next'],
+  [64, 71.5, 'Released alive. The intake keeps running.', ''],
+];
+function hud(t) {
+  show('title', fadeIn(t, 0.8, 8.0, 1.2));
+  show('brand', t > 8.5 && t < 84 ? 1 : 0);
+  let cap = null;
+  for (const c of CAPS) if (t >= c[0] && t < c[1]) cap = c;
+  if (cap) {
+    $('caption').innerHTML = cap[2] + (cap[3] ? `<span class="sub">${cap[3]}</span>` : '');
+    show('caption', fadeIn(t, cap[0], cap[1], 0.6));
+  } else show('caption', 0);
+  // planner panel
+  const pOn = fadeIn(t, 19, 27.5, 0.6);
+  if (pOn > 0) {
+    const lines = [
+      `<h3>ENEC ALERT → QANDEEL PLAN</h3>`,
+      `Swarm <b>${A.distance_km} km NNW</b> of the intake`,
+      t > 20.5 ? `Chance it reaches the gap: <b>${fmt(A.p_arrive * 100)}%</b>` : '',
+      t > 21.8 ? `Arrival window: <b>${fmt(A.window_start_h)}–${fmt(A.window_end_h)} h</b>` : '',
+      t > 23.0 ? `Curtain on at: <b>+${fmt(A.switch_on_h)} h</b>` : '',
+      t > 24.2 ? `Boom crew: stage on the <b>${A.approach_side}</b> side` : '',
+      t > 25.4 ? `Release: <b>${BEST.distance_km} km NE</b>` : '',
+    ];
+    $('panel').innerHTML = lines.filter(Boolean).join('<br>');
+  }
+  show('panel', pOn);
+  // numbers
+  const nOn = fadeIn(t, T.numbers, T.outro, 0.8);
+  if (nOn > 0) {
+    $('cards').innerHTML = [
+      [`${SW.covered_by_plan ?? 39}/${SW.swarms_that_arrived ?? 39}`, 'arriving swarms covered in a hindcast of 100 alerts on real 2025 Gulf data'],
+      [`${fmt(SW.hours_saved_vs_every_alert_pct ?? 77)}%`, 'fewer curtain running hours than switching on for every alert'],
+      ['88–100%', 'kept by the boom with a closed-bottom retention bag (model), vs 0–54% for an open boom'],
+      ['AED 300', '1:20 tank test kit to measure it next: our path from model to evidence'],
+    ].map(([n, txt]) => `<div class="card"><div class="n">${n}</div><div class="t">${txt}</div></div>`).join('');
+  }
+  show('cards', nOn);
+  if (t >= T.outro) {
+    $('title').innerHTML = '<h1>QANDEEL</h1><p>Herd, don’t harvest.</p><p style="font-size:28px;opacity:.85">Team Qandeel · ATRC Advanced Technology Pioneers 2026 · ENEC track</p>';
+    show('title', fadeIn(t, T.outro + 0.5, 99, 1.2));
+  }
+  // world tags
+  const tag = (id, pos, on) => {
+    const v = pos.clone().project(camera);
+    $(id).style.left = ((v.x + 1) / 2 * W) + 'px';
+    $(id).style.top = ((1 - v.y) / 2 * H) + 'px';
+    show(id, v.z < 1 ? on : 0);
+  };
+  tag('tag-gap', new THREE.Vector3(0, 6, BW_Z + 6), fadeIn(t, 10, 17, 0.6));
+  tag('tag-curtain', new THREE.Vector3(GAP_HALF + 10, 8, CURT_Z), fadeIn(t, 27.5, 33, 0.6));
+  tag('tag-release', new THREE.Vector3(RELEASE.x, 10, RELEASE.y), fadeIn(t, 56, 71, 0.6));
+}
+
+// ---------- underwater look ----------
+function water(t) {
+  const under = camera.position.y < 0.3;
+  scene.background = under ? DEEP : SKY;
+  scene.fog.color.copy(under ? DEEP : SKY);
+  scene.fog.near = under ? 2 : 250;
+  scene.fog.far = under ? 70 : 850;
+  skyDome.visible = !under;
+}
+
+// ---------- deterministic stepping ----------
+const FPS = 30;
+let simT = 0;
+function stepTo(t) {
+  if (t < simT) { /* restart */ seed = 12345; location.reload(); }
+  while (simT < t) {
+    const dt = 1 / FPS;
+    simT += dt;
+    updateJelly(simT, dt, simT >= T.curtainOn ? 1 : 0);
+  }
+}
+window.renderAt = (t) => {
+  stepTo(t);
+  waves(t);
+  shot(t);
+  const curtain = seg(t, T.curtainOn, T.curtainOn + 2) * (1 - seg(t, T.towEnd + 6, T.towEnd + 9));
+  updateBubbles(t, curtain);
+  updateBoom(t);
+  water(t);
+  hud(t);
+  renderer.render(scene, camera);
+  return true;
+};
+window.DURATION = DURATION;
+if (new URLSearchParams(location.search).has('nohud')) document.querySelector('.hud').style.display = 'none';
+window.debug = () => { let cx = 0, cz = 0, n = 0; for (const j of jelly) { cx += j.x; cz += j.z; n += j.off ? 1 : 0; }
+  const s = boomState(simT); return { simT, cx: cx / NJ, cz: cz / NJ, withOff: n, boom: s ? [s.c.x, s.c.y, s.close, s.tow] : null,
+  held: [heldCenter.x, heldCenter.y] }; };
+window.ready = true;
+window.renderAt(0);
+</script>
+</body>
+</html>
