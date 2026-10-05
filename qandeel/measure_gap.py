@@ -21,7 +21,8 @@ EARTH_R = 6_371_008.8  # mean Earth radius, m
 def parse_point(text: str) -> tuple[float, float]:
     nums = [float(x) for x in re.findall(r"-?\d+(?:\.\d+)?", text)]
     if len(nums) != 2:
-        raise ValueError(f"expected 'lat, lon', got {text!r}")
+        raise SystemExit(f"Could not read coordinates from {text!r}. Paste the numbers Google Maps shows, "
+                         'e.g. --a "23.96123, 52.23045"')
     lat, lon = nums
     up = text.upper()
     if "S" in up:
