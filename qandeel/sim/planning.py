@@ -35,8 +35,9 @@ class Cloud:
 
 def simulate_cloud(start_xy, hours, rng, runs=400, n_particles=60, spread_m=1500.0, swim_max=0.10,
                    cond: Conditions | None = None, record: Record | None = None, keep_runs=20,
-                   start_hour: float = 0.0) -> Cloud:
-    vel = velocity_series(hours, DT_S, runs, rng, cond=cond, record=record, start_hour=start_hour)
+                   start_hour: float = 0.0, forecast_error: bool = True) -> Cloud:
+    vel = velocity_series(hours, DT_S, runs, rng, cond=cond, record=record, start_hour=start_hour,
+                          forecast_error=forecast_error)
     steps = vel.shape[0]
     shape = (runs, n_particles)
     pos = np.asarray(start_xy, float) + rng.normal(0, spread_m, shape + (2,))

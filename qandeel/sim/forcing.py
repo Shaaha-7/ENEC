@@ -70,7 +70,7 @@ def source_label(record: Record | None) -> str:
 
 def velocity_series(hours: float, dt_s: float, runs: int, rng: np.random.Generator,
                     cond: Conditions | None = None, record: Record | None = None,
-                    start_hour: float = 0.0) -> np.ndarray:
+                    start_hour: float = 0.0, forecast_error: bool = True) -> np.ndarray:
     steps = int(hours * 3600 / dt_s)
     t_h = np.arange(steps) * dt_s / 3600
     if record is not None and record.kind == "forecast":
@@ -81,6 +81,8 @@ def velocity_series(hours: float, dt_s: float, runs: int, rng: np.random.Generat
         lo = np.floor(idx).astype(int)
         frac = (idx - lo)[..., None]
         v = total[lo] * (1 - frac) + total[lo + 1] * frac  # beyond the forecast: hold the last hour
+        if not forecast_error:  # "truth" replay for hindcast evaluation
+            return v
         # forecast error growing with lead time: 15% strength plus a drifting bias (random walk)
         bias = np.cumsum(rng.normal(0, 0.004 * np.sqrt(dt_s / 3600), (steps, runs, 2)), axis=0)
         return v * rng.normal(1.0, 0.15, (1, runs, 1)) + rng.normal(0, 0.01, (1, runs, 2)) + bias

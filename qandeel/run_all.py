@@ -20,6 +20,7 @@ from qandeel.sim.curtain import CURTAIN_Y, GAP_W, bulson_surface_current, hold_g
 from qandeel.sim.env import Conditions, bearing_to_xy  # noqa: E402
 from qandeel.sim.forcing import load_record, load_site, source_label  # noqa: E402
 from qandeel.sim.planning import forecast_arrival, plan_release, switch_on_time  # noqa: E402
+from qandeel.sim.benefits import adaptive_airflow, cost_summary, emissions, hold_margin, smart_switching  # noqa: E402
 from qandeel.sim.sensitivity import tornado  # noqa: E402
 from qandeel.sim.sizing import boom_throughput, compressor, jellyfish_mass_kg  # noqa: E402
 
@@ -229,6 +230,35 @@ def fig_tornado(rows):
     plt.close(fig)
 
 
+def fig_benefits(sw, approach, q_set, ad):
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12.5, 4.6), facecolor=SURFACE,
+                                   gridspec_kw={"width_ratios": [1, 1.6]})
+    names = ["Run on every alert", "Qandeel planner"]
+    vals = [sw["curtain_hours_on_every_alert"], sw["curtain_hours_qandeel"]]
+    ax1.bar(names, vals, color=[GREY, ACCENT], width=0.55)
+    for i, v in enumerate(vals):
+        ax1.text(i, v + max(vals) * 0.02, f"{v:,.0f} h", ha="center", fontsize=10, color=INK)
+    ax1.set_ylim(0, max(vals) * 1.18)
+    ax1.set_ylabel(f"curtain running hours, {sw['alerts']} alerts", color=INK2, fontsize=9)
+    _style(ax1, f"{sw['hours_saved_vs_every_alert_pct']:.0f}% fewer curtain hours",
+           f"{sw['covered_by_plan']} of {sw['swarms_that_arrived']} arriving swarms covered by the plan")
+    hrs = np.arange(len(q_set)) / 24
+    ax2.plot(hrs, q_set, color=ACCENT, lw=0.8)
+    ax2.axhline(4.5, color=INK2, lw=1, ls="--")
+    ax2.text(hrs[-1], 4.6, "fixed worst-case setting", ha="right", fontsize=8.5, color=INK2)
+    ax2.axhline(q_set.mean(), color=GOOD_GREEN, lw=1.5)
+    ax2.text(1, 0.35, f"green line = adaptive average, {q_set.mean():.1f} L/s per m", fontsize=8.5, color=GOOD_GREEN,
+             bbox={"facecolor": SURFACE, "edgecolor": "none", "pad": 1})
+    ax2.set_ylim(0, 5.2)
+    ax2.set_xlabel("days from 1 June 2025", color=INK2, fontsize=9)
+    ax2.set_ylabel("airflow needed (L/s per m)", color=INK2, fontsize=9)
+    _style(ax2, f"Adaptive airflow uses {ad['energy_vs_constant_max_pct']:.0f}% of the energy of a fixed setting",
+           f"real currents + wind; {100 * ad['share_hours_above_max']:.0f}% of hours would need more than 4.5 L/s per m")
+    fig.tight_layout(w_pad=3)
+    fig.savefig(OUT / "fig7_smart_operation.png", dpi=160)
+    plt.close(fig)
+
+
 def main():
     OUT.mkdir(exist_ok=True)
     cond, record, site = Conditions(), load_record(), load_site()
@@ -274,9 +304,21 @@ def main():
     results["boom"] = boom_throughput(tow_m_s=RELATIVE_TOW, retention=round(retained, 2))
     results["mass_kg"] = {f"{d} cm": round(jellyfish_mass_kg(d), 2) for d in (30, 45)}
 
+    if record is not None:
+        sw, _ = smart_switching(record, n_alerts=100)
+        margin, _ = hold_margin()
+        ad, approach, q_set = adaptive_airflow(record, margin)
+        results["smart_switching"], results["adaptive_airflow"] = sw, ad
+        fig_benefits(sw, approach, q_set, ad)
+    e = results["compressor"]["energy_mwh_per_event"]
+    results["cost"] = cost_summary(e)
+    results["emissions"] = emissions(e)
+
     (OUT / "results.json").write_text(json.dumps(results, indent=2, default=float))
     print(f"Forcing: {src}")
-    print(json.dumps({k: results[k] for k in ("alerts", "compressor", "boom")}, indent=2, default=float))
+    print(json.dumps({k: results[k] for k in ("alerts", "compressor", "boom", "cost", "emissions")
+                      if k in results} | {k: results[k] for k in ("smart_switching", "adaptive_airflow")
+                                          if k in results}, indent=2, default=float))
     print("best release:", results["release_options"][0])
 
 

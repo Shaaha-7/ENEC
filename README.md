@@ -16,9 +16,9 @@ pip install -r requirements.txt
 
 python -m qandeel.data_fetch              # 1a. real 2025 bloom-season currents + wind
 python -m qandeel.data_fetch --forecast   # 1b. live 7-day forecast (operational mode)
-python -m qandeel.run_all                 # 2. all simulations -> qandeel/outputs/fig1..fig6 + results.json
+python -m qandeel.run_all                 # 2. all simulations -> qandeel/outputs/fig1..fig7 + results.json
 streamlit run qandeel/dashboard.py        # 3. visual dashboard (opens in your browser)
-python -m pytest qandeel/tests -q         # 14 tests
+python -m pytest qandeel/tests -q         # 16 tests
 ```
 
 Without the data files everything still runs, on assumed conditions; the charts
@@ -80,6 +80,7 @@ approach current, a 10 cm boom skirt.
 | `qandeel/sim/curtain.py` | Individual jellyfish at the gap, curtain on or off, swimming up to 10 or 20 cm/s |
 | `qandeel/sim/boom.py` | Jellyfish in the boom pocket: escape under the skirt; open boom vs closed-bottom retention bag |
 | `qandeel/sim/sensitivity.py` | Which unknowns move the results most |
+| `qandeel/sim/benefits.py` | Smart-switching hindcast, adaptive airflow, cost and emissions |
 | `qandeel/sim/sizing.py` | Compressor air and power, boom throughput, jellyfish mass |
 | `qandeel/data_fetch.py` | Downloads season data or the live forecast |
 | `qandeel/measure_gap.py` | Gap width from two coordinates, saved to `site.json` |
@@ -98,6 +99,11 @@ Currents average 0.08 m/s (max 0.25 m/s); wind is mostly from the N/NW and pushe
 - **Capacity:** with the bag at 0.2 m/s, one boom pair gathers about 2,200-21,600 jellyfish an hour at 0.1-1 per m³ (4-43 t/h).
 - **Release:** with onshore winds, the best point within a day's tow (15 km NE) still sees ~23% drift back within 72 h; the curtain catches them again (about 1.3x handling load). Under 2% return needs 30-40 km.
 - **Compressor:** ~135 kW for a 300 m curtain at 9.5 m depth; ~11 MWh per long event. Gap width drives it (68-271 kW for 150-600 m).
+- **Smart switching (hindcast of 100 alerts in the real 2025 season):** the planner covered all 39 swarms that truly arrived and kept the curtain off for 45 of the 61 that did not: 77% fewer curtain hours than running on every alert.
+- **Adaptive airflow:** setting air hour by hour from real currents and wind uses 46% of the energy of a fixed 4.5 L/s per m. About 8% of hours (strong onshore wind) would need more than 4.5; those hours are flagged for the operator.
+- **Cost (indicative, to confirm with suppliers):** USD 0.4-1.3 million capital for a 300 m gap; about USD 1,100 energy per event. One avoided 12-hour unit outage (about USD 0.5 million, EPRI figure) pays back roughly a third to all of it.
+- **Emissions:** about 4.4 t CO2 per event on a gas-heavy grid; about 0.1 t if powered by the plant's own low-carbon electricity.
+- **Marine life:** jellyfish raked off screens rarely survive; Qandeel keeps them in the water and releases them alive. No mesh (no entanglement), no chemicals, turtle escape gap, bubble noise only during events.
 
 ## Key assumptions
 

@@ -114,3 +114,15 @@ def test_tank_scaling_is_froude_consistent():
     full = bulson_surface_current(3.0)
     model = bulson_surface_current(3.0 / 20 ** 1.5)
     assert model == pytest.approx(full / math.sqrt(20), rel=1e-6)
+
+
+def test_airflow_inverse_of_bulson():
+    from qandeel.sim.benefits import airflow_for
+    assert airflow_for(bulson_surface_current(3.0)) == pytest.approx(3.0, rel=1e-6)
+
+
+def test_cost_and_emissions_tables():
+    from qandeel.sim.benefits import cost_summary, emissions
+    c = cost_summary(11.0)
+    assert c["capex_low_usd"] < c["capex_high_usd"]
+    assert emissions(10.0)["tco2_grid"] == pytest.approx(4.0)

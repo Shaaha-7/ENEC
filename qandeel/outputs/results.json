@@ -1773,5 +1773,72 @@
   "mass_kg": {
     "30 cm": 0.99,
     "45 cm": 3.04
+  },
+  "smart_switching": {
+    "alerts": 100,
+    "swarms_that_arrived": 39,
+    "covered_by_plan": 39,
+    "caught_by_camera_backup": 0,
+    "curtain_hours_qandeel": 2237.0,
+    "curtain_hours_on_every_alert": 9600.0,
+    "curtain_off_for_non_arriving": 45,
+    "non_arriving": 61,
+    "hours_saved_vs_every_alert_pct": 77.0
+  },
+  "adaptive_airflow": {
+    "hours": 2928,
+    "approach_mean_m_s": 0.196,
+    "approach_p95_m_s": 0.358,
+    "margin_m_s": 0.175,
+    "airflow_mean_l_s_m": 2.06,
+    "share_hours_above_3": 0.233,
+    "share_hours_above_max": 0.075,
+    "energy_vs_constant_max_pct": 46.0,
+    "energy_vs_constant_3_pct": 69.0
+  },
+  "cost": {
+    "capex_items": [
+      {
+        "item": "Bubble curtain: diffuser pipe, flotation hose, anchors (300 m, installed)",
+        "low_usd": 150000,
+        "high_usd": 450000
+      },
+      {
+        "item": "Oil-free compressor ~150 kW, standby unit, air line",
+        "low_usd": 120000,
+        "high_usd": 300000
+      },
+      {
+        "item": "Ocean containment boom 300 m with 2 m skirt",
+        "low_usd": 40000,
+        "high_usd": 120000
+      },
+      {
+        "item": "Closed-bottom retention bags (2) and quick-release ends",
+        "low_usd": 10000,
+        "high_usd": 30000
+      },
+      {
+        "item": "Two workboats (or seasonal charter)",
+        "low_usd": 60000,
+        "high_usd": 300000
+      },
+      {
+        "item": "Gap camera, pressure sensors, control PLC, software",
+        "low_usd": 30000,
+        "high_usd": 80000
+      }
+    ],
+    "capex_low_usd": 410000,
+    "capex_high_usd": 1280000,
+    "energy_cost_per_event_usd": 1110.0,
+    "energy_cost_per_season_usd": 11100.0,
+    "outage_cost_12h_usd": 500000,
+    "outages_avoided_to_pay_back": "0.8-2.6"
+  },
+  "emissions": {
+    "energy_mwh_per_event": 11.1,
+    "tco2_grid": 4.4,
+    "tco2_nuclear_supply": 0.13
   }
 }
