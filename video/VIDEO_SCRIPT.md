@@ -1,38 +1,51 @@
-# Qandeel explainer video: narration script
+# Qandeel explainer video: narration
 
-Final cut: `media/Qandeel_explainer.mp4`, about 1 min 42 s (the brief allows 1-2 minutes).
-The video has on-screen captions and no voice. Record the narration below over it
-(phone voice memo is fine; a team member's own voice is better than synthetic speech),
-then combine in any editor (CapCut, Clipchamp, iMovie), or with ffmpeg:
+Final video: `media/Qandeel_explainer.mp4`, 1 min 42 s, 1080p, captions plus narration.
+
+The narration in the file is generated with an open neural text-to-speech voice
+(Kokoro-82M, voice `af_heart`, Apache-2.0) by `video/narrate.py`, over a quiet
+synthetic sea ambience. This is declared in the deck's AI-use statement. A team
+member recording the same lines in their own voice is even better for judges:
+record over the video and replace the audio track (see the end of this file).
+
+| Time | On screen | Narration (as spoken) |
+|---|---|---|
+| 0:00 | Title over the 3D coast | "We are Team Qandeel. Qandeel is Arabic for jellyfish, and for lantern." |
+| 0:08 | Swarm drifting toward the intake | "Every summer, Blue Blubber jellyfish swarms drift toward coastal seawater intakes. They block the screens, and almost none survive." |
+| 0:17 | Alert and planner panel | "ENEC already detects swarms offshore. From that alert, Qandeel simulates hundreds of drifts on real Gulf data, to predict if, and when, they arrive." |
+| 0:27 | Real dashboard clip | "This is our working dashboard, running on real 2025 data: the chance of arrival, the arrival window, when to switch on, and where to release." |
+| 0:37 | Bubble curtain switches on | "When the swarm is due, a bubble curtain switches on, and holds the jellyfish outside the intake." |
+| 0:43 | Underwater: bubble wall | "Nothing is cut, pumped or netted. Rising air moves the water, and the water moves the jellyfish." |
+| 0:51 | Boats close the boom | "Then a boom gathers the swarm, still in the water. Our model found that oil-spill booms leak jellyfish, so we added a closed-bottom retention bag." |
+| 1:01 | Tow and release | "The boom moves with the current, and releases them alive, at a point chosen by simulating where they drift next." |
+| 1:14 | Released, intake running | "The intake keeps running, and the jellyfish go back to the sea." |
+| 1:22 | Result cards | "Tested on one hundred alerts with real Gulf data, we covered every swarm that arrived, with seventy-seven percent less curtain running time. Next, a one to twenty tank test." |
+| 1:34 | Closing title | "Qandeel. Herd, don't harvest." |
+
+In `narrate.py` some words are spelled phonetically for the synthesiser
+("Kandeel", "Ee-neck", "twenty twenty-five").
+
+## Record your own voice instead
+
+Read each line starting at its time (a phone voice memo is fine), then:
 
 ```bash
-ffmpeg -i media/Qandeel_explainer.mp4 -i narration.m4a -c:v copy -c:a aac -shortest media/Qandeel_explainer_voice.mp4
+ffmpeg -i media/Qandeel_explainer.mp4 -i my_voice.m4a -map 0:v -map 1:a -c:v copy -c:a aac -shortest media/Qandeel_explainer_team_voice.mp4
 ```
 
-Aim for a calm pace (~2.3 words per second). Timings are approximate.
-
-| Time | On screen | Narration |
-|---|---|---|
-| 0:00-0:08 | Title over the 3D coast | "We are Team Qandeel. Qandeel is Arabic for jellyfish, and for lantern." |
-| 0:08-0:17 | Swarm drifting toward the intake | "Every summer, swarms of Blue Blubber jellyfish drift toward coastal seawater intakes. They block the screens, crews rake them out by hand, and almost none survive." |
-| 0:17-0:27 | Alert and planner panel | "ENEC already detects swarms offshore. Qandeel starts there: it simulates hundreds of possible drifts on real Gulf currents and wind, and tells the crew if the swarm will arrive, and when." |
-| 0:27-0:37 | Real dashboard clip | "This is our working dashboard, running on real 2025 data: the chance of arrival, the arrival window, when to switch on, and where to release." |
-| 0:37-0:43 | Bubble curtain switches on | "Only when the swarm is due, a bubble curtain across the breakwater opening switches on. Rising air creates a surface current that holds the jellyfish outside." |
-| 0:43-0:51 | Underwater: bubble wall | "Nothing is cut, pumped or netted. The water itself does the work." |
-| 0:51-1:01 | Boats close the boom | "Then a boom gathers the swarm, still in the water. Our model found that oil-spill booms leak jellyfish, because they don't float back up like oil. So we added a closed-bottom retention bag." |
-| 1:01-1:14 | Tow and release | "The boom moves with the current and releases them alive, at a point we choose by simulating where they drift next." |
-| 1:14-1:22 | Released, intake running | "The intake keeps running, and the jellyfish go back to the sea." |
-| 1:22-1:34 | Result cards | "In a test of one hundred alerts on real Gulf data, we covered every swarm that arrived, with seventy-seven percent less curtain running time. Next, a one-to-twenty tank test to measure it." |
-| 1:34-1:42 | Closing title | "Qandeel. Herd, don't harvest." |
-
-## Rebuild the video
+## Rebuild the video from source
 
 ```bash
 cd video && npm install                      # three.js + Inter font
 python -m http.server 8700                   # from the repo root, in another terminal
-PW=<path to playwright> node render_frames.js /tmp/frames     # ~1 h on a laptop CPU
+PW=<path to playwright> node render_frames.js /tmp/frames            # ~1 h on a laptop CPU
 PW=<path to playwright> node render_overlay.js http://localhost:8700/video/overlay_dashboard.html overlay.png
-./assemble.sh /tmp/frames ../media/Qandeel_explainer.mp4
+./assemble.sh /tmp/frames ../media/Qandeel_explainer.mp4             # silent cut
+pip install kokoro-onnx && npm pack kokoro-q8-shards kokoro-js       # voice model and voices
+# join kokoro-q8.part0..5.bin into kokoro-q8.onnx; pack voices/*.bin into voices.npz (see narrate.py)
+python narrate.py --model kokoro-q8.onnx --voices voices.npz --out narration.wav
+ffmpeg -i ../media/Qandeel_explainer.mp4 -i narration.wav -map 0:v -map 1:a -c:v copy \
+  -af loudnorm=I=-16:TP=-1.5 -c:a aac -b:a 160k -shortest Qandeel_explainer_voiced.mp4
 ```
 
 The 3D scene (`scene.html`) reads its numbers from `qandeel/outputs/results.json`,

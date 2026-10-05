@@ -13,7 +13,6 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))  # allow `streamlit run qandeel/dashboard.py`
 
 import matplotlib.pyplot as plt  # noqa: E402
-import numpy as np  # noqa: E402
 import streamlit as st  # noqa: E402
 
 from qandeel.plan_alert import compass  # noqa: E402

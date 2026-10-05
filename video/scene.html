@@ -55,6 +55,11 @@ const R = await (await fetch('../qandeel/outputs/results.json')).json();
 const A = R.alerts[0];
 const SW = R.smart_switching || {};
 const BEST = R.release_options[0];
+const pctRange = (rows) => { const v = rows.map(r => r.retained_share * 100);
+  return `${Math.floor(Math.min(...v))}–${Math.round(Math.max(...v))}%`; };
+const at02 = (r) => Math.abs(r.tow_m_s - 0.2) < 1e-9;
+const BAG = pctRange(R.boom_retention.filter(r => r.bag && at02(r)));
+const OPEN = pctRange(R.boom_retention.filter(r => !r.bag && r.skirt_m === 2 && at02(r)));
 
 // ---------- deterministic random ----------
 let seed = 12345;
@@ -372,7 +377,7 @@ const CAPS = [
    'Rising air creates a surface current that holds jellyfish outside the gap'],
   [33.5, 41, 'Nothing is cut, pumped or netted', 'No mesh, no chemicals: the water itself does the work'],
   [41.5, 51, 'A boom with a closed-bottom retention bag gathers the swarm, still in the water',
-   'Our model found open oil-spill booms leak jellyfish; the bag keeps 88–100%'],
+   `Our model found open oil-spill booms leak jellyfish; the bag keeps ${BAG}`],
   [51.5, 63.5, `Towed with the current and released alive, ${BEST.distance_km} km down-current`,
    'The release point is chosen by simulating where jellyfish drift next'],
   [64, 71.5, 'Released alive. The intake keeps running.', ''],
@@ -407,7 +412,7 @@ function hud(t) {
     $('cards').innerHTML = [
       [`${SW.covered_by_plan ?? 39}/${SW.swarms_that_arrived ?? 39}`, 'arriving swarms covered in a hindcast of 100 alerts on real 2025 Gulf data'],
       [`${fmt(SW.hours_saved_vs_every_alert_pct ?? 77)}%`, 'fewer curtain running hours than switching on for every alert'],
-      ['88–100%', 'kept by the boom with a closed-bottom retention bag (model), vs 0–54% for an open boom'],
+      [BAG, `kept by the boom with a closed-bottom retention bag (model), vs ${OPEN} for an open boom`],
       ['AED 300', '1:20 tank test kit to measure it next: our path from model to evidence'],
     ].map(([n, txt]) => `<div class="card"><div class="n">${n}</div><div class="t">${txt}</div></div>`).join('');
   }

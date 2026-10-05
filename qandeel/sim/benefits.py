@@ -17,7 +17,7 @@ import numpy as np
 from .curtain import bulson_surface_current, run_hold
 from .env import bearing_to_xy
 from .forcing import Record
-from .planning import DT_S, LEAD_SHARE, forecast_arrival, simulate_cloud, switch_on_time
+from .planning import LEAD_SHARE, forecast_arrival, simulate_cloud, switch_on_time
 
 HORIZON_H = 96.0
 RUN_ON_AFTER_H = 12.0  # keep running this long after the late edge of the window
