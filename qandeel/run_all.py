@@ -32,6 +32,7 @@ SKIRT_BLUES = {1.0: "#86b6ef", 1.5: "#2a78d6", 2.0: "#104281"}
 SURFACE = "#fcfcfb"
 
 ALERTS = [  # (label, distance km, bearing deg)
+    ("Swarm 15 km NNW", 15, 330),
     ("Swarm 28 km WNW", 28, 285),
     ("Swarm 28 km N", 28, 0),
 ]
@@ -67,8 +68,8 @@ def fig_arrival(fc, t_on, label, src):
     ax1.axhline(0, color=INK2, lw=1.5)
     ax1.plot([0], [0], marker="v", color=INK, ms=9)
     ax1.annotate("intake gap", (0, 0), xytext=(8, -14), textcoords="offset points", fontsize=9, color=INK)
-    ax1.set_xlim(-34, 30)
-    ax1.set_ylim(-1.5, 14)
+    ax1.set_xlim(-25, 25)
+    ax1.set_ylim(-1.5, 18)
     ax1.set_xlabel("km east of gap", color=INK2, fontsize=9)
     ax1.set_ylabel("km offshore", color=INK2, fontsize=9)
     ax1.legend(frameon=False, fontsize=8.5, loc="upper right", labelcolor=INK2)
@@ -153,7 +154,7 @@ def fig_release(options, src):
     ax.annotate("intake gap", (0, 0), xytext=(6, -14), textcoords="offset points", fontsize=9, color=INK)
     for o in options:
         x, y = bearing_to_xy(o.distance_km, o.bearing_deg) / 1000
-        ax.scatter([x], [y], s=60, color=GREY if o.score > 0.05 else ACCENT, zorder=3)
+        ax.scatter([x], [y], s=60, color=ACCENT if o is options[0] else GREY, zorder=3)
         ax.annotate(f"{o.p_return:.0%}", (x, y), xytext=(0, 7), textcoords="offset points",
                     ha="center", fontsize=7.5, color=INK2)
     best = options[0]
@@ -163,8 +164,8 @@ def fig_release(options, src):
     ax.set_aspect("equal", adjustable="datalim")
     ax.set_xlabel("km east of gap", color=INK2, fontsize=9)
     ax.set_ylabel("km offshore", color=INK2, fontsize=9)
-    _style(ax, f"Releasing {best.distance_km:g} km down-current: {best.p_return:.0%} return in 72 h",
-           f"Label = share of released jellyfish drifting back. Forcing: {src}")
+    _style(ax, f"Best release within a day's tow: {best.distance_km:g} km, {best.p_return:.0%} drift back within 72 h",
+           f"Label = share drifting back to the gap; max 24 h tow. Forcing: {src}")
     fig.tight_layout()
     fig.savefig(OUT / "fig4_release_points.png", dpi=160)
     plt.close(fig)
@@ -216,7 +217,7 @@ def main():
     fig_paths()
 
     options = plan_release(cond=cond, record=record)
-    results["release_options"] = [o.__dict__ | {"score": round(o.score, 3)} for o in options]
+    results["release_options"] = [o.__dict__ | {"score": round(o.score, 3), "load_factor": round(o.load_factor, 2)} for o in options]
     fig_release(options, src)
 
     brows = boom_grid()

@@ -39,6 +39,7 @@ def run_plan(distance, bearing, swim, use_real):
         "t_on": t_on, "side": fc.side, "hourly": fc.cloud.hourly[: HORIZON_H + 1], "start": fc.start_xy,
         "release": None if best is None else {
             "km": best.distance_km, "bearing": best.bearing_deg, "p_return": best.p_return,
+            "tow_h": best.tow_hours,
             "p_near": best.p_beach_near, "xy": bearing_to_xy(best.distance_km, best.bearing_deg)},
         "source": source_label(record),
     }
@@ -163,7 +164,7 @@ else:
          f"{p['t_on']:.0f} h after the alert")
     r = p["release"]
     tile(c4, "Release point", f"{r['km']:g} km {compass(r['bearing'])}",
-         f"{r['p_return']:.0%} drift back within 72 h")
+         f"{r['tow_h']:.0f} h tow; {r['p_return']:.0%} drift back within 72 h and meet the curtain again")
 
 if "clock" not in st.session_state:
     st.session_state.clock = int(st.query_params.get("t", 0))  # ?t=30 opens at hour 30

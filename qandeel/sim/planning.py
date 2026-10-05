@@ -20,7 +20,8 @@ LEAD_SHARE = 0.05  # the swarm "arrives" when 5% of it is at the gap
 SWITCH_ON_BUFFER_H = 3.0
 MIN_ARRIVAL_PROB = 0.10  # below this, the curtain stays off
 NEAR_COAST_KM = 10.0
-TOW_SPEED = 0.3  # m/s, below the ~0.35 m/s at which booms start losing material
+TRANSIT_SPEED = 0.2  # m/s over ground: boom at <=0.1 m/s through the water plus ~0.1 m/s current (assumed)
+MAX_TOW_H = 24.0  # longer tows are impractical for a boom crew
 
 
 @dataclass
@@ -124,6 +125,11 @@ class ReleaseOption:
     def score(self) -> float:
         return self.p_return + 0.5 * self.p_beach_near
 
+    @property
+    def load_factor(self) -> float:
+        """Extra handling caused by returns: each returner meets the curtain again."""
+        return 1.0 / max(1e-9, 1.0 - self.p_return)
+
 
 def plan_release(cond: Conditions | None = None, record: Record | None = None, distances_km=(6, 10, 15),
                  bearings_deg=range(-75, 76, 15), runs=60, n_particles=30, horizon_h=72.0,
@@ -132,13 +138,15 @@ def plan_release(cond: Conditions | None = None, record: Record | None = None, d
 
     Strandings far from the plant are reported but treated like a bloom's
     natural end; strandings near the plant and returns to the gap are penalised.
+    Points needing more than MAX_TOW_H at TRANSIT_SPEED are skipped.
     """
     rng = np.random.default_rng(seed)
     options = []
     for dist in distances_km:
         for b in bearings_deg:
             start = bearing_to_xy(dist, b % 360)
-            if start[1] < min_coast_km * 1000:
+            tow_h = dist * 1000 / TRANSIT_SPEED / 3600
+            if start[1] < min_coast_km * 1000 or tow_h > MAX_TOW_H:
                 continue
             c = simulate_cloud(start, horizon_h, rng, runs, n_particles, spread_m=200.0,
                                cond=cond, record=record, keep_runs=0)
@@ -146,6 +154,6 @@ def plan_release(cond: Conditions | None = None, record: Record | None = None, d
             beached = ~np.isnan(c.beach_x) & ~returned
             near = beached & (np.abs(np.nan_to_num(c.beach_x, nan=1e9)) <= NEAR_COAST_KM * 1000)
             options.append(ReleaseOption(dist, b % 360, float(returned.mean()), float(beached.mean()),
-                                         float(near.mean()), dist * 1000 / TOW_SPEED / 3600))
+                                         float(near.mean()), tow_h))
     options.sort(key=lambda o: (round(o.score, 2), o.tow_hours))  # ties within 1%: shortest tow
     return options

@@ -35,8 +35,9 @@ def plan(distance_km, bearing_deg, cond=None, record=None, swim_max=0.10, runs=4
         f"Curtain switch-on:                  in {t_on:.0f} h (earliest arrival minus 3 h buffer)",
         f"Swarm approaches from the:          {fc.side} side; stage the boom crew there",
         f"Release point:                      {best.distance_km:g} km {compass(best.bearing_deg)} of the gap, "
-        "boom drifts with the current at <=0.1 m/s through the water",
-        f"Simulated return within 72 h:       {best.p_return:.0%}; strandings near the plant: {best.p_beach_near:.0%}",
+        f"~{best.tow_hours:.0f} h with the boom at <=0.1 m/s through the water",
+        f"Simulated return within 72 h:       {best.p_return:.0%} (curtain handles them again: "
+        f"{best.load_factor:.2f}x load); strandings near the plant: {best.p_beach_near:.0%}",
         "Backup: gap camera switches the curtain on at once if jellyfish arrive early.",
     ]
     return "\n".join(lines)

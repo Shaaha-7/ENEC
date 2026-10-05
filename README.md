@@ -80,12 +80,17 @@ Drag the clock slider or press **Play** to animate it for the video.
 | `qandeel/dashboard.py` | Visual dashboard |
 | `qandeel/run_all.py` | Runs everything, writes `outputs/` |
 
-## Main findings so far (assumed conditions)
+## Main findings (real 2025 bloom-season data)
 
-- **Arrival:** a swarm 28 km WNW reaches the gap in 96% of runs, first jellyfish 18-54 h after the alert; curtain on at 15 h. A swarm 28 km N does not arrive; the curtain stays off.
-- **Curtain:** at 3 L/s per metre it holds the swarm outside up to 0.2 m/s approach current, still 95% if adults swim 20 cm/s; it fails above about 0.3 m/s.
-- **Boom:** jellyfish are neutrally buoyant, so an open U-boom loses them under the skirt far below the 0.35 m/s oil-boom limit. Even at 0.1 m/s through the water a 2 m skirt keeps only 60-80% for 30 minutes. Design response: move the boom with the current (at most 0.1 m/s through the water), keep holds short, and tank-test a closed-bottom retention bag.
-- **Release:** 10 km NE (down-current) gives no returns within 72 h.
+Forcing: Copernicus SMOC currents + ERA5 wind, 1 Jun - 30 Sep 2025 (currents average 0.08 m/s, max 0.25 m/s; wind mostly from N/NW).
+Direction convention checked: mean current at the Strait of Hormuz points north, into the Gulf, as expected for "flowing toward".
+
+- **Arrival:** a swarm 15 km NNW reaches the gap in 54% of runs (first jellyfish 10-77 h, bulk ~33 h; curtain on at 7 h); 28 km WNW 30%; 28 km N 34%. Real conditions make arrival uncertain, so the planner reports a probability, not just a time.
+- **Curtain:** at 3 L/s per metre it holds the swarm up to 0.2 m/s approach current, still 95% if adults swim 20 cm/s; it fails above about 0.3 m/s. Real currents (mean 0.08 m/s) are mostly inside that range.
+- **Boom:** jellyfish are neutrally buoyant, so an open U-boom loses them under the skirt far below the 0.35 m/s oil-boom limit. Even at 0.1 m/s a 2 m skirt keeps only 60-80% for 30 minutes. Move the boom with the current, keep holds short, tank-test a closed-bottom retention bag.
+- **Release:** with mostly onshore winds, the best point within a day's tow (15 km NE) still sees ~23% drift back within 72 h; the curtain catches them again (about 1.3x handling load). Under 2% return needs 30-40 km, too far for a boom tow.
+
+Note: the seasonal record gives a climatology-like spread. In operation the planner would replay the live 7-16 day forecast instead.
 
 ## Key assumptions
 
