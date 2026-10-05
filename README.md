@@ -52,7 +52,7 @@ ENEC already has an early-warning system that spots swarms offshore.
 |---|---|
 | Does the prediction save effort? | Tested on 100 alerts: it covered **all 39 swarms that really arrived**, and kept the curtain off for 45 of the 61 that did not. **77% fewer curtain hours** than switching on for every alert. |
 | Does the bubble curtain hold them? | Yes, up to about **0.2 m/s** of current at 3 L/s of air per metre (95%+ even if large adults swim 20 cm/s). Real currents there are mostly below that (average 0.08 m/s). |
-| Can a normal oil-spill boom gather jellyfish? | **No.** Jellyfish float at any depth, so they slip under the skirt: a 2 m skirt keeps only 0 to 54% at 0.2 m/s. That is why we added the **closed-bottom bag**, which keeps **84 to 100%**. |
+| Can a normal oil-spill boom gather jellyfish? | **No.** Jellyfish float at any depth, so they slip under the skirt: a 2 m skirt keeps only 0 to 55% at 0.2 m/s. That is why we added the **closed-bottom bag**, which keeps **84 to 100%**. |
 | How many can one boom pair gather? | About **2,200 to 21,600 jellyfish an hour** (4 to 43 tonnes). |
 | Where to release them? | About 15 km north-east is the best within a day's tow; ~23% still drift back, and the curtain stops them again. |
 | How much power? | Compressor ~**135 kW** for a 300 m opening. Changing the air hour by hour to match the current uses **46%** of the energy of running at full power. |
