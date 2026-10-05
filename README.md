@@ -16,6 +16,7 @@ competition, ENEC challenge:
 
 | Look at this | What it is |
 |---|---|
+| **[enechackathon.streamlit.app](https://enechackathon.streamlit.app/?d=15&b=330&t=30)** | **The live dashboard online.** Type an alert and see the plan. No install needed. |
 | [`media/Qandeel_explainer.mp4`](media/Qandeel_explainer.mp4) | 1 min 42 s 3D video with narration. **Watch this first.** |
 | [`deck/Qandeel_Deck.pdf`](deck/Qandeel_Deck.pdf) | The 10-slide proposal deck we submit |
 | [`media/dashboard_demo.mp4`](media/dashboard_demo.mp4) | Short recording of the dashboard working |
