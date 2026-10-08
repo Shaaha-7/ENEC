@@ -21,7 +21,10 @@ SWITCH_ON_BUFFER_H = 3.0
 MIN_ARRIVAL_PROB = 0.10  # below this, the curtain stays off
 NEAR_COAST_KM = 10.0
 TRANSIT_SPEED = 0.2  # m/s over ground, conservative: boom + retention bag at <=0.2 m/s through the water
-MAX_TOW_H = 24.0  # longer tows are impractical for a boom crew
+MAX_TOW_H = 24.0  # longer tows are impractical
+EMPTY_RETURN_M_S = 1.5  # boom unit coming back empty
+RELEASE_H = 0.5
+FILL_H = 1.0  # time to fill a bag at a typical gathering rate (see sizing.herding_logistics)
 
 
 @dataclass
@@ -35,7 +38,8 @@ class Cloud:
 
 def simulate_cloud(start_xy, hours, rng, runs=400, n_particles=60, spread_m=1500.0, swim_max=0.10,
                    cond: Conditions | None = None, record: Record | None = None, keep_runs=20,
-                   start_hour: float = 0.0, forecast_error: bool = True) -> Cloud:
+                   start_hour: float = 0.0, forecast_error: bool = True, arrive_radius_m=None) -> Cloud:
+    radius = ARRIVE_RADIUS_M if arrive_radius_m is None else arrive_radius_m
     vel = velocity_series(hours, DT_S, runs, rng, cond=cond, record=record, start_hour=start_hour,
                           forecast_error=forecast_error)
     steps = vel.shape[0]
@@ -61,7 +65,7 @@ def simulate_cloud(start_xy, hours, rng, runs=400, n_particles=60, spread_m=1500
         hit_coast = active & (pos[..., 1] <= 0) & np.isnan(beach_x)
         beach_x[hit_coast] = pos[..., 0][hit_coast]
         pos[..., 1] = np.maximum(pos[..., 1], 0.0)
-        arrived = active & (np.hypot(pos[..., 0], pos[..., 1]) <= ARRIVE_RADIUS_M)
+        arrived = active & (np.hypot(pos[..., 0], pos[..., 1]) <= radius)
         arrive_h[arrived] = (k + 1) * DT_S / 3600
         arrive_x[arrived] = pos[..., 0][arrived]
         if (k + 1) % per_h == 0:
@@ -86,12 +90,12 @@ class ArrivalForecast:
 
 def forecast_arrival(distance_km, bearing_deg, cond: Conditions | None = None, record: Record | None = None,
                      runs=400, horizon_h=96.0, seed=0, n_particles=60, swim_max=0.10,
-                     start_hour: float = 0.0) -> ArrivalForecast:
+                     start_hour: float = 0.0, arrive_radius_m=None) -> ArrivalForecast:
     """start_hour: hours from the start of a forecast file to the alert (forecast mode only)."""
     rng = np.random.default_rng(seed)
     start = bearing_to_xy(distance_km, bearing_deg)
     c = simulate_cloud(start, horizon_h, rng, runs, n_particles, swim_max=swim_max, cond=cond, record=record,
-                       start_hour=start_hour)
+                       start_hour=start_hour, arrive_radius_m=arrive_radius_m)
     k_lead = max(1, int(np.ceil(LEAD_SHARE * n_particles)))
     lead = np.sort(c.arrive_h, axis=1)[:, k_lead - 1]  # nan sorts last
     ok = ~np.isnan(lead)
@@ -127,8 +131,18 @@ class ReleaseOption:
     tow_hours: float
 
     @property
+    def round_trip_h(self) -> float:
+        return self.tow_hours + RELEASE_H + self.distance_km * 1000 / EMPTY_RETURN_M_S / 3600
+
+    @property
+    def net_rate(self) -> float:
+        """Bag loads per hour that stay away from the gap (returners are held by the curtain again)."""
+        return (1.0 - self.p_return) / (FILL_H + self.round_trip_h)
+
+    @property
     def score(self) -> float:
-        return self.p_return + 0.5 * self.p_beach_near
+        """Lower is better: net removal rate, discounted for strandings near the plant."""
+        return -self.net_rate * (1.0 - self.p_beach_near)
 
     @property
     def load_factor(self) -> float:
@@ -136,13 +150,15 @@ class ReleaseOption:
         return 1.0 / max(1e-9, 1.0 - self.p_return)
 
 
-def plan_release(cond: Conditions | None = None, record: Record | None = None, distances_km=(6, 10, 15),
+def plan_release(cond: Conditions | None = None, record: Record | None = None, distances_km=(3, 5, 8, 10, 15),
                  bearings_deg=range(-75, 76, 15), runs=60, n_particles=30, horizon_h=72.0,
-                 min_coast_km=3.0, seed=1, start_hour: float = 0.0):
+                 min_coast_km=2.0, seed=1, start_hour: float = 0.0):
     """Score candidate release points by simulating released jellyfish for 72 h.
 
-    Strandings far from the plant are reported but treated like a bloom's
-    natural end; strandings near the plant and returns to the gap are penalised.
+    The best point removes the most jellyfish per hour of boom time: a far point has
+    few returns but a long tow; a near point is quick but more drift back to the
+    curtain. Strandings near the plant are penalised; strandings far away are the
+    bloom's natural end (most of an untouched summer swarm strands anyway).
     Points needing more than MAX_TOW_H at TRANSIT_SPEED are skipped.
     """
     rng = np.random.default_rng(seed)
@@ -160,5 +176,5 @@ def plan_release(cond: Conditions | None = None, record: Record | None = None, d
             near = beached & (np.abs(np.nan_to_num(c.beach_x, nan=1e9)) <= NEAR_COAST_KM * 1000)
             options.append(ReleaseOption(dist, b % 360, float(returned.mean()), float(beached.mean()),
                                          float(near.mean()), tow_h))
-    options.sort(key=lambda o: (round(o.score, 2), o.tow_hours))  # ties within 1%: shortest tow
+    options.sort(key=lambda o: (round(o.score, 3), o.tow_hours))  # ties: shortest tow
     return options

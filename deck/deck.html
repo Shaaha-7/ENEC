@@ -60,7 +60,7 @@
     <div class="kicker" style="color:#7fd0ff">ATRC Advanced Technology Pioneers 2026 · ENEC track</div>
     <h1 style="font-size:120px; letter-spacing:10px; margin-bottom:0">QANDEEL</h1>
     <div style="font-size:56px; font-weight:600; opacity:.9; margin: 4px 0 26px">قنديل</div>
-    <p style="font-size:38px; line-height:1.3; margin:0 0 46px">Herd, don’t harvest: live-release management of Blue Blubber jellyfish swarms after ENEC’s early warning</p>
+    <p style="font-size:38px; line-height:1.3; margin:0 0 46px">Herd, don’t harvest: autonomous, live-release management of Blue Blubber jellyfish swarms after ENEC’s early warning</p>
     <div style="font-size:24px; line-height:1.7; color:#cfe0f0">
       <b style="color:#fff">Team Qandeel</b><br>
       [Member 1 – name, university, role] · [Member 2 – name, university, role]<br>
@@ -78,13 +78,13 @@
   <div class="cols c64" style="margin-top:22px">
     <div>
       <div class="card" style="margin-bottom:14px"><h3>Problem</h3><p>Blue Blubber swarms (30–45 cm, 1–3 kg) drift onto seawater intakes. Clearing them takes heavy manual work and almost none survive.</p></div>
-      <div class="card" style="margin-bottom:14px"><h3>Solution</h3><p>After ENEC’s alert, software plans the response; a bubble curtain at the breakwater gap holds the swarm out; a boom with a closed-bottom retention bag gathers it in the water; it is released alive down-current.</p></div>
-      <div class="card" style="margin-bottom:14px"><h3>Evidence</h3><p>Working simulation on real 2025 Copernicus currents and ERA5 wind; dashboard; 16 automated tests; open code.</p></div>
+      <div class="card" style="margin-bottom:14px"><h3>Solution</h3><p>After ENEC’s alert, a drift planner decides when to act; a bubble curtain at the breakwater gap holds the swarm out; two uncrewed boats tow a boom with a closed-bottom bag and release the jellyfish alive. An AI gap camera is the backup.</p></div>
+      <div class="card" style="margin-bottom:14px"><h3>Evidence</h3><p>Simulation on real 2025 Gulf currents and wind, stress-tested against physics the planner does not know; online dashboard; 19 tests; open code.</p></div>
       <div class="card"><h3>Next</h3><p>A 1:20 tank test (AED 300 kit) to measure what the model assumes, then a sea pilot with ENEC.</p></div>
     </div>
     <div style="display:grid; grid-template-rows: repeat(4, 1fr); gap: 22px">
-      <div><div class="num">39 / 39</div><div class="numt">swarms that truly arrived were covered, in a hindcast of 100 alerts on real 2025 Gulf data</div></div>
-      <div><div class="num">77%</div><div class="numt">fewer curtain running hours than switching on for every alert</div></div>
+      <div><div class="num">0.1% vs 17%</div><div class="numt">of arriving jellyfish reach the gap before the curtain runs: Qandeel vs a daylight camera alone (stress test, 100 alerts, real 2025 data)</div></div>
+      <div><div class="num">1–2 days</div><div class="numt">of warning for the boat crews and the curtain, for about USD 170 of extra energy per alert</div></div>
       <div><div class="num">84–100%</div><div class="numt">of jellyfish kept by the boom with our retention bag (model), vs 0–55% for an open oil-spill boom</div></div>
       <div><div class="num">46%</div><div class="numt">of the energy of a fixed airflow, by setting air hour by hour from real currents and wind</div></div>
     </div>
@@ -147,9 +147,9 @@
       <text x="990" y="166" text-anchor="middle" fill="#4a5566">only when needed</text>
 
       <rect x="1200" y="40" width="290" height="180" rx="18" fill="#e9f7ef" stroke="#13a35b" stroke-width="2"/>
-      <text x="1345" y="95" text-anchor="middle" font-weight="800" font-size="26">Boom + bag</text>
-      <text x="1345" y="135" text-anchor="middle" fill="#4a5566">gathers the swarm</text>
-      <text x="1345" y="166" text-anchor="middle" fill="#4a5566">in the water, no mesh</text>
+      <text x="1345" y="88" text-anchor="middle" font-weight="800" font-size="26">Uncrewed boats</text>
+      <text x="1345" y="128" text-anchor="middle" font-weight="800" font-size="24">+ boom + bag</text>
+      <text x="1345" y="166" text-anchor="middle" fill="#4a5566">gather in the water</text>
 
       <rect x="1540" y="40" width="172" height="180" rx="18" fill="#2a78d6"/>
       <text x="1626" y="105" text-anchor="middle" font-weight="800" font-size="26" fill="#fff">Live</text>
@@ -161,7 +161,7 @@
         <path d="M1140 130H1192" marker-end="url(#ar)"/><path d="M1490 130H1532" marker-end="url(#ar)"/>
         <path d="M990 220V300H540V248" stroke-dasharray="7 6" marker-end="url(#ar)"/>
       </g>
-      <text x="765" y="290" text-anchor="middle" fill="#8a95a5" font-size="20">gap camera + pressure sensors feed back</text>
+      <text x="765" y="290" text-anchor="middle" fill="#8a95a5" font-size="20">AI gap camera + pressure sensors feed back</text>
     </g>
     <g font-size="23">
       <rect x="0" y="350" width="540" height="160" rx="18" fill="#f3f7fb"/>
@@ -173,13 +173,13 @@
       <text x="614" y="435" fill="#4a5566">A rising-bubble current holds them out;</text>
       <text x="614" y="468" fill="#4a5566">nothing is cut, pumped or netted.</text>
       <rect x="1172" y="350" width="540" height="160" rx="18" fill="#f3f7fb"/>
-      <text x="1200" y="395" font-weight="800" font-size="25">3 · Borrow proven oil-spill tools</text>
-      <text x="1200" y="435" fill="#4a5566">Booms and boats exist today; we found</text>
-      <text x="1200" y="468" fill="#4a5566">and fixed why they leak jellyfish.</text>
+      <text x="1200" y="395" font-weight="800" font-size="25">3 · Proven tools, made autonomous</text>
+      <text x="1200" y="435" fill="#4a5566">Oil-spill booms towed by uncrewed boats;</text>
+      <text x="1200" y="468" fill="#4a5566">with a bag that stops jellyfish leaking.</text>
     </g>
   </svg>
   <div style="display:grid; grid-template-columns: 1.6fr 1fr; gap:26px; align-items:center; margin-top:4px">
-    <img src="img/aerial.jpg" style="width:100%; height:230px; object-fit:cover; object-position: 50% 35%; border-radius:12px">
+    <img src="img/aerial.jpg" style="width:100%; height:200px; object-fit:cover; object-position: 50% 35%; border-radius:12px">
     <p style="font-size:22px; color:var(--ink2); margin:0">The breakwater leaves one opening to the intake. A swarm offshore must pass through it, so that is the one place we act. Image: our 3D model (stylised; not to scale).</p>
   </div>
   <div class="foot"><span>Team Qandeel · ENEC track · ATP 2026</span><span>4</span></div>
@@ -193,11 +193,11 @@
     <div>
       <div class="step"><div class="n">1</div><div><span class="tag">Alert.</span><p>ENEC reports a swarm, e.g. 15 km NNW. The planner receives it automatically.</p></div></div>
       <div class="step"><div class="n">2</div><div><span class="tag">Plan.</span><p>400 simulated drifts of 60 swimming jellyfish each, on the live current and wind forecast: 54% chance of arrival, window 10–77 h.</p></div></div>
-      <div class="step"><div class="n">3</div><div><span class="tag">Prepare.</span><p>Curtain on at +7 h; crew staged on the approach side; release point chosen.</p></div></div>
+      <div class="step"><div class="n">3</div><div><span class="tag">Prepare.</span><p>Curtain on at +7 h; uncrewed boats staged on the approach side; release point chosen.</p></div></div>
       <div class="step"><div class="n">4</div><div><span class="tag">Deflect.</span><p>Curtain across the gap holds the swarm outside; airflow follows the current.</p></div></div>
-      <div class="step"><div class="n">5</div><div><span class="tag">Gather.</span><p>Two boats close a U-boom with a closed-bottom retention bag around them.</p></div></div>
-      <div class="step"><div class="n">6</div><div><span class="tag">Release.</span><p>Move with the current at ≤0.2 m/s through the water; open the boom down-current.</p></div></div>
-      <div class="step"><div class="n">7</div><div><span class="tag">Learn.</span><p>Camera and sensor data improve the next plan. Backup: the gap camera starts the curtain at once if jellyfish arrive early.</p></div></div>
+      <div class="step"><div class="n">5</div><div><span class="tag">Gather.</span><p>Two uncrewed surface vessels, supervised from shore, close a U-boom with a closed-bottom bag.</p></div></div>
+      <div class="step"><div class="n">6</div><div><span class="tag">Release.</span><p>Tow ~5 km at ≤0.2 m/s (about 7 h) and open the bag; about half drift back and are held again by the curtain.</p></div></div>
+      <div class="step"><div class="n">7</div><div><span class="tag">Learn.</span><p>An AI camera counts jellyfish at the gap and starts the curtain if they arrive early. Its records are the training data for a learning model that corrects the drift forecast.</p></div></div>
     </div>
     <div>
       <img class="fig" src="img/dashboard.png">
@@ -209,22 +209,17 @@
 
 <!-- 6. Evidence: planning on real data -->
 <section class="slide">
-  <div class="kicker">Evidence 1 · real Gulf data</div>
-  <h1>The planner runs the curtain only when it matters</h1>
-  <div class="cols c2" style="margin-top:24px; gap:40px">
-    <div><img class="fig" src="../qandeel/outputs/fig1_arrival_window.png">
-      <div class="src">Swarm 15 km NNW: 400 runs on real June–September 2025 conditions.</div></div>
-    <div><img class="fig" src="../qandeel/outputs/fig7_smart_operation.png">
-      <div class="src">Hindcast of 100 alerts at random times and places in the real 2025 season.</div></div>
-  </div>
-  <div class="cols c3" style="margin-top:30px; gap:28px">
-    <div class="card"><h3>39 / 39 covered</h3><p>Every swarm that truly reached the gap was covered by the plan; the curtain stayed off for 45 of 61 that did not arrive.</p></div>
-    <div class="card"><h3>77% fewer hours</h3><p>Versus switching on for every alert. A live forecast narrows the window further (10–77 h → ~10–20 h in tests).</p></div>
-    <div class="card"><h3>46% of the energy</h3><p>Adaptive airflow follows real currents and wind. ~8% of hours need more air than the design maximum: flagged for the crew.</p></div>
-  </div>
-  <div class="foot"><span>Team Qandeel · ENEC track · ATP 2026</span><span>6</span></div>
+  <div class="kicker">Evidence 1 · real Gulf data, honest test</div>
+<h1>Better protection than a camera alone, at a known cost</h1>
+<img class="fig" src="../qandeel/outputs/fig7_smart_operation.png" style="margin-top:16px; width:100%">
+<div class="src">100 alerts at random times and places in the real 2025 season; the truth uses physics the planner does not know. “Arrived” = within 2 km of the gap (15 km NNW alert: 54%; at 500 m, 48%).</div>
+<div class="cols c3" style="margin-top:22px; gap:28px">
+<div class="card"><h3>0.1% vs 17% get through</h3><p>Truth drifts with currents ×0.7–1.3, wind drift 1.5–5% and an unmodelled 0–3 cm/s current. A daylight camera alone misses night arrivals; Qandeel switches on ahead of them.</p></div>
+<div class="card"><h3>The cost</h3><p>2,485 curtain hours vs 1,206 for camera-only (about 13 h, USD 170 of energy, per alert), and 74% fewer than running on every alert. In return: 1–2 days of warning.</p></div>
+<div class="card"><h3>What this is not</h3><p>Still simulation against simulation, not real jellyfish. Next: compare drift with real Gulf drifter tracks and ENEC swarm records.</p></div>
+</div>
+<div class="foot"><span>Team Qandeel · ENEC track · ATP 2026</span><span>6</span></div>
 </section>
-
 <!-- 7. Evidence: curtain and boom -->
 <section class="slide">
   <div class="kicker">Evidence 2 · curtain and boom</div>
@@ -236,7 +231,7 @@
       <div class="src">Jellyfish depth from field data; apex downflow 25% (pessimistic 50%) of tow speed.</div></div>
   </div>
   <div class="cols c2" style="margin-top:30px; gap:40px">
-    <div class="card"><h3>Curtain holds the swarm</h3><p>At 3 L/s of air per metre it holds 100% up to 0.2 m/s approach current, 95% even if adults swim 20 cm/s; real currents average 0.08 m/s. It fails above ~0.3 m/s, matching field trials.</p></div>
+    <div class="card"><h3>Curtain holds the swarm, with little spare</h3><p>Water approaches the gap at ~0.20 m/s on average (intake draw + current + wind), 0.36 m/s in the worst 5% of hours. Normal setting 3 L/s per m holds ~0.27 m/s; design maximum 4.5 holds ~0.33 m/s. ~8% of hours exceed it and are flagged to operators.</p></div>
     <div class="card"><h3>Why the bag matters</h3><p>Oil floats back up; neutrally buoyant jellyfish are dragged under the skirt far below the 0.35 m/s oil-boom limit (0–55% kept at 0.2 m/s). A closed-bottom fabric bag keeps 84–100% in the model.</p></div>
   </div>
   <div class="foot"><span>Team Qandeel · ENEC track · ATP 2026</span><span>7</span></div>
@@ -251,23 +246,23 @@
       <h2>Marine-life protection</h2>
       <table>
         <tr><th>Risk</th><th>How we reduce it</th></tr>
-        <tr><td>Jellyfish killed</td><td>Kept in the water and released alive; no cutting, pumping or mesh</td></tr>
-        <tr><td>Turtles, dolphins in the boom</td><td>Escape gap, slow tow, camera watch, stop on sighting</td></tr>
-        <tr><td>Seabed, sediment</td><td>Pipe on legs 0.5–1 m above the bed, routed away from coral and seagrass</td></tr>
-        <tr><td>Bubble noise, fish</td><td>Runs only during events; measured in the pilot</td></tr>
-        <tr><td>Released swarm returns</td><td>Release point simulated for 72 h; returners meet the curtain again (~1.3× load)</td></tr>
-        <tr><td>Carbon</td><td>~11 MWh per event: ~4.4 t CO₂ on a gas grid, ~0.1 t on the plant’s own power</td></tr>
-      </table>
+<tr><td>Bubbles drawn into the intake</td><td>Curtain on the seaward side; bubbles surface in under a minute, in the outer basin; bubble detector on the intake line; curtain moved further out if the pilot shows carry-over</td></tr>
+<tr><td>Nuclear approval, security</td><td>FANR approval from day one; kit stays outside safety-related intake structures; boats operated by plant staff inside the security zone rules</td></tr>
+<tr><td>Jellyfish harmed</td><td>No cutting, pumping or mesh; coarse bubbles push them away at the surface (air under the bell checked in the tank test)</td></tr>
+<tr><td>Turtles, dolphins, seabed</td><td>Escape gap, slow tow, camera stop on sighting; pipe on legs above the bed, away from coral and seagrass</td></tr>
+<tr><td>Released jellyfish strand</td><td>Left alone, 57% of the same swarm strands within 4 days; release ~5 km out strands 40%</td></tr>
+<tr><td>Carbon</td><td>~11 MWh per event: ~4.4 t CO₂ on a gas grid, ~0.1 t on the plant’s own power</td></tr>
+</table>
     </div>
     <div>
       <h2>Feasibility</h2>
       <table>
         <tr><th>Item</th><th>Estimate (300 m gap)</th></tr>
         <tr><td>Compressed air</td><td>0.9 m³/s, ~135 kW, oil-free (ISO 8573-1 Class 0)</td></tr>
-        <tr><td>Capital (indicative)</td><td>USD 0.4–1.3 M: curtain, compressor + standby, boom, bags, boats, sensors</td></tr>
+        <tr><td>Capital (indicative)</td><td>USD 0.55–1.8 M: curtain, compressor + standby, boom, bags, two uncrewed boats, sensors</td></tr>
         <tr><td>Running cost</td><td>~USD 1,100 of energy per event</td></tr>
-        <tr><td>Value</td><td>One avoided 12 h unit outage (~USD 0.5 M, EPRI figure) pays back a third to all of it</td></tr>
-        <tr><td>Capacity</td><td>One boom pair: ~2,200–21,600 jellyfish/h (4–43 t/h) vs 0.9 t/h for a cutting robot</td></tr>
+        <tr><td>Value</td><td>One to four avoided 12 h unit outages (~USD 0.5 M each, EPRI figure) pay it back</td></tr>
+        <tr><td>Capacity</td><td>Gathering 4–43 t/h, but the loaded tow sets the pace: ~0.5 t/h net per boom unit, ~1.8 t/h with three uncrewed tugs swapping bags. The curtain does the bulk work; boats clear what builds up</td></tr>
         <tr><td>Gulf hardening</td><td>Membrane diffusers, foul-release coating, modular sections, lifted out off-season</td></tr>
       </table>
     </div>
@@ -283,13 +278,13 @@
     <div>
       <table>
         <tr><th>Assumption</th><th>Basis</th><th>If wrong</th></tr>
-        <tr><td>Intake behind a breakwater with one gap, ~300 m, ~9.5 m deep</td><td>Brief; public channel depth</td><td>Curtain size scales; measure on satellite images</td></tr>
+        <tr><td>Intake behind a breakwater with one gap, ~300 m (not yet measured), ~9.5 m deep</td><td>Brief; public channel depth</td><td>Curtain and compressor scale with width</td></tr>
         <tr><td>Alert gives position, hours of notice</td><td>Brief: “time to prepare”</td><td>Camera trigger switches the curtain on</td></tr>
         <tr><td>Swarm in top 1 m; adults swim ≤10–20 cm/s</td><td>Field and lab studies (Australia)</td><td>Deeper skirt; tested at 20 cm/s</td></tr>
         <tr><td>Swarm density 0.1–1 per m³</td><td>No published figure</td><td>Capacity scales linearly</td></tr>
         <tr><td>Apex downflow 25–50% of tow speed; bag passes 20%</td><td>Model hypothesis</td><td>Measured in the tank test</td></tr>
       </table>
-      <p style="font-size:22px; color:var(--ink2); margin-top:22px"><b>Limitations:</b> no management method has been tested on Blue Blubbers; bubble curtains weaken in strong currents (~8% of hours need extra air); ~23% of released jellyfish may drift back within 3 days; uncrewed boats are a later phase.</p>
+      <p style="font-size:21px; color:var(--ink2); margin-top:18px"><b>Limitations:</b> the planner is tested only against simulations; currents come from one model point and the coast is a straight line; the curtain model ignores depth; ~8% of hours exceed the design airflow. <b>Why not harvest?</b> Blue Blubber is fished for food elsewhere; a full bag can go to a licensed processor instead of release. Release is the default while no UAE market exists.</p>
     </div>
     <div><img class="fig" src="../qandeel/outputs/fig6_sensitivity.png" style="max-height:620px; object-fit:contain; background:#fff">
       <div class="src">Sensitivity: approach current, bag leakage / apex downflow and gap width drive the results, so we measure them first.</div></div>
@@ -303,13 +298,13 @@
   <h1>From simulation to sea, one measured step at a time</h1>
   <div class="cols" style="grid-template-columns: repeat(4, 1fr); gap: 26px; margin-top: 34px">
     <div class="card" style="border-top:6px solid var(--green)"><span class="pill" style="background:#e3f6ec;color:#13a35b">Done</span>
-      <h3 style="margin-top:14px">1 · Simulation</h3><p>Real-data planner, curtain, boom and release models; dashboard; hindcast; 16 tests.</p></div>
+      <h3 style="margin-top:14px">1 · Simulation</h3><p>Real-data planner, curtain, boom, release and logistics models; online dashboard; stress test; 19 tests.</p></div>
     <div class="card" style="border-top:6px solid var(--accent)"><span class="pill">Weeks 1–2</span>
       <h3 style="margin-top:14px">2 · 1:20 tank test</h3><p>AED 300 kit: aquarium air line, pump, neutrally buoyant agar mock jellyfish. Measure curtain hold, apex downflow, bag retention.</p></div>
     <div class="card" style="border-top:6px solid var(--accent)"><span class="pill">With ENEC</span>
-      <h3 style="margin-top:14px">3 · Sea pilot</h3><p>One curtain section and one boom trial in bloom season: jellyfish deflected and released, survival, energy, effects on other species.</p></div>
+      <h3 style="margin-top:14px">3 · Sea pilot</h3><p>One curtain section and one uncrewed boom trial in bloom season; FANR approval; drift checked against tracked swarms; survival and effects on other species.</p></div>
     <div class="card" style="border-top:6px solid var(--accent)"><span class="pill">Then</span>
-      <h3 style="margin-top:14px">4 · Scale-up</h3><p>Full gap; live ENEC alerts into the planner; assisted, then shore-supervised uncrewed boats.</p></div>
+      <h3 style="margin-top:14px">4 · Scale-up</h3><p>Full gap; live ENEC alerts into the planner; learning model trained on camera and swarm records corrects the forecast.</p></div>
   </div>
   <div class="cols c2" style="margin-top:40px; gap:48px">
     <div><h2>Pass marks</h2>
@@ -318,8 +313,8 @@
       <p style="font-size:23px; color:var(--ink2); margin:0 0 18px">Live dashboard: enechackathon.streamlit.app. Code, data and tests: github.com/Shaaha-7/ENEC. AI assistants helped search and summarise literature, check claims, draft text and write simulation code, and an open text-to-speech model voices the video; the team reviewed every decision, assumption and figure, and can explain each in our own words.</p></div>
   </div>
   <div style="display:grid; grid-template-columns: 1fr 1fr 1.2fr; gap:22px; margin-top:26px; align-items:center">
-    <img src="img/hero.jpg" style="width:100%; height:190px; object-fit:cover; border-radius:12px">
-    <img src="img/underwater.jpg" style="width:100%; height:190px; object-fit:cover; border-radius:12px">
+    <img src="img/hero.jpg" style="width:100%; height:150px; object-fit:cover; border-radius:12px">
+    <img src="img/underwater.jpg" style="width:100%; height:150px; object-fit:cover; border-radius:12px">
     <p style="font-size:22px; color:var(--ink2); margin:0">Stills from our 3D explainer video: the curtain holding a swarm outside the gap, and the bubble wall seen underwater.</p>
   </div>
   <div class="foot"><span>Team Qandeel · ENEC track · ATP 2026</span><span>10</span></div>

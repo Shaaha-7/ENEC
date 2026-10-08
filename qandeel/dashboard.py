@@ -57,7 +57,7 @@ def status_at(p, t):
     if t < p["t_on"]:
         return "STANDBY", WARN, f"Curtain switches on in {fmt_h(p['t_on'] - t)}"
     if t < p["p90"] + 12:
-        return "ON", GOOD, "Curtain running; boom crew collecting jellyfish held at the gap"
+        return "ON", GOOD, "Curtain running; uncrewed boats collecting jellyfish held at the gap"
     return "OFF", GREY, "Swarm has passed; curtain off, data logged for the next plan"
 
 
@@ -207,7 +207,7 @@ def render(t):
     status_slot.markdown(
         f"### {now:%a %d %b, %H:%M}\n"
         f"<div style='font-size:28px;font-weight:700;color:{colour}'>Curtain {status}</div>\n\n{msg}\n\n"
-        + (f"- Swarm approaches from the **{p['side']}** side: stage the boom crew there\n"
+        + (f"- Swarm approaches from the **{p['side']}** side: stage the uncrewed boats there\n"
            "- Boom with closed-bottom retention bag, at most 0.2 m/s through the water\n"
            "- Gap camera switches the curtain on at once if jellyfish arrive early"
            if p["t_on"] is not None else ""),

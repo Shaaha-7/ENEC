@@ -44,3 +44,28 @@ def boom_throughput(mouth_m=30.0, layer_m=1.0, tow_m_s=0.3, density_per_m3=(0.1,
 def jellyfish_mass_kg(bell_cm):
     """Yang et al. (2018): m = 0.08 * D^2.77 g, D in cm (fitted on 2-20 cm animals)."""
     return 0.08 * bell_cm ** 2.77 / 1000.0
+
+
+BAG_CAPACITY_T = 10.0  # assumed: ~20 m3 retention bag, half full of jellyfish (tank test to confirm)
+
+
+def herding_logistics(release_options, gather_t_h=10.0, bag_t=BAG_CAPACITY_T, tow_m_s=0.2, tugs=(1, 3)):
+    """Net tonnes per hour actually removed from the gap by one boom unit, including the round trip.
+
+    release_options: best ReleaseOption per distance. With one unit and no bag swap, the boom
+    stops gathering while it tows. With detachable bags, uncrewed tugs shuttle full bags while
+    the boom keeps gathering; removal is then capped by the gathering rate. Jellyfish that drift
+    back are not counted as removed (the curtain holds them again).
+    """
+    rows = []
+    for o in release_options:
+        tow_h = o.distance_km * 1000 / tow_m_s / 3600
+        trip_h = o.round_trip_h
+        kept = 1 - o.p_return
+        row = {"distance_km": o.distance_km, "bearing_deg": o.bearing_deg, "p_return": round(o.p_return, 2),
+               "p_strand": round(o.p_beach, 2), "tow_h": round(tow_h, 1), "round_trip_h": round(trip_h, 1)}
+        row["net_t_h_single_unit"] = round(bag_t * kept / (bag_t / gather_t_h + trip_h), 2)
+        for n in tugs[1:]:
+            row[f"net_t_h_with_{n}_tugs"] = round(min(gather_t_h, n * bag_t / trip_h) * kept, 2)
+        rows.append(row)
+    return {"gather_t_h": gather_t_h, "bag_t": bag_t, "tow_m_s": tow_m_s, "rows": rows}

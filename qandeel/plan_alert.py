@@ -33,7 +33,7 @@ def plan(distance_km, bearing_deg, cond=None, record=None, swim_max=0.10, runs=4
         f"Chance of reaching the gap in 96 h: {fc.p_arrive:.0%} (about {fc.share_reaching:.0%} of the swarm)",
         f"Arrival window:                     {fc.p10_h:.0f}-{fc.p90_h:.0f} h after alert (bulk at {fc.p50_h:.0f} h)",
         f"Curtain switch-on:                  in {t_on:.0f} h (earliest arrival minus 3 h buffer)",
-        f"Swarm approaches from the:          {fc.side} side; stage the boom crew there",
+        f"Swarm approaches from the:          {fc.side} side; stage the uncrewed boats there",
         f"Release point:                      {best.distance_km:g} km {compass(best.bearing_deg)} of the gap, "
         f"~{best.tow_hours:.0f} h tow, boom + retention bag at <=0.2 m/s through the water",
         f"Simulated return within 72 h:       {best.p_return:.0%} (curtain handles them again: "

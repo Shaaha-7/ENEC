@@ -22,7 +22,7 @@ from qandeel.sim.forcing import load_record, load_site, source_label  # noqa: E4
 from qandeel.sim.planning import forecast_arrival, plan_release, switch_on_time  # noqa: E402
 from qandeel.sim.benefits import adaptive_airflow, cost_summary, emissions, hold_margin, smart_switching  # noqa: E402
 from qandeel.sim.sensitivity import tornado  # noqa: E402
-from qandeel.sim.sizing import boom_throughput, compressor, jellyfish_mass_kg  # noqa: E402
+from qandeel.sim.sizing import boom_throughput, compressor, herding_logistics, jellyfish_mass_kg  # noqa: E402
 
 OUT = Path(__file__).parent / "outputs"
 
@@ -151,24 +151,32 @@ def fig_paths():
 
 
 def fig_release(options, src):
-    fig, ax = plt.subplots(figsize=(8.5, 4.8), facecolor=SURFACE)
+    fig, ax = plt.subplots(figsize=(10, 5.6), facecolor=SURFACE)
     ax.axhline(0, color=INK2, lw=1.5)
     ax.plot([0], [0], marker="v", color=INK, ms=9)
     ax.annotate("intake gap", (0, 0), xytext=(6, -14), textcoords="offset points", fontsize=9, color=INK)
+    best_per_d = {}
     for o in options:
+        best_per_d.setdefault(o.distance_km, o)
         x, y = bearing_to_xy(o.distance_km, o.bearing_deg) / 1000
-        ax.scatter([x], [y], s=60, color=ACCENT if o is options[0] else GREY, zorder=3)
-        ax.annotate(f"{o.p_return:.0%}", (x, y), xytext=(0, 7), textcoords="offset points",
-                    ha="center", fontsize=7.5, color=INK2)
-    best = options[0]
-    bx, by = bearing_to_xy(best.distance_km, best.bearing_deg) / 1000
-    ax.annotate(f"chosen: {best.distance_km:g} km, {best.bearing_deg:.0f} deg", (bx, by), xytext=(-215, -42),
-                textcoords="offset points", fontsize=9, color=ACCENT, arrowprops={"arrowstyle": "-", "color": ACCENT})
-    ax.set_aspect("equal", adjustable="datalim")
+        ax.scatter([x], [y], s=22, color=GRID, zorder=2)
+    for d, o in best_per_d.items():
+        x, y = bearing_to_xy(o.distance_km, o.bearing_deg) / 1000
+        chosen = o is options[0]
+        ax.scatter([x], [y], s=70, color=ACCENT if chosen else GREY, zorder=3)
+        ax.annotate(f"{d:g} km: {o.p_return:.0%} back, {o.tow_hours:.0f} h tow", (x, y), xytext=(9, -15 if chosen else 4),
+                    textcoords="offset points", fontsize=8.5, color=ACCENT if chosen else INK2,
+                    fontweight="bold" if chosen else "normal",
+                    bbox={"facecolor": SURFACE, "edgecolor": "none", "pad": 0.5, "alpha": 0.85})
+    ax.set_xlim(-17, 17)
+    ax.set_ylim(-1.5, 17)
+    ax.set_aspect("equal")
     ax.set_xlabel("km east of gap", color=INK2, fontsize=9)
     ax.set_ylabel("km offshore", color=INK2, fontsize=9)
-    _style(ax, f"Best release within a day's tow: {best.distance_km:g} km, {best.p_return:.0%} drift back within 72 h",
-           f"Label = share drifting back to the gap; max 24 h tow. Forcing: {src}")
+    best = options[0]
+    _style(ax, f"Best release for net removal: {best.distance_km:g} km, {best.tow_hours:.0f} h tow, "
+               f"{best.p_return:.0%} drift back to the curtain",
+           "Labelled: best point at each distance (share back at the gap within 72 h). Far = fewer returns, longer tows.")
     fig.tight_layout()
     fig.savefig(OUT / "fig4_release_points.png", dpi=160)
     plt.close(fig)
@@ -230,30 +238,45 @@ def fig_tornado(rows):
     plt.close(fig)
 
 
-def fig_benefits(sw, approach, q_set, ad):
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12.5, 4.6), facecolor=SURFACE,
-                                   gridspec_kw={"width_ratios": [1, 1.6]})
-    names = ["Run on every alert", "Qandeel planner"]
-    vals = [sw["curtain_hours_on_every_alert"], sw["curtain_hours_qandeel"]]
-    ax1.bar(names, vals, color=[GREY, ACCENT], width=0.55)
-    for i, v in enumerate(vals):
-        ax1.text(i, v + max(vals) * 0.02, f"{v:,.0f} h", ha="center", fontsize=10, color=INK)
-    ax1.set_ylim(0, max(vals) * 1.18)
+def fig_benefits(sw, approach, q_set, ad, cap):
+    fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(16, 4.7), facecolor=SURFACE,
+                                        gridspec_kw={"width_ratios": [1, 1, 1.5]})
+    names = ["Every alert\n(96 h each)", "Camera only\n(daylight)", "Qandeel\n+ camera backup"]
+    hours = [sw["hours_every_alert"], sw["hours_camera_only"], sw["hours_qandeel"]]
+    cols = [GREY, GREY, ACCENT]
+    ax1.bar(names, hours, color=cols, width=0.6)
+    for i, v in enumerate(hours):
+        ax1.text(i, v + max(hours) * 0.02, f"{v:,.0f} h", ha="center", fontsize=10, color=INK)
+    ax1.set_ylim(0, max(hours) * 1.18)
+    ax1.tick_params(axis="x", labelsize=8.5)
     ax1.set_ylabel(f"curtain running hours, {sw['alerts']} alerts", color=INK2, fontsize=9)
-    _style(ax1, f"{sw['hours_saved_vs_every_alert_pct']:.0f}% fewer curtain hours",
-           f"{sw['covered_by_plan']} of {sw['swarms_that_arrived']} arriving swarms covered by the plan")
+    _style(ax1, "Curtain hours", "camera only runs least")
+    unp = [100.0, sw["unprotected_pct_camera_only"], sw["unprotected_pct_qandeel"]]
+    ax2.bar(names[1:], unp[1:], color=cols[1:], width=0.5)
+    for i, v in enumerate(unp[1:]):
+        ax2.text(i, v + 0.6, f"{v:.1f}%", ha="center", fontsize=10, color=INK)
+    ax2.set_ylim(0, max(unp[1:]) * 1.3 + 1)
+    ax2.tick_params(axis="x", labelsize=8.5)
+    ax2.set_ylabel("arriving jellyfish reaching the gap\nbefore the curtain runs (%)", color=INK2, fontsize=9)
+    _style(ax2, "Jellyfish that get through first", "night arrivals are missed by a camera")
     hrs = np.arange(len(q_set)) / 24
-    ax2.plot(hrs, q_set, color=ACCENT, lw=0.8)
-    ax2.axhline(4.5, color=INK2, lw=1, ls="--")
-    ax2.text(hrs[-1], 4.6, "fixed worst-case setting", ha="right", fontsize=8.5, color=INK2)
-    ax2.axhline(q_set.mean(), color=GOOD_GREEN, lw=1.5)
-    ax2.text(1, 0.35, f"green line = adaptive average, {q_set.mean():.1f} L/s per m", fontsize=8.5, color=GOOD_GREEN,
+    ax3.plot(hrs, q_set, color=ACCENT, lw=0.8)
+    ax3.axhline(4.5, color=INK2, lw=1, ls="--")
+    ax3.text(hrs[-1], 4.62, f"design maximum 4.5 (holds ~{cap[4.5]:.2f} m/s)", ha="right", fontsize=8.5, color=INK2)
+    ax3.axhline(3.0, color=INK2, lw=0.8, ls=":")
+    ax3.text(hrs[-1], 3.1, f"normal 3.0 (holds ~{cap[3.0]:.2f} m/s)", ha="right", fontsize=8.5, color=INK2,
              bbox={"facecolor": SURFACE, "edgecolor": "none", "pad": 1})
-    ax2.set_ylim(0, 5.2)
-    ax2.set_xlabel("days from 1 June 2025", color=INK2, fontsize=9)
-    ax2.set_ylabel("airflow needed (L/s per m)", color=INK2, fontsize=9)
-    _style(ax2, f"Adaptive airflow uses {ad['energy_vs_constant_max_pct']:.0f}% of the energy of a fixed setting",
-           f"real currents + wind; {100 * ad['share_hours_above_max']:.0f}% of hours would need more than 4.5 L/s per m")
+    ax3.axhline(q_set.mean(), color=GOOD_GREEN, lw=1.5)
+    ax3.text(1, 0.35, f"green = adaptive average {q_set.mean():.1f} L/s per m", fontsize=8.5, color=GOOD_GREEN,
+             bbox={"facecolor": SURFACE, "edgecolor": "none", "pad": 1})
+    ax3.set_ylim(0, 5.4)
+    ax3.set_xlabel("days from 1 June 2025", color=INK2, fontsize=9)
+    ax3.set_ylabel("airflow needed (L/s per m)", color=INK2, fontsize=9)
+    _style(ax3, f"Approach at the gap: mean {ad['approach_mean_m_s']:.2f} m/s, worst 5% {ad['approach_p95_m_s']:.2f} m/s",
+           f"intake draw + current + wind drift; {100 * ad['share_hours_above_max']:.0f}% of hours exceed the design maximum")
+    fig.suptitle(f"Model-error stress test, {sw['alerts']} alerts in the real 2025 season: Qandeel lets "
+                 f"{sw['unprotected_pct_qandeel']:.1f}% through vs {sw['unprotected_pct_camera_only']:.0f}% for a camera alone",
+                 x=0.01, ha="left", fontsize=12, fontweight="bold", color=INK)
     fig.tight_layout(w_pad=3)
     fig.savefig(OUT / "fig7_smart_operation.png", dpi=160)
     plt.close(fig)
@@ -277,6 +300,14 @@ def main():
         })
         if i == 0:
             fig_arrival(fc, t_on, label, src)
+            reached = ~np.isnan(fc.cloud.arrive_h)
+            results["natural_fate"] = {
+                "label": label, "reach_gap": round(float(reached.mean()), 3),
+                "strand_elsewhere": round(float((~np.isnan(fc.cloud.beach_x) & ~reached).mean()), 3)}
+            results["arrival_radius_sensitivity"] = [
+                {"radius_m": r, "p_arrive": round(forecast_arrival(dist, bearing, cond=cond, record=record, seed=i,
+                                                                  arrive_radius_m=r).p_arrive, 3)}
+                for r in (500, 1000, 2000)]
 
     rows = hold_grid()
     results["curtain_hold"] = rows
@@ -301,15 +332,23 @@ def main():
     results["compressor"] = compressor(curtain_m=GAP_W, airflow_l_s_m=3.0, depth_m=float(site["gap_depth_m"]),
                                        hours=round(event_h))
     retained = run_boom(RELATIVE_TOW, DESIGN_SKIRT, 0.10, 0.25, minutes=30, n=600, bag=True).retained_share
-    results["boom"] = boom_throughput(tow_m_s=RELATIVE_TOW, retention=round(retained, 2))
+    results["boom"] = boom_throughput(tow_m_s=RELATIVE_TOW, retention=round(retained, 2))  # gathering rate only
+    best = {}
+    for o in plan_release(cond=cond, record=record, distances_km=(3, 5, 8, 10, 15), min_coast_km=2.0):
+        best.setdefault(o.distance_km, o)  # options come sorted best-first
+    results["herding"] = herding_logistics([best[d] for d in sorted(best)])
     results["mass_kg"] = {f"{d} cm": round(jellyfish_mass_kg(d), 2) for d in (30, 45)}
 
+    margin, pts = hold_margin()
+    cap = {q: v for q, (_, v) in zip((1.5, 3.0, 4.5), pts)}
+    results["curtain_capacity_m_s"] = {f"{q:g} L/s per m": round(v, 3) for q, v in cap.items()}
     if record is not None:
-        sw, _ = smart_switching(record, n_alerts=100)
-        margin, _ = hold_margin()
+        sw, _ = smart_switching(record, n_alerts=100, stress=True)
+        sc, _ = smart_switching(record, n_alerts=100, stress=False)
         ad, approach, q_set = adaptive_airflow(record, margin)
-        results["smart_switching"], results["adaptive_airflow"] = sw, ad
-        fig_benefits(sw, approach, q_set, ad)
+        results["smart_switching"], results["smart_switching_self_consistency"] = sw, sc
+        results["adaptive_airflow"] = ad
+        fig_benefits(sw, approach, q_set, ad, cap)
     e = results["compressor"]["energy_mwh_per_event"]
     results["cost"] = cost_summary(e)
     results["emissions"] = emissions(e)
@@ -317,7 +356,8 @@ def main():
     (OUT / "results.json").write_text(json.dumps(results, indent=2, default=float))
     print(f"Forcing: {src}")
     print(json.dumps({k: results[k] for k in ("alerts", "compressor", "boom", "cost", "emissions")
-                      if k in results} | {k: results[k] for k in ("smart_switching", "adaptive_airflow")
+                      if k in results} | {k: results[k] for k in ("smart_switching", "smart_switching_self_consistency",
+                                                             "adaptive_airflow", "herding", "natural_fate")
                                           if k in results}, indent=2, default=float))
     print("best release:", results["release_options"][0])
 

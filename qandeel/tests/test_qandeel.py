@@ -9,7 +9,7 @@ from qandeel.sim.curtain import bulson_surface_current, run_hold
 from qandeel.sim.env import Conditions, bearing_to_xy
 from qandeel.sim.forcing import load_record, velocity_series
 from qandeel.sim.planning import forecast_arrival, plan_release, switch_on_time
-from qandeel.sim.sizing import boom_throughput, compressor, jellyfish_mass_kg
+from qandeel.sim.sizing import boom_throughput, compressor, herding_logistics, jellyfish_mass_kg
 
 
 def test_bearing_to_xy_compass_convention():
@@ -69,6 +69,26 @@ def test_best_release_point_has_no_returns():
     best = plan_release(runs=30, n_particles=20)[0]
     assert best.p_return < 0.02
     assert best.bearing_deg <= 90  # down-current (east) of the gap
+
+
+def test_release_ranking_prefers_net_removal():
+    opts = plan_release(runs=30, n_particles=20)
+    assert opts[0].net_rate * (1 - opts[0].p_beach_near) >= max(o.net_rate * (1 - o.p_beach_near) for o in opts) - 1e-3
+    assert opts[0].round_trip_h > opts[0].tow_hours
+
+
+def test_herding_is_limited_by_the_tow_not_gathering():
+    opts = {o.distance_km: o for o in reversed(plan_release(runs=30, n_particles=20))}
+    rows = herding_logistics([opts[d] for d in sorted(opts)], gather_t_h=10.0)["rows"]
+    for r in rows:
+        assert r["net_t_h_single_unit"] < 10.0  # far below the gathering rate
+        assert r["net_t_h_with_3_tugs"] >= r["net_t_h_single_unit"]
+
+
+def test_smaller_arrival_radius_lowers_arrival_chance():
+    wide = forecast_arrival(10, 330, runs=60, n_particles=20, seed=2).p_arrive
+    tight = forecast_arrival(10, 330, runs=60, n_particles=20, seed=2, arrive_radius_m=300).p_arrive
+    assert tight <= wide
 
 
 def test_sizing_numbers():

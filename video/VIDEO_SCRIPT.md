@@ -16,10 +16,10 @@ record over the video and replace the audio track (see the end of this file).
 | 0:27 | Real dashboard clip | "This is our working dashboard, running on real 2025 data: the chance of arrival, the arrival window, when to switch on, and where to release." |
 | 0:37 | Bubble curtain switches on | "When the swarm is due, a bubble curtain switches on, and holds the jellyfish outside the intake." |
 | 0:43 | Underwater: bubble wall | "Nothing is cut, pumped or netted. Rising air moves the water, and the water moves the jellyfish." |
-| 0:51 | Boats close the boom | "Then a boom gathers the swarm, still in the water. Our model found that oil-spill booms leak jellyfish, so we added a closed-bottom retention bag." |
-| 1:01 | Tow and release | "The boom moves with the current, and releases them alive, at a point chosen by simulating where they drift next." |
+| 0:51 | Uncrewed boats close the boom | "Then two uncrewed boats close a boom around the swarm. Our model found that oil-spill booms leak jellyfish, so we added a closed-bottom bag." |
+| 1:01 | Tow and release | "They tow the swarm about five kilometres and release it alive. About half drift back, and the curtain simply holds them again." |
 | 1:14 | Released, intake running | "The intake keeps running, and the jellyfish go back to the sea." |
-| 1:22 | Result cards | "Tested on one hundred alerts with real Gulf data, we covered every swarm that arrived, with seventy-seven percent less curtain running time. Next, a one to twenty tank test." |
+| 1:22 | Result cards | "In a stress test of one hundred alerts on real Gulf data, a camera alone let seventeen percent through. Qandeel let almost none. Next, a one to twenty tank test." |
 | 1:34 | Closing title | "Qandeel. Herd, don't harvest." |
 
 In `narrate.py` some words are spelled phonetically for the synthesiser

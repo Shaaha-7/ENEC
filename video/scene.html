@@ -55,6 +55,7 @@ const R = await (await fetch('../qandeel/outputs/results.json')).json();
 const A = R.alerts[0];
 const SW = R.smart_switching || {};
 const BEST = R.release_options[0];
+const COMPASS = (b) => ['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSW','SW','WSW','W','WNW','NW','NNW'][Math.round(((b % 360) + 360) % 360 / 22.5) % 16];
 const pctRange = (rows) => { const v = rows.map(r => r.retained_share * 100);
   return `${Math.floor(Math.min(...v))}–${Math.round(Math.max(...v))}%`; };
 const at02 = (r) => Math.abs(r.tow_m_s - 0.2) < 1e-9;
@@ -376,10 +377,10 @@ const CAPS = [
   [27, 33, 'The bubble curtain switches on only when the swarm is due',
    'Rising air creates a surface current that holds jellyfish outside the gap'],
   [33.5, 41, 'Nothing is cut, pumped or netted', 'No mesh, no chemicals: the water itself does the work'],
-  [41.5, 51, 'A boom with a closed-bottom retention bag gathers the swarm, still in the water',
+  [41.5, 51, 'Two uncrewed boats close a boom with a closed-bottom bag around the swarm',
    `Our model found open oil-spill booms leak jellyfish; the bag keeps ${BAG}`],
-  [51.5, 63.5, `Towed with the current and released alive, ${BEST.distance_km} km down-current`,
-   'The release point is chosen by simulating where jellyfish drift next'],
+  [51.5, 63.5, `Towed about ${BEST.distance_km} km and released alive`,
+   `The planner picks the point that removes the most per hour; about ${fmt(BEST.p_return * 100)}% drift back and the curtain holds them again`],
   [64, 71.5, 'Released alive. The intake keeps running.', ''],
 ];
 function hud(t) {
@@ -400,8 +401,8 @@ function hud(t) {
       t > 20.5 ? `Chance it reaches the gap: <b>${fmt(A.p_arrive * 100)}%</b>` : '',
       t > 21.8 ? `Arrival window: <b>${fmt(A.window_start_h)}–${fmt(A.window_end_h)} h</b>` : '',
       t > 23.0 ? `Curtain on at: <b>+${fmt(A.switch_on_h)} h</b>` : '',
-      t > 24.2 ? `Boom crew: stage on the <b>${A.approach_side}</b> side` : '',
-      t > 25.4 ? `Release: <b>${BEST.distance_km} km NE</b>` : '',
+      t > 24.2 ? `Uncrewed boats: stage on the <b>${A.approach_side}</b> side` : '',
+      t > 25.4 ? `Release: <b>${BEST.distance_km} km ${COMPASS(BEST.bearing_deg)}</b>, ${fmt(BEST.tow_hours)} h tow` : '',
     ];
     $('panel').innerHTML = lines.filter(Boolean).join('<br>');
   }
@@ -410,8 +411,8 @@ function hud(t) {
   const nOn = fadeIn(t, T.numbers, T.outro, 0.8);
   if (nOn > 0) {
     $('cards').innerHTML = [
-      [`${SW.covered_by_plan ?? 39}/${SW.swarms_that_arrived ?? 39}`, 'arriving swarms covered in a hindcast of 100 alerts on real 2025 Gulf data'],
-      [`${fmt(SW.hours_saved_vs_every_alert_pct ?? 77)}%`, 'fewer curtain running hours than switching on for every alert'],
+      [`${SW.unprotected_pct_qandeel}% vs ${fmt(SW.unprotected_pct_camera_only)}%`, 'of arriving jellyfish reach the gap before the curtain runs: Qandeel vs a daylight camera alone (stress test, 100 alerts, real 2025 data)'],
+      ['1–2 days', 'of warning for the uncrewed boats and the curtain, for about USD 170 of extra energy per alert'],
       [BAG, `kept by the boom with a closed-bottom retention bag (model), vs ${OPEN} for an open boom`],
       ['AED 300', '1:20 tank test kit to measure it next: our path from model to evidence'],
     ].map(([n, txt]) => `<div class="card"><div class="n">${n}</div><div class="t">${txt}</div></div>`).join('');

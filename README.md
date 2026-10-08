@@ -40,10 +40,15 @@ ENEC already has an early-warning system that spots swarms offshore.
 2. **Hold.** A **bubble curtain** (a pipe on the seabed that releases air) runs across
    the intake opening. The rising bubbles push water outward at the surface, and that
    water pushes the jellyfish away. Nothing is cut, pumped or netted.
-3. **Herd and release.** Two boats tow a floating **boom** in a U-shape and gently
-   gather the swarm, still in the water. A closed-bottom **retention bag** at the end
-   of the U stops them escaping underneath. The boats move them away and release them
-   alive, at a spot the simulation picks so they do not drift straight back.
+3. **Herd and release.** Two **uncrewed boats**, supervised from shore, tow a floating
+   **boom** in a U-shape and gently gather the swarm, still in the water. A closed-bottom
+   **retention bag** at the end of the U stops them escaping underneath. They tow the
+   swarm about 5 km and release it alive. About half drift back; the curtain simply
+   holds them again.
+
+An **AI camera** at the opening counts jellyfish and switches the curtain on if they
+arrive early. Its records are the future training data for a learning model that
+corrects the drift forecast.
 
 ---
 
@@ -51,14 +56,24 @@ ENEC already has an early-warning system that spots swarms offshore.
 
 | Question | Answer |
 |---|---|
-| Does the prediction save effort? | Tested on 100 alerts: it covered **all 39 swarms that really arrived**, and kept the curtain off for 45 of the 61 that did not. **77% fewer curtain hours** than switching on for every alert. |
-| Does the bubble curtain hold them? | Yes, up to about **0.2 m/s** of current at 3 L/s of air per metre (95%+ even if large adults swim 20 cm/s). Real currents there are mostly below that (average 0.08 m/s). |
+| Is the prediction worth it? | In a **stress test** of 100 alerts (the "truth" uses physics the planner does not know: currents ×0.7–1.3, wind drift 1.5–5%, an unmodelled 0–3 cm/s current), only **0.1%** of arriving jellyfish reached the gap before the curtain was running, vs **17%** for a camera alone (it cannot see at night). The cost: 2,485 curtain hours vs 1,206 for camera-only, about 13 h (~USD 170 of energy) per alert, but 74% fewer than running on every alert. Crews get **1–2 days of warning**. |
+| Is that real validation? | **No, not yet.** It is simulation against simulation. The planner copes with model error, but it has not been checked against real jellyfish or drifter tracks. That is the next step. |
+| Does the bubble curtain hold them? | Water approaches the opening at about **0.20 m/s** on average (intake suction + current + wind), **0.36 m/s** in the worst 5% of hours. The normal setting (3 L/s of air per metre) holds about 0.27 m/s; the design maximum (4.5) about 0.33 m/s. So there is **little spare**: about 8% of hours exceed it and are flagged to operators. |
 | Can a normal oil-spill boom gather jellyfish? | **No.** Jellyfish float at any depth, so they slip under the skirt: a 2 m skirt keeps only 0 to 55% at 0.2 m/s. That is why we added the **closed-bottom bag**, which keeps **84 to 100%**. |
-| How many can one boom pair gather? | About **2,200 to 21,600 jellyfish an hour** (4 to 43 tonnes). |
-| Where to release them? | About 15 km north-east is the best within a day's tow; ~23% still drift back, and the curtain stops them again. |
+| How fast can the boats clear them? | Gathering is fast (4 to 43 t/h), but the slow loaded tow sets the pace: about **0.5 t/h net** per boom unit, about **1.8 t/h** with three uncrewed tugs swapping bags. The curtain does the bulk of the work; the boats clear what builds up. |
+| Where to release them? | About **5 km** out (7 h tow) removes the most per hour. Further out means fewer return but much longer tows. |
+| Don't released jellyfish strand anyway? | Many do: left alone, **57%** of the same swarm strands within 4 days (summer winds blow onshore). Released 5 km out, 40% strand. |
+| Why not harvest them? | Blue Blubber is fished for food elsewhere (e.g. Australia). A full bag could go to a licensed processor instead of release; release is the default while there is no UAE market. |
 | How much power? | Compressor ~**135 kW** for a 300 m opening. Changing the air hour by hour to match the current uses **46%** of the energy of running at full power. |
-| What does it cost? | Roughly **USD 0.4 to 1.3 million** to build (estimate, to confirm with suppliers) and ~USD 1,100 of electricity per event. One avoided 12-hour plant outage (~USD 0.5 million) pays back a third to all of it. |
+| What does it cost? | Roughly **USD 0.55 to 1.8 million** to build, including two uncrewed boats (estimate, to confirm with suppliers), and ~USD 1,100 of electricity per event. One to four avoided 12-hour plant outages (~USD 0.5 million each) pay it back. |
 | Emissions? | ~4.4 t CO2 per event on a gas grid, ~0.1 t on the plant's own low-carbon power. |
+
+**Risks an ENEC engineer will ask about (and our answer):**
+
+- *Bubbles sucked into the cooling pumps:* the curtain is on the seaward side; bubbles reach the surface in under a minute, in the outer basin; a bubble detector watches the intake line; the curtain moves further out if the pilot shows carry-over.
+- *Nuclear approval and security:* anything at the intake needs **FANR** approval, and boats must work within the plant's security zone rules. Kit stays outside safety-related intake structures; plant staff operate the boats from shore.
+- *Air trapped under a jellyfish's bell:* coarse bubbles push them away at the surface rather than through the plume; we check for bell damage in the tank test.
+- *"Arrived" is generous:* it means within 2 km of the opening. At 500 m the 15 km NNW alert drops from 54% to 48%, so the choice barely matters.
 
 **Be honest about this when presenting:** the simulation uses real public ocean data but
 **no ENEC data**. It shows the concept works on paper. It is not a forecast for the real
@@ -80,7 +95,7 @@ ENEC/
     ├── data/              real ocean data (currents + wind, June-Sept 2025)
     ├── sim/               the models (drift, curtain, boom, costs...)
     ├── outputs/           charts and results.json made by run_all
-    ├── tests/             automatic checks (16 tests)
+    ├── tests/             automatic checks (19 tests)
     ├── dashboard.py       the visual dashboard
     ├── run_all.py         runs every simulation
     └── site.json          size of the intake opening (width, depth)
@@ -193,12 +208,12 @@ ERA5 / Open-Meteo wind. Free and public.
 | File | What it does |
 |---|---|
 | `qandeel/sim/forcing.py` | Loads the ocean data (forecast, season or assumed) |
-| `qandeel/sim/planning.py` | Swarm of 60 jellyfish per run: chance of arrival, arrival window, switch-on time, release point |
+| `qandeel/sim/planning.py` | Swarm of 60 jellyfish per run: chance of arrival, arrival window, switch-on time, release point (best net removal per hour) |
 | `qandeel/sim/curtain.py` | Individual jellyfish at the opening, curtain on or off |
 | `qandeel/sim/boom.py` | Jellyfish inside the boom: who escapes under the skirt, open boom vs bag |
 | `qandeel/sim/sensitivity.py` | Which unknown numbers change the results most |
-| `qandeel/sim/benefits.py` | Smart-switching test, adaptive air, cost and emissions |
-| `qandeel/sim/sizing.py` | Compressor air and power, boom capacity, jellyfish mass |
+| `qandeel/sim/benefits.py` | Stress test vs camera-only, adaptive air, cost and emissions |
+| `qandeel/sim/sizing.py` | Compressor air and power, boom capacity, herding logistics (round trips), jellyfish mass |
 | `qandeel/data_fetch.py` | Downloads the ocean data |
 | `qandeel/measure_gap.py` | Opening width from two map coordinates |
 | `qandeel/tank_scale.py` | Tank-test sizes (`--scale 20`) |
@@ -213,12 +228,18 @@ ERA5 / Open-Meteo wind. Free and public.
 - Bubble curtain surface current from Bulson's formula, U0 = 1.46 (g q)^(1/3).
 - Boom: water flows down at the apex at 25% (worst case 50%) of tow speed; the bag fabric lets 20% of it through.
 - Forecast error: 15 to 20% on current strength plus a slowly drifting bias.
+- Currents and wind come from one model grid point offshore of the site; the curtain model treats the flow as flat (no depth layers).
+- Retention bag holds ~10 t; uncrewed boats tow at 0.2 m/s loaded and return empty at 1.5 m/s.
+- An optical gap camera only works in daylight (06:00-18:00 local).
 
-### Why there is no AI/machine-learning model
+### Where the AI and autonomy are
 
-A model trained on our own simulated data could only re-learn our equations. The planner
-runs the physics directly and gets its uncertainty from repeating the run hundreds of
-times. Machine learning makes sense later, once real swarm records exist.
+- **Uncrewed boats** tow the boom and shuttle full bags, supervised from shore.
+- **AI gap camera:** a detection model counts jellyfish at the opening and triggers the curtain.
+- **Autonomous planning loop:** alert in, plan out (switch-on time, airflow, boat side, release point), re-planned on every new forecast.
+- **Learning model, later:** the drift planner itself is physics, not machine learning, because a model trained on our own
+  simulations could only re-learn our equations. Once the camera and ENEC have real swarm records, a learning model
+  can correct the physics forecast with them.
 
 ### Deck, video and tank test
 
