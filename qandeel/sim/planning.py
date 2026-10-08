@@ -20,7 +20,9 @@ LEAD_SHARE = 0.05  # the swarm "arrives" when 5% of it is at the gap
 SWITCH_ON_BUFFER_H = 3.0
 MIN_ARRIVAL_PROB = 0.10  # below this, the curtain stays off
 NEAR_COAST_KM = 10.0
-TRANSIT_SPEED = 0.2  # m/s over ground, conservative: boom + retention bag at <=0.2 m/s through the water
+TOW_THROUGH_WATER = 0.2  # m/s: the most the boom + bag can move through the water without losing jellyfish
+INTAKE_DRAW_M_S = 0.08  # assumed flow toward the gap created by the intake itself
+INTAKE_ZONE_M = 500.0  # where that draw is felt
 MAX_TOW_H = 24.0  # longer tows are impractical
 EMPTY_RETURN_M_S = 1.5  # boom unit coming back empty
 RELEASE_H = 0.5
@@ -57,15 +59,15 @@ def simulate_cloud(start_xy, hours, rng, runs=400, n_particles=60, spread_m=1500
     step_sd = np.sqrt(2 * EDDY_DIFFUSIVITY * DT_S)
     turn_sd = np.sqrt(DT_S / 1800.0)  # heading wanders over ~30 min
     for k in range(steps):
-        active = np.isnan(arrive_h)
+        active = np.isnan(arrive_h) & np.isnan(beach_x)  # stranded jellyfish stay on the beach
         heading += rng.normal(0, turn_sd, shape)
         v = vel[k][:, None, :] + speed[..., None] * np.stack([np.sin(heading), np.cos(heading)], -1)
         step = v * DT_S + rng.normal(0, step_sd, shape + (2,))
         pos = np.where(active[..., None], pos + step, pos)
-        hit_coast = active & (pos[..., 1] <= 0) & np.isnan(beach_x)
-        beach_x[hit_coast] = pos[..., 0][hit_coast]
         pos[..., 1] = np.maximum(pos[..., 1], 0.0)
         arrived = active & (np.hypot(pos[..., 0], pos[..., 1]) <= radius)
+        hit_coast = active & ~arrived & (pos[..., 1] <= 0)  # strands away from the gap: ends there
+        beach_x[hit_coast] = pos[..., 0][hit_coast]
         arrive_h[arrived] = (k + 1) * DT_S / 3600
         arrive_x[arrived] = pos[..., 0][arrived]
         if (k + 1) % per_h == 0:
@@ -121,6 +123,29 @@ def switch_on_time(fc: ArrivalForecast, buffer_h=SWITCH_ON_BUFFER_H):
     return max(0.0, fc.p10_h - buffer_h)
 
 
+def tow_over_ground(distance_km, bearing_deg, record: Record | None = None, cond: Conditions | None = None,
+                    start_hour: float = 0.0, runs=40, max_h=MAX_TOW_H * 2, seed=3):
+    """Hours to tow a full bag from the gap to a release point, per run (nan = not reached in max_h).
+
+    The boom moves at TOW_THROUGH_WATER through the water; over the ground the water's own
+    motion along the route (current + wind drift, plus the intake draw near the gap) adds or
+    subtracts. When the water runs toward the gap faster than the tow, the boom waits.
+    """
+    rng = np.random.default_rng(seed)
+    vel = velocity_series(max_h, DT_S, runs, rng, cond=cond, record=record, start_hour=start_hour,
+                          forecast_error=False)
+    u = bearing_to_xy(1.0, bearing_deg) / 1000.0  # unit vector, east/north
+    dist = distance_km * 1000.0
+    s = np.zeros(runs)
+    done = np.full(runs, np.nan)
+    for k in range(vel.shape[0]):
+        along = vel[k] @ u - np.where(s < INTAKE_ZONE_M, INTAKE_DRAW_M_S, 0.0)
+        s = np.where(np.isnan(done), s + np.maximum(0.0, TOW_THROUGH_WATER + along) * DT_S, s)
+        newly = np.isnan(done) & (s >= dist)
+        done[newly] = (k + 1) * DT_S / 3600
+    return done
+
+
 @dataclass
 class ReleaseOption:
     distance_km: float
@@ -128,7 +153,8 @@ class ReleaseOption:
     p_return: float  # share of released jellyfish drifting back to the gap within the horizon
     p_beach: float  # share stranding anywhere on the coast
     p_beach_near: float  # share stranding within NEAR_COAST_KM of the plant
-    tow_hours: float
+    tow_hours: float  # median over-ground tow time
+    tow_p90_h: float = float("nan")  # slow case
 
     @property
     def round_trip_h(self) -> float:
@@ -159,15 +185,21 @@ def plan_release(cond: Conditions | None = None, record: Record | None = None, d
     few returns but a long tow; a near point is quick but more drift back to the
     curtain. Strandings near the plant are penalised; strandings far away are the
     bloom's natural end (most of an untouched summer swarm strands anyway).
-    Points needing more than MAX_TOW_H at TRANSIT_SPEED are skipped.
+    Tow time is over the ground (see tow_over_ground); points the boom cannot reach within
+    MAX_TOW_H in most runs are skipped.
     """
     rng = np.random.default_rng(seed)
     options = []
     for dist in distances_km:
         for b in bearings_deg:
             start = bearing_to_xy(dist, b % 360)
-            tow_h = dist * 1000 / TRANSIT_SPEED / 3600
-            if start[1] < min_coast_km * 1000 or tow_h > MAX_TOW_H:
+            if start[1] < min_coast_km * 1000:
+                continue
+            tows = tow_over_ground(dist, b % 360, record=record, cond=cond, start_hour=start_hour, seed=seed)
+            if np.isnan(tows).mean() > 0.1:
+                continue  # too often the boom cannot get there
+            tow_h, tow_p90 = float(np.nanmedian(tows)), float(np.nanpercentile(tows, 90))
+            if tow_h > MAX_TOW_H:
                 continue
             c = simulate_cloud(start, horizon_h, rng, runs, n_particles, spread_m=200.0,
                                cond=cond, record=record, keep_runs=0, start_hour=start_hour + tow_h)
@@ -175,6 +207,6 @@ def plan_release(cond: Conditions | None = None, record: Record | None = None, d
             beached = ~np.isnan(c.beach_x) & ~returned
             near = beached & (np.abs(np.nan_to_num(c.beach_x, nan=1e9)) <= NEAR_COAST_KM * 1000)
             options.append(ReleaseOption(dist, b % 360, float(returned.mean()), float(beached.mean()),
-                                         float(near.mean()), tow_h))
+                                         float(near.mean()), tow_h, tow_p90))
     options.sort(key=lambda o: (round(o.score, 3), o.tow_hours))  # ties: shortest tow
     return options

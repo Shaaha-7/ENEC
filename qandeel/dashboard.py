@@ -23,7 +23,7 @@ from qandeel.sim.planning import ARRIVE_RADIUS_M, forecast_arrival, plan_release
 
 INK, INK2, GRID, GREY, ACCENT, SURFACE = "#0b0b0b", "#52514e", "#e4e3df", "#b9b8b2", "#2a78d6", "#fcfcfb"
 GOOD, WARN = "#0ca30c", "#fab219"
-HORIZON_H = 72
+HORIZON_H = 96  # same horizon as the planner
 
 st.set_page_config(page_title="Qandeel response dashboard", layout="wide")
 
@@ -35,13 +35,14 @@ def run_plan(distance, bearing, swim, mode, start_hour, data_key=None):
                           start_hour=start_hour)
     t_on = switch_on_time(fc)
     release_hour = start_hour + (fc.p50_h or 0)
-    best = plan_release(record=record, start_hour=release_hour)[0] if t_on is not None else None
+    opts = plan_release(record=record, start_hour=release_hour) if t_on is not None else []
+    best = opts[0] if opts else None
     return {
         "p_arrive": fc.p_arrive, "share": fc.share_reaching, "p10": fc.p10_h, "p50": fc.p50_h, "p90": fc.p90_h,
         "t_on": t_on, "side": fc.side, "hourly": fc.cloud.hourly[: HORIZON_H + 1], "start": fc.start_xy,
         "release": None if best is None else {
             "km": best.distance_km, "bearing": best.bearing_deg, "p_return": best.p_return,
-            "tow_h": best.tow_hours,
+            "tow_h": best.tow_hours, "tow_p90_h": best.tow_p90_h,
             "p_near": best.p_beach_near, "xy": bearing_to_xy(best.distance_km, best.bearing_deg)},
         "source": source_label(record),
     }
@@ -64,7 +65,6 @@ def status_at(p, t):
 def draw_map(p, t):
     fig, ax = plt.subplots(figsize=(8.5, 5.2), facecolor=SURFACE)
     ax.set_facecolor("#eef4fb")
-    ax.fill_between([-60, 60], -3, 0, color="#e9e4d6", zorder=1)
     ax.axhline(0, color=INK2, lw=1.5, zorder=2)
     h = int(min(t, HORIZON_H))
     cloud = p["hourly"][h]  # (runs, particles, 2)
@@ -87,13 +87,18 @@ def draw_map(p, t):
     sx, sy = p["start"] / 1000
     ax.plot([sx], [sy], marker="x", color=INK, ms=8, zorder=6)
     ax.annotate("alert position", (sx, sy), xytext=(6, 8), textcoords="offset points", fontsize=8.5, color=INK2)
-    ax.set_xlim(-36, 26)
-    ax.set_ylim(-3, 17)
+    ymax = max(17.0, sy + 3)
+    if p["release"]:
+        ymax = max(ymax, ry + 3)
+    half_w = max(31.0, abs(sx) + 8, ymax * 1.55)
+    ax.fill_between([-half_w, half_w], -3, 0, color="#e9e4d6", zorder=1)
+    ax.set_xlim(-half_w, half_w)
+    ax.set_ylim(-3, ymax)
     ax.set_aspect("equal")
     ax.set_xlabel("km east of the intake gap", color=INK2, fontsize=9)
     ax.set_ylabel("km offshore", color=INK2, fontsize=9)
     ax.tick_params(colors=INK2, labelsize=8)
-    ax.text(25, 16, "N\n^", ha="center", va="top", fontsize=10, color=INK2)
+    ax.text(half_w - 1, ymax - 1, "N\n^", ha="center", va="top", fontsize=10, color=INK2)
     ax.legend(loc="upper left", frameon=False, fontsize=8, labelcolor=INK2)
     for s in ax.spines.values():
         s.set_color(GRID)
@@ -150,10 +155,16 @@ with st.sidebar:
     st.caption(f"= {compass(bearing)}")
     mode = st.radio("Ocean data", list(modes), format_func=modes.get,
                     help="Download with `python -m qandeel.data_fetch` (season) or `--forecast` (live).")
-    default_day = fc_start if (mode == "forecast" and fc_start) else datetime(2026, 7, 14, 6, 0)
-    alert_date = st.date_input("Alert date (UTC)", default_day.date())
-    times = [f"{h:02d}:{m:02d}" for h in range(24) for m in (0, 30)]
-    alert_clock = datetime.strptime(st.selectbox("Alert time (UTC)", times, index=default_day.hour * 2), "%H:%M").time()
+    if mode == "forecast" and fc_start:
+        alert_date = st.date_input("Alert date (UTC)", fc_start.date())
+        times = [f"{h:02d}:{m:02d}" for h in range(24) for m in (0, 30)]
+        alert_clock = datetime.strptime(st.selectbox("Alert time (UTC)", times, index=fc_start.hour * 2),
+                                        "%H:%M").time()
+        st.caption(f"Forecast covers {fc_start:%d %b %H:%M} UTC + {len(forecast.time)} h.")
+    else:
+        alert_date, alert_clock = fc_start.date() if fc_start else datetime(2026, 7, 14).date(), datetime.min.time()
+        st.caption("Season replay: each simulated run starts at a random hour of summer 2025, "
+                   "so times are shown as hours after the alert, not clock times.")
     swim = st.select_slider("Top jellyfish swim speed", [0.10, 0.15, 0.20], 0.10,
                             format_func=lambda v: f"{v * 100:.0f} cm/s")
     st.divider()
@@ -161,6 +172,13 @@ with st.sidebar:
                f"({'measured' if site['gap_width_measured'] else 'assumed'}).")
 
 alert_at = datetime.combine(alert_date, alert_clock)
+clock_mode = mode == "forecast" and fc_start is not None
+
+
+def when(h):
+    return f"{(alert_at + timedelta(hours=h)):%a %H:%M}" if clock_mode else f"+{h:.0f} h"
+
+
 start_hour = (alert_at - fc_start).total_seconds() / 3600 if (mode == "forecast" and fc_start) else 0.0
 if mode == "forecast" and not 0 <= start_hour <= 72:
     st.sidebar.warning("Alert time is outside the forecast; using the forecast start.")
@@ -184,16 +202,24 @@ if p["t_on"] is None:
     tile(c4, "Release point", "not needed")
 else:
     tile(c2, "Arrival window", f"{p['p10']:.0f}-{p['p90']:.0f} h",
-         f"bulk of swarm at {(alert_at + timedelta(hours=p['p50'])):%a %H:%M}")
-    tile(c3, "Curtain switch-on", f"{(alert_at + timedelta(hours=p['t_on'])):%a %H:%M}",
-         f"{p['t_on']:.0f} h after the alert")
+         f"bulk of swarm at {when(p['p50'])}")
+    tile(c3, "Curtain switch-on", when(p["t_on"]), f"{p['t_on']:.0f} h after the alert")
     r = p["release"]
-    tile(c4, "Release point", f"{r['km']:g} km {compass(r['bearing'])}",
-         f"{r['tow_h']:.0f} h tow; {r['p_return']:.0%} drift back within 72 h and meet the curtain again")
+    if r is None:
+        tile(c4, "Release point", "none reachable", "the current blocks every candidate tow; hold at the curtain")
+    else:
+        tile(c4, "Release point", f"{r['km']:g} km {compass(r['bearing'])}",
+             f"{r['tow_h']:.0f} h tow over the ground (slow case {r['tow_p90_h']:.0f} h); "
+             f"{r['p_return']:.0%} drift back within 72 h and meet the curtain again")
+    if clock_mode and r is not None:
+        need = start_hour + p["p50"] + r["tow_p90_h"] + 72
+        if need > len(forecast.time):
+            st.warning(f"Release planning needs about {need:.0f} h of forecast but only {len(forecast.time)} h exist; "
+                       "later hours repeat the last forecast hour. Re-plan when the forecast updates.")
 
 if "clock" not in st.session_state:
     st.session_state.clock = int(st.query_params.get("t", 0))  # ?t=30 opens at hour 30
-play = st.button("Play 0 to 72 h")
+play = st.button(f"Play 0 to {HORIZON_H} h")
 clock = st.slider("Clock: hours after alert", 0, HORIZON_H, key="clock")
 
 left, right = st.columns([3, 2])
@@ -203,9 +229,9 @@ map_slot, status_slot, line_slot = left.empty(), right.empty(), st.empty()
 def render(t):
     status, colour, msg = status_at(p, t)
     map_slot.pyplot(draw_map(p, t), clear_figure=True)
-    now = alert_at + timedelta(hours=t)
+    head = f"{(alert_at + timedelta(hours=t)):%a %d %b, %H:%M}" if clock_mode else f"{t} h after the alert"
     status_slot.markdown(
-        f"### {now:%a %d %b, %H:%M}\n"
+        f"### {head}\n"
         f"<div style='font-size:28px;font-weight:700;color:{colour}'>Curtain {status}</div>\n\n{msg}\n\n"
         + (f"- Swarm approaches from the **{p['side']}** side: stage the uncrewed boats there\n"
            "- Boom with closed-bottom retention bag, at most 0.2 m/s through the water\n"

@@ -17,9 +17,9 @@ record over the video and replace the audio track (see the end of this file).
 | 0:37 | Bubble curtain switches on | "When the swarm is due, a bubble curtain switches on, and holds the jellyfish outside the intake." |
 | 0:43 | Underwater: bubble wall | "Nothing is cut, pumped or netted. Rising air moves the water, and the water moves the jellyfish." |
 | 0:51 | Uncrewed boats close the boom | "Then two uncrewed boats close a boom around the swarm. Our model found that oil-spill booms leak jellyfish, so we added a closed-bottom bag." |
-| 1:01 | Tow and release | "They tow the swarm about five kilometres and release it alive. About half drift back, and the curtain simply holds them again." |
+| 1:01 | Tow and release | "They tow the swarm about three kilometres and release it alive. More than half drift back, and the curtain simply holds them again." |
 | 1:14 | Released, intake running | "The intake keeps running, and the jellyfish go back to the sea." |
-| 1:22 | Result cards | "In a stress test of one hundred alerts on real Gulf data, a camera alone let seventeen percent through. Qandeel let almost none. Next, a one to twenty tank test." |
+| 1:22 | Result cards | "In a stress test on real Gulf data, a camera alone let about a quarter through. Qandeel let about three percent. Next, a one to twenty tank test." |
 | 1:34 | Closing title | "Qandeel. Herd, don't harvest." |
 
 In `narrate.py` some words are spelled phonetically for the synthesiser

@@ -13,6 +13,28 @@ lengths / 20, speeds / 4.5, air per metre of pipe / 89). Jellyfish behaviour doe
 not scale, so the mock jellyfish are passive: this tests the water physics, not
 swimming. Live-animal tests come later, with ENEC and a permit.
 
+## What a 1:20 tank can and cannot tell us
+
+Use the tank to **compare setups** (curtain on vs off, more vs less air, open boom vs
+bag) and to measure the **downflow fraction** and **bag leakage** ratios. Do not read
+its numbers as a prediction of full-scale performance:
+
+- **Bubbles do not scale.** Aquarium bubbles are millimetre-sized and rise at
+  0.2-0.3 m/s, about the same as full-size bubbles, so relative to the scaled flow they
+  rise roughly 4.5 times too fast. Small bubble barriers are known to behave differently
+  from full-size ones. Treat the tank curtain as a qualitative check of the model trend.
+- **One slice of the gap.** A 1 m air line represents a 20 m slice of a 300 m opening.
+  The way the flow converges on the gap is not reproduced.
+- **Uneven flow.** A pump in a tub makes swirling, uneven flow. Measure the approach
+  speed at several points and report the spread; a long narrow trough or a slow
+  stream-table (flume) is better than a round pool.
+- **Short runs.** Test 2 ideally needs about 18 m of tow. In a short tank, tow back and
+  forth and count jellyfish after each pass, or hold the boom still in the pump's
+  current instead of towing it (same speed through the water).
+- **No depth for the curtain model.** The simulation treats the flow as flat. Release
+  mock jellyfish at three depths (near the surface, mid-depth, near the bottom) to see
+  whether deeper ones are drawn under the curtain, which the model cannot show.
+
 ## Kit
 
 | Item | Use | Approx. cost |

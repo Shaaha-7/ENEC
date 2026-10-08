@@ -13,7 +13,7 @@ Monte Carlo run. Three sources, best first:
 """
 import csv
 import json
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from pathlib import Path
 
 import numpy as np
@@ -62,6 +62,13 @@ def load_record(path=DATA_CSV) -> Record | None:
             s = WIND_DRIFT_FACTOR * float(r["wind_speed"])
             wd.append((s * np.sin(to), s * np.cos(to)))
     return Record(t, np.array(cur), np.array(wd))
+
+
+def with_wind_factor(record: "Record | None", factor: float) -> "Record | None":
+    """Same record with wind drift at `factor` x wind speed instead of WIND_DRIFT_FACTOR."""
+    if record is None:
+        return None
+    return replace(record, wind_drift=record.wind_drift * (factor / WIND_DRIFT_FACTOR))
 
 
 def source_label(record: Record | None) -> str:

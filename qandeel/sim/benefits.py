@@ -29,11 +29,11 @@ import numpy as np
 from .curtain import bulson_surface_current, run_hold
 from .env import bearing_to_xy
 from .forcing import Record
-from .planning import forecast_arrival, simulate_cloud, switch_on_time
+from .planning import INTAKE_DRAW_M_S, forecast_arrival, simulate_cloud, switch_on_time
 
 HORIZON_H = 96.0
 RUN_ON_AFTER_H = 12.0  # keep running this long after the late edge of the window / last sighting
-INTAKE_DRAW_M_S = 0.08  # assumed approach speed created by the intake itself at the gap
+
 LOCAL_UTC_OFFSET_H = 4  # UAE
 STARTUP_H = 0.25  # compressor start and pipe fill
 
@@ -159,11 +159,18 @@ def adaptive_airflow(record: Record, margin: float, q_min=1.0, q_max=4.5):
 # Indicative capital costs in USD: order of magnitude for a 300 m gap, to confirm with suppliers.
 CAPEX_USD = [
     ("Bubble curtain: diffuser pipe, flotation hose, anchors (300 m, installed)", 150_000, 450_000),
-    ("Oil-free compressor ~150 kW, standby unit, air line", 120_000, 300_000),
+    ("Oil-free variable-speed compressor ~150 kW, standby unit, air line", 150_000, 350_000),
     ("Ocean containment boom 300 m with 2 m skirt", 40_000, 120_000),
     ("Closed-bottom retention bags (2) and quick-release ends", 10_000, 30_000),
     ("Two uncrewed surface vessels (USVs) with tow gear, shore-supervised", 200_000, 800_000),
     ("Gap camera, pressure sensors, control PLC, software", 30_000, 80_000),
+]
+# Indicative yearly running costs (USD) beyond electricity: to confirm with operators and suppliers.
+OPEX_USD_PER_YEAR = [
+    ("Two shore-supervised operators on call through the bloom season (share of existing staff)", 60_000, 150_000),
+    ("Uncrewed boats: maintenance, insurance, communications", 40_000, 120_000),
+    ("Diver/ROV inspection and diffuser cleaning (warm-water fouling), 4-6 visits", 30_000, 90_000),
+    ("Compressor service, boom and bag repair, spares", 20_000, 60_000),
 ]
 OUTAGE_COST_USD_PER_12H = 500_000  # industry figure for a 12-hour unit outage, as cited by EPRI
 
@@ -172,12 +179,18 @@ def cost_summary(energy_mwh_per_event, events_per_season=10, usd_per_mwh=100.0):
     lo = sum(r[1] for r in CAPEX_USD)
     hi = sum(r[2] for r in CAPEX_USD)
     run = energy_mwh_per_event * usd_per_mwh
+    op_lo = sum(r[1] for r in OPEX_USD_PER_YEAR) + run * events_per_season
+    op_hi = sum(r[2] for r in OPEX_USD_PER_YEAR) + run * events_per_season
     return {"capex_items": [{"item": a, "low_usd": b, "high_usd": c} for a, b, c in CAPEX_USD],
             "capex_low_usd": lo, "capex_high_usd": hi,
             "energy_cost_per_event_usd": round(run, 0),
             "energy_cost_per_season_usd": round(run * events_per_season, 0),
+            "opex_items": [{"item": a, "low_usd": b, "high_usd": c} for a, b, c in OPEX_USD_PER_YEAR],
+            "opex_low_usd_per_year": round(op_lo, -3), "opex_high_usd_per_year": round(op_hi, -3),
             "outage_cost_12h_usd": OUTAGE_COST_USD_PER_12H,
-            "outages_avoided_to_pay_back": f"{lo / OUTAGE_COST_USD_PER_12H:.1f}-{hi / OUTAGE_COST_USD_PER_12H:.1f}"}
+            "outages_avoided_to_pay_back": f"{lo / OUTAGE_COST_USD_PER_12H:.1f}-{hi / OUTAGE_COST_USD_PER_12H:.1f}",
+            "outages_avoided_per_year_to_cover_running": f"{op_lo / OUTAGE_COST_USD_PER_12H:.1f}-"
+                                                         f"{op_hi / OUTAGE_COST_USD_PER_12H:.1f}"}
 
 
 def emissions(energy_mwh_per_event, grid_t_per_mwh=0.4):

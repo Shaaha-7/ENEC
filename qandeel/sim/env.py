@@ -11,7 +11,10 @@ from dataclasses import dataclass, replace
 import numpy as np
 
 TIDAL_PERIOD_H = 12.42  # principal lunar semi-diurnal tide (M2)
-WIND_DRIFT_FACTOR = 0.03  # surface drift ~3% of wind speed, standard rule of thumb
+# Extra wind drift on top of the ocean-model current, as a share of wind speed. The 3% rule is for
+# oil and floating objects; SMOC currents already include wind-driven (Ekman) and wave (Stokes)
+# drift, and jellyfish sit below the surface, so the base case is 1%. 0% and 3% are run as bounds.
+WIND_DRIFT_FACTOR = 0.01
 
 
 @dataclass(frozen=True)

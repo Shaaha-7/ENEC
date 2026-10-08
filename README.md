@@ -12,12 +12,12 @@ competition, ENEC challenge:
 
 ---
 
-## Start here (5 minutes)
+## Start here
 
 | Look at this | What it is |
 |---|---|
 | **[enechackathon.streamlit.app](https://enechackathon.streamlit.app/?d=15&b=330&t=30)** | **The live dashboard online.** Type an alert and see the plan. No install needed. |
-| [`media/Qandeel_explainer.mp4`](media/Qandeel_explainer.mp4) | 1 min 42 s 3D video with narration. **Watch this first.** |
+| [`media/Qandeel_explainer.mp4`](media/Qandeel_explainer.mp4) | 1 min 42 s 3D explainer video with narration |
 | [`deck/Qandeel_Deck.pdf`](deck/Qandeel_Deck.pdf) | The 10-slide proposal deck we submit |
 | [`media/dashboard_demo.mp4`](media/dashboard_demo.mp4) | Short recording of the dashboard working |
 | [`qandeel/outputs/`](qandeel/outputs/) | The result charts (fig1 to fig7) |
@@ -43,8 +43,8 @@ ENEC already has an early-warning system that spots swarms offshore.
 3. **Herd and release.** Two **uncrewed boats**, supervised from shore, tow a floating
    **boom** in a U-shape and gently gather the swarm, still in the water. A closed-bottom
    **retention bag** at the end of the U stops them escaping underneath. They tow the
-   swarm about 5 km and release it alive. About half drift back; the curtain simply
-   holds them again.
+   swarm about 3 km and release it alive. More than half drift back; the curtain
+   simply holds them again.
 
 An **AI camera** at the opening counts jellyfish and switches the curtain on if they
 arrive early. Its records are the future training data for a learning model that
@@ -54,32 +54,54 @@ corrects the drift forecast.
 
 ## What we found (from the simulation, real 2025 Gulf data)
 
+Base case: Copernicus currents plus 1% extra wind drift (0% and 3% are run as bounds; see below).
+
 | Question | Answer |
 |---|---|
-| Is the prediction worth it? | In a **stress test** of 100 alerts (the "truth" uses physics the planner does not know: currents ×0.7–1.3, wind drift 1.5–5%, an unmodelled 0–3 cm/s current), only **0.1%** of arriving jellyfish reached the gap before the curtain was running, vs **17%** for a camera alone (it cannot see at night). The cost: 2,485 curtain hours vs 1,206 for camera-only, about 13 h (~USD 170 of energy) per alert, but 74% fewer than running on every alert. Crews get **1–2 days of warning**. |
-| Is that real validation? | **No, not yet.** It is simulation against simulation. The planner copes with model error, but it has not been checked against real jellyfish or drifter tracks. That is the next step. |
-| Does the bubble curtain hold them? | Water approaches the opening at about **0.20 m/s** on average (intake suction + current + wind), **0.36 m/s** in the worst 5% of hours. The normal setting (3 L/s of air per metre) holds about 0.27 m/s; the design maximum (4.5) about 0.33 m/s. So there is **little spare**: about 8% of hours exceed it and are flagged to operators. |
-| Can a normal oil-spill boom gather jellyfish? | **No.** Jellyfish float at any depth, so they slip under the skirt: a 2 m skirt keeps only 0 to 55% at 0.2 m/s. That is why we added the **closed-bottom bag**, which keeps **84 to 100%**. |
-| How fast can the boats clear them? | Gathering is fast (4 to 43 t/h), but the slow loaded tow sets the pace: about **0.5 t/h net** per boom unit, about **1.8 t/h** with three uncrewed tugs swapping bags. The curtain does the bulk of the work; the boats clear what builds up. |
-| Where to release them? | About **5 km** out (7 h tow) removes the most per hour. Further out means fewer return but much longer tows. |
-| Don't released jellyfish strand anyway? | Many do: left alone, **57%** of the same swarm strands within 4 days (summer winds blow onshore). Released 5 km out, 40% strand. |
+| Is the prediction worth it? | In a **stress test** of 100 alerts (the "truth" uses physics the planner does not know: currents ×0.7–1.3, wind drift ×0.5–1.7, an unmodelled 0–3 cm/s current), **2.7–3.7%** of arriving jellyfish reached the gap before the curtain was running, vs **20–26%** for a daylight-only camera (three random seeds). The cost: about 12 more curtain hours per alert than camera-only (~USD 160 of energy), still ~80% fewer than running on every alert. Crews get **1–2 days of warning**. |
+| Is that real validation? | **No.** It is simulation against simulation. The next step is comparing the drift with real Gulf drifter tracks and ENEC swarm records. |
+| Does the bubble curtain hold them? | Water approaches the opening at **0.14 m/s** on average, **0.23 m/s** in the worst 5% of hours (0.20 / 0.36 m/s if wind drift is 3%). The normal setting (3 L/s of air per metre) holds about 0.27 m/s; the design maximum (4.5) about 0.33 m/s. Over a full 82-hour event it holds 100% at 0.2 m/s, but only **78%** if large adults swim 20 cm/s. |
+| Can a normal oil-spill boom gather jellyfish? | **No.** Jellyfish float at any depth, so they slip under the skirt: a 2 m skirt keeps only 0 to 55% at 0.2 m/s. A **closed-bottom bag** keeps **84 to 100%** in the model. |
+| How fast can the boats clear them? | The boom can only move 0.2 m/s through the water, and near the gap the water flows *toward* the gap, so tows are slow over the ground (median 6 h for 3 km, 21 h for 15 km, sometimes blocked). Net removal is about **0.6 t/h** per boom unit, about **1.9 t/h** with three uncrewed tugs swapping bags. The curtain does the bulk of the work; the boats clear what builds up. |
+| Where to release them? | About **3 km** north-east removes the most per hour: ~60% drift back and the curtain holds them again (2.4× handling). 10–15 km means few returns but 17–21 h tows. |
+| Don't released jellyfish strand anyway? | Left alone, **55%** of the same swarm strands within 4 days (summer winds blow onshore). Released 3 km out, 35% strand. |
 | Why not harvest them? | Blue Blubber is fished for food elsewhere (e.g. Australia). A full bag could go to a licensed processor instead of release; release is the default while there is no UAE market. |
-| How much power? | Compressor ~**135 kW** for a 300 m opening. Changing the air hour by hour to match the current uses **46%** of the energy of running at full power. |
-| What does it cost? | Roughly **USD 0.55 to 1.8 million** to build, including two uncrewed boats (estimate, to confirm with suppliers), and ~USD 1,100 of electricity per event. One to four avoided 12-hour plant outages (~USD 0.5 million each) pay it back. |
-| Emissions? | ~4.4 t CO2 per event on a gas grid, ~0.1 t on the plant's own low-carbon power. |
+| How much power? | Compressor ~**135 kW** for a 300 m opening, ~10 MWh per long event. Setting the air hour by hour uses **29–46%** of the energy of full power (needs a variable-speed compressor). |
+| What does it cost? | Roughly **USD 0.6 to 1.8 million** to build, including two uncrewed boats, and **USD 0.16 to 0.43 million a year** to run (operators on call, boat upkeep, diver cleaning, servicing, energy). Estimates, to confirm with suppliers. One to four avoided 12-hour outages (~USD 0.5 million each) repay the capital. |
+| Emissions? | ~3.9 t CO2 per event on a gas grid, ~0.1 t on the plant's own low-carbon power. |
 
-**Risks an ENEC engineer will ask about (and our answer):**
+### How much the wind assumption matters
 
-- *Bubbles sucked into the cooling pumps:* the curtain is on the seaward side; bubbles reach the surface in under a minute, in the outer basin; a bubble detector watches the intake line; the curtain moves further out if the pilot shows carry-over.
-- *Nuclear approval and security:* anything at the intake needs **FANR** approval, and boats must work within the plant's security zone rules. Kit stays outside safety-related intake structures; plant staff operate the boats from shore.
-- *Air trapped under a jellyfish's bell:* coarse bubbles push them away at the surface rather than through the plume; we check for bell damage in the tank test.
-- *"Arrived" is generous:* it means within 2 km of the opening. At 500 m the 15 km NNW alert drops from 54% to 48%, so the choice barely matters.
+The ocean model already includes wind-driven and wave drift; the extra wind drift felt by
+jellyfish just below the surface is uncertain. Results at 0%, 1% (base) and 3% extra:
 
-**Be honest about this when presenting:** the simulation uses real public ocean data but
-**no ENEC data**. It shows the concept works on paper. It is not a forecast for the real
-plant. The next step is a 1:20 tank test (see below).
+| Extra wind drift | Arrival chance: 15 km NNW / 28 km WNW / 28 km N | Approach at the gap (mean / worst 5%) | Through before the curtain: Qandeel vs camera |
+|---|---|---|---|
+| 0% | 39% / 4% / 3% | 0.11 / 0.18 m/s | 4.2% vs 18% |
+| 1% (base) | 44% / 1% / 12% | 0.14 / 0.23 m/s | 2.7% vs 26% |
+| 3% | 40% / 1% / 29% | 0.20 / 0.36 m/s | 0.7% vs 26% |
 
----
+The curtain is sized for the 3% case.
+
+### Limitations
+
+- The simulation uses real public ocean data but **no ENEC data**; it is not a forecast for the real plant.
+- Currents come from one ocean-model grid point (~9 km cells) through a free service that rounds speed to
+  ~0.03 m/s (only ~10 distinct speeds in the season). `python -m qandeel.fetch_copernicus` downloads the
+  full-precision data with a free Copernicus Marine account.
+- The coast is a straight line and the curtain model has no depth: near the bed a bubble curtain draws water
+  *toward* it, so deeper or night-time jellyfish could pass underneath. The tank test checks three depths.
+- Swim speeds and depths come from Australian studies of the same species; the species at Barakah and the
+  weight of 30–45 cm adults (the mass formula was fitted on 2–20 cm animals) need confirming.
+- "Arrived" means within 2 km of the opening; within 500 m the 15 km NNW alert drops from 44% to 31%.
+
+**Risks an ENEC engineer will ask about:**
+
+- *Bubbles sucked into the cooling pumps:* the curtain is on the seaward side; bubbles surface in under a minute, in the outer basin; a bubble detector watches the intake line; the curtain moves further out if the pilot shows carry-over.
+- *Approvals:* **FANR** for any change at the intake, **EAD** for marine works and moving live animals, Coast Guard and plant security for boats. Kit stays outside safety-related intake structures.
+- *Sediment and bubbly water:* diffusers sit 0.5–1 m above the bed; turbidity is watched at the intake; no boats or divers in the bubble zone while it runs (bubbly water gives less buoyancy).
+- *Air trapped under a bell:* coarse bubbles push jellyfish away at the surface rather than through the plume; checked in the tank test.
+- *Wildlife:* turtles, dolphins and dugongs (escape gap, slow tow, camera stop on sighting); seagrass and protected areas kept clear of the pipe and the release points.
 
 ## What is in this repository
 
@@ -95,7 +117,7 @@ ENEC/
     ├── data/              real ocean data (currents + wind, June-Sept 2025)
     ├── sim/               the models (drift, curtain, boom, costs...)
     ├── outputs/           charts and results.json made by run_all
-    ├── tests/             automatic checks (19 tests)
+    ├── tests/             automatic checks (26 tests, incl. the reported numbers on real data)
     ├── dashboard.py       the visual dashboard
     ├── run_all.py         runs every simulation
     └── site.json          size of the intake opening (width, depth)
@@ -160,22 +182,7 @@ The online app downloads a fresh 7-day forecast by itself (at most every 6 hours
 
 ---
 
-## Still to do (team tasks)
-
-- [ ] **Slide 1 of the deck:** add every member's name, university and role
-  (edit `deck/deck.html`, then rebuild, see `deck/` below).
-- [ ] **Measure the intake opening.** In Google Earth, right-click the two breakwater tips
-  at the Barakah intake opening and copy their coordinates, then run
-  `python -m qandeel.measure_gap --a "24.12345, 52.12345" --b "24.12345, 52.12345"`
-  with **your real numbers**, and then `python -m qandeel.run_all`.
-  Right now the width is an assumed 300 m; it is the number that changes the compressor size most.
-- [ ] **Optional:** record the narration in a team member's own voice
-  (lines and one-line command in `video/VIDEO_SCRIPT.md`).
-- [ ] Everyone: be able to explain the three steps and the honest limits above.
-
----
-
-## Words you will hear
+## Glossary
 
 | Word | Meaning |
 |---|---|
@@ -190,7 +197,7 @@ The online app downloads a fresh 7-day forecast by itself (at most every 6 hours
 
 ---
 
-## More detail (for whoever wants to go deeper)
+## Technical detail
 
 ### Ocean data
 
@@ -214,7 +221,8 @@ ERA5 / Open-Meteo wind. Free and public.
 | `qandeel/sim/sensitivity.py` | Which unknown numbers change the results most |
 | `qandeel/sim/benefits.py` | Stress test vs camera-only, adaptive air, cost and emissions |
 | `qandeel/sim/sizing.py` | Compressor air and power, boom capacity, herding logistics (round trips), jellyfish mass |
-| `qandeel/data_fetch.py` | Downloads the ocean data |
+| `qandeel/data_fetch.py` | Downloads the ocean data (Open-Meteo) |
+| `qandeel/fetch_copernicus.py` | Full-precision currents direct from Copernicus Marine (free account) |
 | `qandeel/measure_gap.py` | Opening width from two map coordinates |
 | `qandeel/tank_scale.py` | Tank-test sizes (`--scale 20`) |
 | `qandeel/plan_alert.py` | Text plan for one alert |
@@ -229,7 +237,9 @@ ERA5 / Open-Meteo wind. Free and public.
 - Boom: water flows down at the apex at 25% (worst case 50%) of tow speed; the bag fabric lets 20% of it through.
 - Forecast error: 15 to 20% on current strength plus a slowly drifting bias.
 - Currents and wind come from one model grid point offshore of the site; the curtain model treats the flow as flat (no depth layers).
-- Retention bag holds ~10 t; uncrewed boats tow at 0.2 m/s loaded and return empty at 1.5 m/s.
+- Retention bag holds ~10 t; the boom moves at most 0.2 m/s through the water (over the ground this depends on the current and the intake draw) and returns empty at 1.5 m/s.
+- Extra wind drift on top of the ocean-model current: 1% of wind speed (0% and 3% as bounds).
+- Stranded jellyfish stay stranded; they are not counted as arriving later.
 - An optical gap camera only works in daylight (06:00-18:00 local).
 
 ### Where the AI and autonomy are

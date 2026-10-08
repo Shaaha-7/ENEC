@@ -54,6 +54,9 @@ const W = 1920, H = 1080, DURATION = 92;
 const R = await (await fetch('../qandeel/outputs/results.json')).json();
 const A = R.alerts[0];
 const SW = R.smart_switching || {};
+const SEEDS = [SW, ...(R.smart_switching_other_seeds || [])];
+const SEEDS_Q = SEEDS.reduce((a, r) => a + r.unprotected_pct_qandeel, 0) / SEEDS.length;
+const SEEDS_C = SEEDS.reduce((a, r) => a + r.unprotected_pct_camera_only, 0) / SEEDS.length;
 const BEST = R.release_options[0];
 const COMPASS = (b) => ['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSW','SW','WSW','W','WNW','NW','NNW'][Math.round(((b % 360) + 360) % 360 / 22.5) % 16];
 const pctRange = (rows) => { const v = rows.map(r => r.retained_share * 100);
@@ -411,8 +414,8 @@ function hud(t) {
   const nOn = fadeIn(t, T.numbers, T.outro, 0.8);
   if (nOn > 0) {
     $('cards').innerHTML = [
-      [`${SW.unprotected_pct_qandeel}% vs ${fmt(SW.unprotected_pct_camera_only)}%`, 'of arriving jellyfish reach the gap before the curtain runs: Qandeel vs a daylight camera alone (stress test, 100 alerts, real 2025 data)'],
-      ['1–2 days', 'of warning for the uncrewed boats and the curtain, for about USD 170 of extra energy per alert'],
+      [`${fmt(SEEDS_Q)}% vs ${fmt(SEEDS_C)}%`, 'of arriving jellyfish reach the gap before the curtain runs: Qandeel vs a daylight camera alone (stress test, 3 × 100 alerts, real 2025 data)'],
+      ['1–2 days', 'of warning for the uncrewed boats and the curtain, for about 12 extra curtain hours (~USD 160) per alert'],
       [BAG, `kept by the boom with a closed-bottom retention bag (model), vs ${OPEN} for an open boom`],
       ['AED 300', '1:20 tank test kit to measure it next: our path from model to evidence'],
     ].map(([n, txt]) => `<div class="card"><div class="n">${n}</div><div class="t">${txt}</div></div>`).join('');

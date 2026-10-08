@@ -27,11 +27,11 @@ LINES = [  # (start s, end s, text)
     (43.3, 51.0, "Nothing is cut, pumped or netted. Rising air moves the water, and the water moves the jellyfish."),
     (51.3, 61.0, "Then two uncrewed boats close a boom around the swarm. Our model found that oil-spill booms leak "
                  "jellyfish, so we added a closed-bottom bag."),
-    (61.3, 74.0, "They tow the swarm about five kilometres and release it alive. About half drift back, "
+    (61.3, 74.0, "They tow the swarm about three kilometres and release it alive. More than half drift back, "
                  "and the curtain simply holds them again."),
     (74.3, 82.0, "The intake keeps running, and the jellyfish go back to the sea."),
-    (82.3, 94.0, "In a stress test of one hundred alerts on real Gulf data, a camera alone let seventeen percent "
-                 "through. Qandeel let almost none. Next, a one to twenty tank test."),
+    (82.3, 94.0, "In a stress test on real Gulf data, a camera alone let about a quarter through. "
+                 "Qandeel let about three percent. Next, a one to twenty tank test."),
     (94.6, 101.6, "Kandeel. Herd, don't harvest."),
 ]
 TOTAL = 102.0

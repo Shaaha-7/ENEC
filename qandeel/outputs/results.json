@@ -19,56 +19,56 @@
       "label": "Swarm 15 km NNW",
       "distance_km": 15,
       "bearing_deg": 330,
-      "p_arrive": 0.54,
-      "share_of_swarm_reaching_gap": 0.306,
-      "window_start_h": 9.7,
-      "bulk_arrival_h": 33.1,
-      "window_end_h": 77.0,
-      "switch_on_h": 6.7,
+      "p_arrive": 0.44,
+      "share_of_swarm_reaching_gap": 0.13,
+      "window_start_h": 15.9,
+      "bulk_arrival_h": 42.1,
+      "window_end_h": 72.7,
+      "switch_on_h": 12.9,
       "approach_side": "west"
     },
     {
       "label": "Swarm 28 km WNW",
       "distance_km": 28,
       "bearing_deg": 285,
-      "p_arrive": 0.302,
-      "share_of_swarm_reaching_gap": 0.241,
-      "window_start_h": 26.8,
-      "bulk_arrival_h": 50.3,
-      "window_end_h": 87.3,
-      "switch_on_h": 23.8,
-      "approach_side": "west"
+      "p_arrive": 0.01,
+      "share_of_swarm_reaching_gap": 0.003,
+      "window_start_h": 42.3,
+      "bulk_arrival_h": 64.5,
+      "window_end_h": 85.4,
+      "switch_on_h": null,
+      "approach_side": null
     },
     {
       "label": "Swarm 28 km N",
       "distance_km": 28,
       "bearing_deg": 0,
-      "p_arrive": 0.338,
-      "share_of_swarm_reaching_gap": 0.12,
-      "window_start_h": 40.7,
-      "bulk_arrival_h": 75.3,
-      "window_end_h": 90.8,
-      "switch_on_h": 37.7,
+      "p_arrive": 0.117,
+      "share_of_swarm_reaching_gap": 0.022,
+      "window_start_h": 55.1,
+      "bulk_arrival_h": 83.3,
+      "window_end_h": 91.2,
+      "switch_on_h": 52.1,
       "approach_side": "centre"
     }
   ],
   "natural_fate": {
     "label": "Swarm 15 km NNW",
-    "reach_gap": 0.306,
-    "strand_elsewhere": 0.566
+    "reach_gap": 0.13,
+    "strand_elsewhere": 0.547
   },
   "arrival_radius_sensitivity": [
     {
       "radius_m": 500,
-      "p_arrive": 0.477
+      "p_arrive": 0.305
     },
     {
       "radius_m": 1000,
-      "p_arrive": 0.5
+      "p_arrive": 0.357
     },
     {
       "radius_m": 2000,
-      "p_arrive": 0.54
+      "p_arrive": 0.44
     }
   ],
   "curtain_hold": [
@@ -467,494 +467,422 @@
   ],
   "release_options": [
     {
-      "distance_km": 5,
-      "bearing_deg": 315,
-      "p_return": 0.5077777777777778,
-      "p_beach": 0.39666666666666667,
-      "p_beach_near": 0.3016666666666667,
-      "tow_hours": 6.944444444444445,
+      "distance_km": 3,
+      "bearing_deg": 45,
+      "p_return": 0.5777777777777777,
+      "p_beach": 0.35388888888888886,
+      "p_beach_near": 0.3238888888888889,
+      "tow_hours": 5.583333333333333,
+      "tow_p90_h": 8.3,
       "score": -0.037,
-      "load_factor": 2.03
-    },
-    {
-      "distance_km": 3,
-      "bearing_deg": 330,
-      "p_return": 0.7144444444444444,
-      "p_beach": 0.2644444444444444,
-      "p_beach_near": 0.21666666666666667,
-      "tow_hours": 4.166666666666667,
-      "score": -0.036,
-      "load_factor": 3.5
-    },
-    {
-      "distance_km": 3,
-      "bearing_deg": 45,
-      "p_return": 0.715,
-      "p_beach": 0.2544444444444444,
-      "p_beach_near": 0.22444444444444445,
-      "tow_hours": 4.166666666666667,
-      "score": -0.036,
-      "load_factor": 3.51
-    },
-    {
-      "distance_km": 5,
-      "bearing_deg": 0,
-      "p_return": 0.4866666666666667,
-      "p_beach": 0.44222222222222224,
-      "p_beach_near": 0.35944444444444446,
-      "tow_hours": 6.944444444444445,
-      "score": -0.035,
-      "load_factor": 1.95
-    },
-    {
-      "distance_km": 3,
-      "bearing_deg": 15,
-      "p_return": 0.7466666666666667,
-      "p_beach": 0.23222222222222222,
-      "p_beach_near": 0.2111111111111111,
-      "tow_hours": 4.166666666666667,
-      "score": -0.032,
-      "load_factor": 3.95
-    },
-    {
-      "distance_km": 5,
-      "bearing_deg": 345,
-      "p_return": 0.57,
-      "p_beach": 0.37555555555555553,
-      "p_beach_near": 0.2922222222222222,
-      "tow_hours": 6.944444444444445,
-      "score": -0.032,
-      "load_factor": 2.33
-    },
-    {
-      "distance_km": 5,
-      "bearing_deg": 45,
-      "p_return": 0.5033333333333333,
-      "p_beach": 0.48055555555555557,
-      "p_beach_near": 0.4,
-      "tow_hours": 6.944444444444445,
-      "score": -0.032,
-      "load_factor": 2.01
-    },
-    {
-      "distance_km": 5,
-      "bearing_deg": 15,
-      "p_return": 0.5605555555555556,
-      "p_beach": 0.4166666666666667,
-      "p_beach_near": 0.34944444444444445,
-      "tow_hours": 6.944444444444445,
-      "score": -0.031,
-      "load_factor": 2.28
-    },
-    {
-      "distance_km": 15,
-      "bearing_deg": 285,
-      "p_return": 0.2061111111111111,
-      "p_beach": 0.7072222222222222,
-      "p_beach_near": 0.02666666666666667,
-      "tow_hours": 20.833333333333332,
-      "score": -0.031,
-      "load_factor": 1.26
-    },
-    {
-      "distance_km": 3,
-      "bearing_deg": 30,
-      "p_return": 0.7622222222222222,
-      "p_beach": 0.235,
-      "p_beach_near": 0.22166666666666668,
-      "tow_hours": 4.166666666666667,
-      "score": -0.03,
-      "load_factor": 4.21
-    },
-    {
-      "distance_km": 5,
-      "bearing_deg": 300,
-      "p_return": 0.5283333333333333,
-      "p_beach": 0.46555555555555556,
-      "p_beach_near": 0.4127777777777778,
-      "tow_hours": 6.944444444444445,
-      "score": -0.03,
-      "load_factor": 2.12
-    },
-    {
-      "distance_km": 5,
-      "bearing_deg": 330,
-      "p_return": 0.5788888888888889,
-      "p_beach": 0.39055555555555554,
-      "p_beach_near": 0.3288888888888889,
-      "tow_hours": 6.944444444444445,
-      "score": -0.03,
       "load_factor": 2.37
     },
     {
-      "distance_km": 8,
-      "bearing_deg": 300,
-      "p_return": 0.36777777777777776,
-      "p_beach": 0.575,
-      "p_beach_near": 0.3416666666666667,
-      "tow_hours": 11.11111111111111,
-      "score": -0.03,
-      "load_factor": 1.58
-    },
-    {
-      "distance_km": 8,
-      "bearing_deg": 30,
-      "p_return": 0.395,
-      "p_beach": 0.4572222222222222,
-      "p_beach_near": 0.29888888888888887,
-      "tow_hours": 11.11111111111111,
-      "score": -0.03,
-      "load_factor": 1.65
+      "distance_km": 15,
+      "bearing_deg": 75,
+      "p_return": 0.02,
+      "p_beach": 0.8216666666666667,
+      "p_beach_near": 0.11333333333333333,
+      "tow_hours": 20.833333333333336,
+      "tow_p90_h": 30.81666666666667,
+      "score": -0.035,
+      "load_factor": 1.02
     },
     {
       "distance_km": 10,
-      "bearing_deg": 285,
-      "p_return": 0.32,
-      "p_beach": 0.6744444444444444,
-      "p_beach_near": 0.23166666666666666,
-      "tow_hours": 13.88888888888889,
+      "bearing_deg": 45,
+      "p_return": 0.09222222222222222,
+      "p_beach": 0.655,
+      "p_beach_near": 0.2861111111111111,
+      "tow_hours": 16.666666666666668,
+      "tow_p90_h": 23.200000000000003,
+      "score": -0.032,
+      "load_factor": 1.1
+    },
+    {
+      "distance_km": 3,
+      "bearing_deg": 330,
+      "p_return": 0.6261111111111111,
+      "p_beach": 0.28888888888888886,
+      "p_beach_near": 0.2588888888888889,
+      "tow_hours": 7.083333333333333,
+      "tow_p90_h": 26.833333333333332,
       "score": -0.03,
+      "load_factor": 2.67
+    },
+    {
+      "distance_km": 3,
+      "bearing_deg": 30,
+      "p_return": 0.6583333333333333,
+      "p_beach": 0.30833333333333335,
+      "p_beach_near": 0.2761111111111111,
+      "tow_hours": 6.416666666666666,
+      "tow_p90_h": 9.533333333333333,
+      "score": -0.029,
+      "load_factor": 2.93
+    },
+    {
+      "distance_km": 15,
+      "bearing_deg": 60,
+      "p_return": 0.03,
+      "p_beach": 0.7238888888888889,
+      "p_beach_near": 0.19333333333333333,
+      "tow_hours": 22.5,
+      "tow_p90_h": 31.86666666666667,
+      "score": -0.029,
+      "load_factor": 1.03
+    },
+    {
+      "distance_km": 3,
+      "bearing_deg": 315,
+      "p_return": 0.6172222222222222,
+      "p_beach": 0.3527777777777778,
+      "p_beach_near": 0.34055555555555556,
+      "tow_hours": 6.833333333333333,
+      "tow_p90_h": 25.63333333333333,
+      "score": -0.028,
+      "load_factor": 2.61
+    },
+    {
+      "distance_km": 3,
+      "bearing_deg": 15,
+      "p_return": 0.645,
+      "p_beach": 0.31055555555555553,
+      "p_beach_near": 0.2777777777777778,
+      "tow_hours": 7.25,
+      "tow_p90_h": 12.916666666666668,
+      "score": -0.028,
+      "load_factor": 2.82
+    },
+    {
+      "distance_km": 5,
+      "bearing_deg": 45,
+      "p_return": 0.32,
+      "p_beach": 0.6133333333333333,
+      "p_beach_near": 0.5283333333333333,
+      "tow_hours": 9.083333333333332,
+      "tow_p90_h": 11.75,
+      "score": -0.028,
       "load_factor": 1.47
     },
     {
-      "distance_km": 15,
+      "distance_km": 5,
       "bearing_deg": 315,
-      "p_return": 0.125,
-      "p_beach": 0.7322222222222222,
-      "p_beach_near": 0.13333333333333333,
-      "tow_hours": 20.833333333333332,
-      "score": -0.03,
-      "load_factor": 1.14
-    },
-    {
-      "distance_km": 5,
-      "bearing_deg": 60,
-      "p_return": 0.5827777777777777,
-      "p_beach": 0.39666666666666667,
-      "p_beach_near": 0.3516666666666667,
-      "tow_hours": 6.944444444444445,
-      "score": -0.029,
-      "load_factor": 2.4
-    },
-    {
-      "distance_km": 10,
-      "bearing_deg": 15,
-      "p_return": 0.3016666666666667,
-      "p_beach": 0.535,
-      "p_beach_near": 0.2733333333333333,
-      "tow_hours": 13.88888888888889,
-      "score": -0.029,
-      "load_factor": 1.43
-    },
-    {
-      "distance_km": 3,
-      "bearing_deg": 0,
-      "p_return": 0.7922222222222223,
-      "p_beach": 0.18555555555555556,
-      "p_beach_near": 0.16555555555555557,
-      "tow_hours": 4.166666666666667,
+      "p_return": 0.30444444444444446,
+      "p_beach": 0.5522222222222222,
+      "p_beach_near": 0.45944444444444443,
+      "tow_hours": 10.916666666666668,
+      "tow_p90_h": 31.416666666666664,
       "score": -0.028,
-      "load_factor": 4.81
-    },
-    {
-      "distance_km": 5,
-      "bearing_deg": 30,
-      "p_return": 0.6394444444444445,
-      "p_beach": 0.31777777777777777,
-      "p_beach_near": 0.26611111111111113,
-      "tow_hours": 6.944444444444445,
-      "score": -0.028,
-      "load_factor": 2.77
+      "load_factor": 1.44
     },
     {
       "distance_km": 8,
-      "bearing_deg": 345,
-      "p_return": 0.37666666666666665,
-      "p_beach": 0.5238888888888888,
-      "p_beach_near": 0.35888888888888887,
-      "tow_hours": 11.11111111111111,
-      "score": -0.028,
-      "load_factor": 1.6
-    },
-    {
-      "distance_km": 8,
-      "bearing_deg": 75,
-      "p_return": 0.38,
-      "p_beach": 0.5955555555555555,
-      "p_beach_near": 0.3738888888888889,
-      "tow_hours": 11.11111111111111,
-      "score": -0.028,
-      "load_factor": 1.61
-    },
-    {
-      "distance_km": 10,
-      "bearing_deg": 300,
-      "p_return": 0.3088888888888889,
-      "p_beach": 0.6783333333333333,
-      "p_beach_near": 0.3061111111111111,
-      "tow_hours": 13.88888888888889,
-      "score": -0.028,
-      "load_factor": 1.45
-    },
-    {
-      "distance_km": 10,
-      "bearing_deg": 75,
-      "p_return": 0.4077777777777778,
-      "p_beach": 0.5283333333333333,
-      "p_beach_near": 0.19833333333333333,
-      "tow_hours": 13.88888888888889,
-      "score": -0.028,
-      "load_factor": 1.69
-    },
-    {
-      "distance_km": 15,
       "bearing_deg": 45,
-      "p_return": 0.21166666666666667,
-      "p_beach": 0.6177777777777778,
-      "p_beach_near": 0.115,
-      "tow_hours": 20.833333333333332,
+      "p_return": 0.21333333333333335,
+      "p_beach": 0.5683333333333334,
+      "p_beach_near": 0.40444444444444444,
+      "tow_hours": 13.833333333333334,
+      "tow_p90_h": 19.05,
       "score": -0.028,
       "load_factor": 1.27
     },
     {
-      "distance_km": 8,
-      "bearing_deg": 315,
-      "p_return": 0.4988888888888889,
-      "p_beach": 0.3972222222222222,
-      "p_beach_near": 0.24555555555555555,
-      "tow_hours": 11.11111111111111,
-      "score": -0.027,
-      "load_factor": 2.0
+      "distance_km": 10,
+      "bearing_deg": 60,
+      "p_return": 0.07666666666666666,
+      "p_beach": 0.7044444444444444,
+      "p_beach_near": 0.4411111111111111,
+      "tow_hours": 14.833333333333332,
+      "tow_p90_h": 22.5,
+      "score": -0.028,
+      "load_factor": 1.08
     },
     {
-      "distance_km": 8,
+      "distance_km": 5,
+      "bearing_deg": 60,
+      "p_return": 0.27,
+      "p_beach": 0.6666666666666666,
+      "p_beach_near": 0.6222222222222222,
+      "tow_hours": 7.666666666666666,
+      "tow_p90_h": 11.016666666666667,
+      "score": -0.027,
+      "load_factor": 1.37
+    },
+    {
+      "distance_km": 5,
+      "bearing_deg": 30,
+      "p_return": 0.42833333333333334,
+      "p_beach": 0.4588888888888889,
+      "p_beach_near": 0.3988888888888889,
+      "tow_hours": 10.166666666666666,
+      "tow_p90_h": 13.383333333333335,
+      "score": -0.027,
+      "load_factor": 1.75
+    },
+    {
+      "distance_km": 5,
       "bearing_deg": 330,
-      "p_return": 0.4677777777777778,
-      "p_beach": 0.4266666666666667,
-      "p_beach_near": 0.29055555555555557,
-      "tow_hours": 11.11111111111111,
+      "p_return": 0.39111111111111113,
+      "p_beach": 0.47,
+      "p_beach_near": 0.40055555555555555,
+      "tow_hours": 11.166666666666668,
+      "tow_p90_h": 34.166666666666664,
       "score": -0.027,
-      "load_factor": 1.88
+      "load_factor": 1.64
+    },
+    {
+      "distance_km": 5,
+      "bearing_deg": 0,
+      "p_return": 0.42277777777777775,
+      "p_beach": 0.42944444444444446,
+      "p_beach_near": 0.3516666666666667,
+      "tow_hours": 11.5,
+      "tow_p90_h": 24.283333333333335,
+      "score": -0.027,
+      "load_factor": 1.73
+    },
+    {
+      "distance_km": 5,
+      "bearing_deg": 345,
+      "p_return": 0.4338888888888889,
+      "p_beach": 0.3977777777777778,
+      "p_beach_near": 0.3438888888888889,
+      "tow_hours": 11.833333333333334,
+      "tow_p90_h": 29.60000000000001,
+      "score": -0.026,
+      "load_factor": 1.77
+    },
+    {
+      "distance_km": 10,
+      "bearing_deg": 75,
+      "p_return": 0.04388888888888889,
+      "p_beach": 0.9111111111111111,
+      "p_beach_near": 0.5405555555555556,
+      "tow_hours": 13.416666666666668,
+      "tow_p90_h": 20.433333333333334,
+      "score": -0.026,
+      "load_factor": 1.05
     },
     {
       "distance_km": 8,
-      "bearing_deg": 0,
-      "p_return": 0.4022222222222222,
-      "p_beach": 0.5427777777777778,
-      "p_beach_near": 0.35777777777777775,
-      "tow_hours": 11.11111111111111,
-      "score": -0.027,
-      "load_factor": 1.67
-    },
-    {
-      "distance_km": 10,
-      "bearing_deg": 315,
-      "p_return": 0.36833333333333335,
-      "p_beach": 0.5938888888888889,
-      "p_beach_near": 0.2633333333333333,
-      "tow_hours": 13.88888888888889,
-      "score": -0.027,
-      "load_factor": 1.58
-    },
-    {
-      "distance_km": 10,
-      "bearing_deg": 0,
-      "p_return": 0.32222222222222224,
-      "p_beach": 0.5338888888888889,
-      "p_beach_near": 0.31833333333333336,
-      "tow_hours": 13.88888888888889,
-      "score": -0.027,
-      "load_factor": 1.48
-    },
-    {
-      "distance_km": 10,
-      "bearing_deg": 60,
-      "p_return": 0.37333333333333335,
-      "p_beach": 0.5416666666666666,
-      "p_beach_near": 0.27055555555555555,
-      "tow_hours": 13.88888888888889,
-      "score": -0.027,
-      "load_factor": 1.6
-    },
-    {
-      "distance_km": 15,
-      "bearing_deg": 60,
-      "p_return": 0.26611111111111113,
-      "p_beach": 0.6683333333333333,
-      "p_beach_near": 0.08555555555555555,
-      "tow_hours": 20.833333333333332,
-      "score": -0.027,
-      "load_factor": 1.36
+      "bearing_deg": 30,
+      "p_return": 0.17833333333333334,
+      "p_beach": 0.5733333333333334,
+      "p_beach_near": 0.41944444444444445,
+      "tow_hours": 15.666666666666668,
+      "tow_p90_h": 19.833333333333332,
+      "score": -0.026,
+      "load_factor": 1.22
     },
     {
       "distance_km": 10,
       "bearing_deg": 30,
-      "p_return": 0.4177777777777778,
-      "p_beach": 0.37833333333333335,
-      "p_beach_near": 0.24222222222222223,
-      "tow_hours": 13.88888888888889,
-      "score": -0.026,
-      "load_factor": 1.72
+      "p_return": 0.17333333333333334,
+      "p_beach": 0.5461111111111111,
+      "p_beach_near": 0.31666666666666665,
+      "tow_hours": 19.416666666666668,
+      "tow_p90_h": 23.0,
+      "score": -0.025,
+      "load_factor": 1.21
     },
     {
-      "distance_km": 15,
+      "distance_km": 3,
+      "bearing_deg": 345,
+      "p_return": 0.7005555555555556,
+      "p_beach": 0.24722222222222223,
+      "p_beach_near": 0.21611111111111111,
+      "tow_hours": 7.833333333333333,
+      "tow_p90_h": 22.53333333333334,
+      "score": -0.024,
+      "load_factor": 3.34
+    },
+    {
+      "distance_km": 8,
+      "bearing_deg": 315,
+      "p_return": 0.21777777777777776,
+      "p_beach": 0.5861111111111111,
+      "p_beach_near": 0.4483333333333333,
+      "tow_hours": 15.25,
+      "tow_p90_h": 39.16666666666667,
+      "score": -0.024,
+      "load_factor": 1.28
+    },
+    {
+      "distance_km": 8,
+      "bearing_deg": 345,
+      "p_return": 0.2338888888888889,
+      "p_beach": 0.5038888888888889,
+      "p_beach_near": 0.3827777777777778,
+      "tow_hours": 16.583333333333336,
+      "tow_p90_h": 39.150000000000006,
+      "score": -0.024,
+      "load_factor": 1.31
+    },
+    {
+      "distance_km": 10,
+      "bearing_deg": 285,
+      "p_return": 0.011111111111111112,
+      "p_beach": 0.9461111111111111,
+      "p_beach_near": 0.4905555555555556,
+      "tow_hours": 17.5,
+      "tow_p90_h": 30.433333333333334,
+      "score": -0.024,
+      "load_factor": 1.01
+    },
+    {
+      "distance_km": 10,
       "bearing_deg": 300,
-      "p_return": 0.31555555555555553,
-      "p_beach": 0.5788888888888889,
-      "p_beach_near": 0.04,
-      "tow_hours": 20.833333333333332,
-      "score": -0.026,
-      "load_factor": 1.46
+      "p_return": 0.07222222222222222,
+      "p_beach": 0.8366666666666667,
+      "p_beach_near": 0.44055555555555553,
+      "tow_hours": 18.0,
+      "tow_p90_h": 37.5,
+      "score": -0.024,
+      "load_factor": 1.08
     },
     {
-      "distance_km": 15,
-      "bearing_deg": 75,
-      "p_return": 0.29555555555555557,
-      "p_beach": 0.6322222222222222,
-      "p_beach_near": 0.06055555555555556,
-      "tow_hours": 20.833333333333332,
-      "score": -0.026,
+      "distance_km": 3,
+      "bearing_deg": 0,
+      "p_return": 0.71,
+      "p_beach": 0.22777777777777777,
+      "p_beach_near": 0.20833333333333334,
+      "tow_hours": 8.0,
+      "tow_p90_h": 16.733333333333338,
+      "score": -0.023,
+      "load_factor": 3.45
+    },
+    {
+      "distance_km": 5,
+      "bearing_deg": 15,
+      "p_return": 0.39611111111111114,
+      "p_beach": 0.545,
+      "p_beach_near": 0.4761111111111111,
+      "tow_hours": 11.333333333333334,
+      "tow_p90_h": 17.200000000000003,
+      "score": -0.023,
+      "load_factor": 1.66
+    },
+    {
+      "distance_km": 8,
+      "bearing_deg": 300,
+      "p_return": 0.08777777777777777,
+      "p_beach": 0.7811111111111111,
+      "p_beach_near": 0.5411111111111111,
+      "tow_hours": 15.0,
+      "tow_p90_h": 32.16666666666667,
+      "score": -0.023,
+      "load_factor": 1.1
+    },
+    {
+      "distance_km": 8,
+      "bearing_deg": 330,
+      "p_return": 0.29444444444444445,
+      "p_beach": 0.48833333333333334,
+      "p_beach_near": 0.37222222222222223,
+      "tow_hours": 16.25,
+      "tow_p90_h": 40.91666666666667,
+      "score": -0.023,
       "load_factor": 1.42
     },
     {
-      "distance_km": 3,
-      "bearing_deg": 315,
-      "p_return": 0.8138888888888889,
-      "p_beach": 0.18388888888888888,
-      "p_beach_near": 0.18,
-      "tow_hours": 4.166666666666667,
-      "score": -0.025,
-      "load_factor": 5.37
-    },
-    {
-      "distance_km": 3,
+      "distance_km": 10,
       "bearing_deg": 345,
-      "p_return": 0.8177777777777778,
-      "p_beach": 0.17833333333333334,
-      "p_beach_near": 0.15666666666666668,
-      "tow_hours": 4.166666666666667,
-      "score": -0.025,
-      "load_factor": 5.49
+      "p_return": 0.17277777777777778,
+      "p_beach": 0.5166666666666667,
+      "p_beach_near": 0.34,
+      "tow_hours": 20.5,
+      "tow_p90_h": 41.733333333333334,
+      "score": -0.023,
+      "load_factor": 1.21
     },
     {
       "distance_km": 8,
-      "bearing_deg": 15,
-      "p_return": 0.4588888888888889,
-      "p_beach": 0.4483333333333333,
-      "p_beach_near": 0.3416666666666667,
-      "tow_hours": 11.11111111111111,
-      "score": -0.025,
-      "load_factor": 1.85
-    },
-    {
-      "distance_km": 10,
-      "bearing_deg": 345,
-      "p_return": 0.35944444444444446,
-      "p_beach": 0.5066666666666667,
-      "p_beach_near": 0.3244444444444444,
-      "tow_hours": 13.88888888888889,
-      "score": -0.025,
-      "load_factor": 1.56
-    },
-    {
-      "distance_km": 15,
-      "bearing_deg": 345,
-      "p_return": 0.21166666666666667,
-      "p_beach": 0.5022222222222222,
-      "p_beach_near": 0.2111111111111111,
-      "tow_hours": 20.833333333333332,
-      "score": -0.025,
-      "load_factor": 1.27
-    },
-    {
-      "distance_km": 8,
-      "bearing_deg": 45,
-      "p_return": 0.5011111111111111,
-      "p_beach": 0.43777777777777777,
-      "p_beach_near": 0.31444444444444447,
-      "tow_hours": 11.11111111111111,
-      "score": -0.024,
-      "load_factor": 2.0
-    },
-    {
-      "distance_km": 10,
-      "bearing_deg": 330,
-      "p_return": 0.4027777777777778,
-      "p_beach": 0.5155555555555555,
-      "p_beach_near": 0.3161111111111111,
-      "tow_hours": 13.88888888888889,
-      "score": -0.024,
-      "load_factor": 1.67
-    },
-    {
-      "distance_km": 15,
-      "bearing_deg": 0,
-      "p_return": 0.19833333333333333,
-      "p_beach": 0.6066666666666667,
-      "p_beach_near": 0.24333333333333335,
-      "tow_hours": 20.833333333333332,
-      "score": -0.024,
-      "load_factor": 1.25
+      "bearing_deg": 75,
+      "p_return": 0.041666666666666664,
+      "p_beach": 0.8827777777777778,
+      "p_beach_near": 0.6877777777777778,
+      "tow_hours": 10.833333333333332,
+      "tow_p90_h": 16.516666666666666,
+      "score": -0.022,
+      "load_factor": 1.04
     },
     {
       "distance_km": 8,
       "bearing_deg": 60,
-      "p_return": 0.5261111111111111,
-      "p_beach": 0.4388888888888889,
-      "p_beach_near": 0.3016666666666667,
-      "tow_hours": 11.11111111111111,
-      "score": -0.023,
-      "load_factor": 2.11
+      "p_return": 0.14888888888888888,
+      "p_beach": 0.7466666666666667,
+      "p_beach_near": 0.6066666666666667,
+      "tow_hours": 12.25,
+      "tow_p90_h": 17.750000000000004,
+      "score": -0.022,
+      "load_factor": 1.17
     },
     {
-      "distance_km": 15,
-      "bearing_deg": 330,
-      "p_return": 0.26222222222222225,
-      "p_beach": 0.47333333333333333,
-      "p_beach_near": 0.23333333333333334,
-      "tow_hours": 20.833333333333332,
-      "score": -0.023,
-      "load_factor": 1.36
-    },
-    {
-      "distance_km": 15,
+      "distance_km": 8,
       "bearing_deg": 15,
-      "p_return": 0.265,
-      "p_beach": 0.5027777777777778,
-      "p_beach_near": 0.23055555555555557,
-      "tow_hours": 20.833333333333332,
-      "score": -0.023,
-      "load_factor": 1.36
+      "p_return": 0.23666666666666666,
+      "p_beach": 0.5088888888888888,
+      "p_beach_near": 0.41388888888888886,
+      "tow_hours": 17.333333333333332,
+      "tow_p90_h": 25.483333333333334,
+      "score": -0.022,
+      "load_factor": 1.31
+    },
+    {
+      "distance_km": 10,
+      "bearing_deg": 15,
+      "p_return": 0.175,
+      "p_beach": 0.4988888888888889,
+      "p_beach_near": 0.3338888888888889,
+      "tow_hours": 21.833333333333336,
+      "tow_p90_h": 33.25,
+      "score": -0.022,
+      "load_factor": 1.21
+    },
+    {
+      "distance_km": 10,
+      "bearing_deg": 0,
+      "p_return": 0.18777777777777777,
+      "p_beach": 0.49277777777777776,
+      "p_beach_near": 0.3611111111111111,
+      "tow_hours": 21.666666666666668,
+      "tow_p90_h": 35.33333333333333,
+      "score": -0.021,
+      "load_factor": 1.23
+    },
+    {
+      "distance_km": 8,
+      "bearing_deg": 0,
+      "p_return": 0.25555555555555554,
+      "p_beach": 0.5694444444444444,
+      "p_beach_near": 0.42333333333333334,
+      "tow_hours": 18.0,
+      "tow_p90_h": 33.50000000000001,
+      "score": -0.02,
+      "load_factor": 1.34
+    },
+    {
+      "distance_km": 5,
+      "bearing_deg": 300,
+      "p_return": 0.21666666666666667,
+      "p_beach": 0.7516666666666667,
+      "p_beach_near": 0.6977777777777778,
+      "tow_hours": 10.166666666666666,
+      "tow_p90_h": 25.43333333333333,
+      "score": -0.019,
+      "load_factor": 1.28
     },
     {
       "distance_km": 8,
       "bearing_deg": 285,
-      "p_return": 0.5522222222222222,
-      "p_beach": 0.4444444444444444,
-      "p_beach_near": 0.30666666666666664,
-      "tow_hours": 11.11111111111111,
-      "score": -0.022,
-      "load_factor": 2.23
-    },
-    {
-      "distance_km": 10,
-      "bearing_deg": 45,
-      "p_return": 0.4861111111111111,
-      "p_beach": 0.46444444444444444,
-      "p_beach_near": 0.255,
-      "tow_hours": 13.88888888888889,
-      "score": -0.022,
-      "load_factor": 1.95
-    },
-    {
-      "distance_km": 15,
-      "bearing_deg": 30,
-      "p_return": 0.35944444444444446,
-      "p_beach": 0.5255555555555556,
-      "p_beach_near": 0.17888888888888888,
-      "tow_hours": 20.833333333333332,
-      "score": -0.021,
-      "load_factor": 1.56
+      "p_return": 0.06722222222222222,
+      "p_beach": 0.8911111111111111,
+      "p_beach_near": 0.7361111111111112,
+      "tow_hours": 14.5,
+      "tow_p90_h": 26.550000000000008,
+      "score": -0.014,
+      "load_factor": 1.07
     }
   ],
   "boom_retention": [
@@ -1963,9 +1891,9 @@
     "air_m3_min": 54.0,
     "discharge_bar_abs": 2.47,
     "power_kw": 135.0,
-    "event_hours": 82,
-    "energy_mwh_per_event": 11.1,
-    "energy_cost_usd_per_event": 1110.0
+    "event_hours": 72,
+    "energy_mwh_per_event": 9.74,
+    "energy_cost_usd_per_event": 974.0
   },
   "boom": {
     "swept_m3_s": 6.0,
@@ -1996,53 +1924,58 @@
     "rows": [
       {
         "distance_km": 3,
-        "bearing_deg": 330,
-        "p_return": 0.71,
-        "p_strand": 0.26,
-        "tow_h": 4.2,
-        "round_trip_h": 5.2,
-        "net_t_h_single_unit": 0.46,
-        "net_t_h_with_3_tugs": 1.64
+        "bearing_deg": 45,
+        "p_return": 0.58,
+        "p_strand": 0.35,
+        "tow_h": 5.6,
+        "tow_p90_h": 8.3,
+        "round_trip_h": 6.6,
+        "net_t_h_single_unit": 0.55,
+        "net_t_h_with_3_tugs": 1.91
       },
       {
         "distance_km": 5,
-        "bearing_deg": 315,
-        "p_return": 0.51,
-        "p_strand": 0.4,
-        "tow_h": 6.9,
-        "round_trip_h": 8.4,
-        "net_t_h_single_unit": 0.53,
-        "net_t_h_with_3_tugs": 1.76
+        "bearing_deg": 45,
+        "p_return": 0.32,
+        "p_strand": 0.61,
+        "tow_h": 9.1,
+        "tow_p90_h": 11.8,
+        "round_trip_h": 10.5,
+        "net_t_h_single_unit": 0.59,
+        "net_t_h_with_3_tugs": 1.94
       },
       {
         "distance_km": 8,
-        "bearing_deg": 300,
-        "p_return": 0.37,
+        "bearing_deg": 45,
+        "p_return": 0.21,
         "p_strand": 0.57,
-        "tow_h": 11.1,
-        "round_trip_h": 13.1,
-        "net_t_h_single_unit": 0.45,
-        "net_t_h_with_3_tugs": 1.45
+        "tow_h": 13.8,
+        "tow_p90_h": 19.1,
+        "round_trip_h": 15.8,
+        "net_t_h_single_unit": 0.47,
+        "net_t_h_with_3_tugs": 1.49
       },
       {
         "distance_km": 10,
-        "bearing_deg": 285,
-        "p_return": 0.32,
-        "p_strand": 0.67,
-        "tow_h": 13.9,
-        "round_trip_h": 16.2,
-        "net_t_h_single_unit": 0.39,
-        "net_t_h_with_3_tugs": 1.26
+        "bearing_deg": 45,
+        "p_return": 0.09,
+        "p_strand": 0.66,
+        "tow_h": 16.7,
+        "tow_p90_h": 23.2,
+        "round_trip_h": 19.0,
+        "net_t_h_single_unit": 0.45,
+        "net_t_h_with_3_tugs": 1.43
       },
       {
         "distance_km": 15,
-        "bearing_deg": 285,
-        "p_return": 0.21,
-        "p_strand": 0.71,
+        "bearing_deg": 75,
+        "p_return": 0.02,
+        "p_strand": 0.82,
         "tow_h": 20.8,
+        "tow_p90_h": 30.8,
         "round_trip_h": 24.1,
-        "net_t_h_single_unit": 0.32,
-        "net_t_h_with_3_tugs": 0.99
+        "net_t_h_single_unit": 0.39,
+        "net_t_h_with_3_tugs": 1.22
       }
     ]
   },
@@ -2055,37 +1988,130 @@
     "3 L/s per m": 0.275,
     "4.5 L/s per m": 0.325
   },
+  "hold_duration": [
+    {
+      "approach_m_s": 0.15,
+      "swim_max_m_s": 0.1,
+      "airflow_l_s_m": 3.0,
+      "held_after_3h": 1.0,
+      "held_after_24h": 1.0,
+      "held_after_82h": 1.0
+    },
+    {
+      "approach_m_s": 0.2,
+      "swim_max_m_s": 0.1,
+      "airflow_l_s_m": 3.0,
+      "held_after_3h": 1.0,
+      "held_after_24h": 1.0,
+      "held_after_82h": 1.0
+    },
+    {
+      "approach_m_s": 0.25,
+      "swim_max_m_s": 0.1,
+      "airflow_l_s_m": 3.0,
+      "held_after_3h": 0.993,
+      "held_after_24h": 0.967,
+      "held_after_82h": 0.927
+    },
+    {
+      "approach_m_s": 0.15,
+      "swim_max_m_s": 0.2,
+      "airflow_l_s_m": 3.0,
+      "held_after_3h": 0.983,
+      "held_after_24h": 0.923,
+      "held_after_82h": 0.857
+    },
+    {
+      "approach_m_s": 0.2,
+      "swim_max_m_s": 0.2,
+      "airflow_l_s_m": 3.0,
+      "held_after_3h": 0.99,
+      "held_after_24h": 0.877,
+      "held_after_82h": 0.777
+    },
+    {
+      "approach_m_s": 0.25,
+      "swim_max_m_s": 0.2,
+      "airflow_l_s_m": 3.0,
+      "held_after_3h": 0.697,
+      "held_after_24h": 0.53,
+      "held_after_82h": 0.423
+    }
+  ],
   "smart_switching": {
     "test": "model-error stress test",
     "alerts": 100,
-    "swarms_that_arrived": 36,
-    "covered_by_plan": 24,
-    "curtain_off_for_non_arriving": 45,
-    "non_arriving": 64,
+    "swarms_that_arrived": 20,
+    "covered_by_plan": 13,
+    "curtain_off_for_non_arriving": 61,
+    "non_arriving": 80,
     "hours_every_alert": 9600.0,
-    "hours_camera_only": 1206,
-    "hours_qandeel": 2485,
-    "unprotected_pct_camera_only": 16.9,
-    "unprotected_pct_qandeel": 0.1,
-    "median_warning_h_qandeel": 52.4,
-    "hours_saved_vs_every_alert_pct": 74
+    "hours_camera_only": 676,
+    "hours_qandeel": 1830,
+    "unprotected_pct_camera_only": 26.1,
+    "unprotected_pct_qandeel": 2.7,
+    "median_warning_h_qandeel": 46.0,
+    "hours_saved_vs_every_alert_pct": 81
   },
   "smart_switching_self_consistency": {
     "test": "self-consistency",
     "alerts": 100,
-    "swarms_that_arrived": 39,
-    "covered_by_plan": 28,
-    "curtain_off_for_non_arriving": 45,
-    "non_arriving": 61,
+    "swarms_that_arrived": 16,
+    "covered_by_plan": 7,
+    "curtain_off_for_non_arriving": 63,
+    "non_arriving": 84,
     "hours_every_alert": 9600.0,
-    "hours_camera_only": 1336,
-    "hours_qandeel": 2418,
-    "unprotected_pct_camera_only": 25.0,
-    "unprotected_pct_qandeel": 1.7,
-    "median_warning_h_qandeel": 28.2,
-    "hours_saved_vs_every_alert_pct": 75
+    "hours_camera_only": 608,
+    "hours_qandeel": 1609,
+    "unprotected_pct_camera_only": 20.2,
+    "unprotected_pct_qandeel": 2.9,
+    "median_warning_h_qandeel": 36.9,
+    "hours_saved_vs_every_alert_pct": 83
   },
+  "smart_switching_other_seeds": [
+    {
+      "test": "model-error stress test",
+      "alerts": 100,
+      "swarms_that_arrived": 22,
+      "covered_by_plan": 12,
+      "curtain_off_for_non_arriving": 61,
+      "non_arriving": 78,
+      "hours_every_alert": 9600.0,
+      "hours_camera_only": 810,
+      "hours_qandeel": 1773,
+      "unprotected_pct_camera_only": 23.6,
+      "unprotected_pct_qandeel": 3.7,
+      "median_warning_h_qandeel": 31.4,
+      "hours_saved_vs_every_alert_pct": 82
+    },
+    {
+      "test": "model-error stress test",
+      "alerts": 100,
+      "swarms_that_arrived": 23,
+      "covered_by_plan": 10,
+      "curtain_off_for_non_arriving": 54,
+      "non_arriving": 77,
+      "hours_every_alert": 9600.0,
+      "hours_camera_only": 891,
+      "hours_qandeel": 2097,
+      "unprotected_pct_camera_only": 20.5,
+      "unprotected_pct_qandeel": 3.0,
+      "median_warning_h_qandeel": 38.8,
+      "hours_saved_vs_every_alert_pct": 78
+    }
+  ],
   "adaptive_airflow": {
+    "hours": 2928,
+    "approach_mean_m_s": 0.14,
+    "approach_p95_m_s": 0.234,
+    "margin_m_s": 0.175,
+    "airflow_mean_l_s_m": 1.29,
+    "share_hours_above_3": 0.004,
+    "share_hours_above_max": 0.0,
+    "energy_vs_constant_max_pct": 29.0,
+    "energy_vs_constant_3_pct": 43.0
+  },
+  "adaptive_airflow_wind_3pct": {
     "hours": 2928,
     "approach_mean_m_s": 0.196,
     "approach_p95_m_s": 0.358,
@@ -2096,6 +2122,53 @@
     "energy_vs_constant_max_pct": 46.0,
     "energy_vs_constant_3_pct": 69.0
   },
+  "wind_drift_sensitivity": [
+    {
+      "wind_drift_pct": 0.0,
+      "p_arrive_alerts": [
+        0.39,
+        0.04,
+        0.03
+      ],
+      "approach_mean_m_s": 0.112,
+      "approach_p95_m_s": 0.179,
+      "share_hours_above_design_max": 0.0,
+      "best_release": "3 km at 45 deg, 5 h tow, 60% return",
+      "unprotected_pct_camera_only": 17.9,
+      "unprotected_pct_qandeel": 4.2,
+      "swarms_that_arrived": 14
+    },
+    {
+      "wind_drift_pct": 1.0,
+      "p_arrive_alerts": [
+        0.44,
+        0.01,
+        0.12
+      ],
+      "approach_mean_m_s": 0.14,
+      "approach_p95_m_s": 0.234,
+      "share_hours_above_design_max": 0.0,
+      "best_release": "3 km at 45 deg, 6 h tow, 58% return",
+      "unprotected_pct_camera_only": 26.1,
+      "unprotected_pct_qandeel": 2.7,
+      "swarms_that_arrived": 20
+    },
+    {
+      "wind_drift_pct": 3.0,
+      "p_arrive_alerts": [
+        0.4,
+        0.01,
+        0.29
+      ],
+      "approach_mean_m_s": 0.196,
+      "approach_p95_m_s": 0.358,
+      "share_hours_above_design_max": 0.075,
+      "best_release": "15 km at 75 deg, 21 h tow, 2% return",
+      "unprotected_pct_camera_only": 25.9,
+      "unprotected_pct_qandeel": 0.7,
+      "swarms_that_arrived": 23
+    }
+  ],
   "cost": {
     "capex_items": [
       {
@@ -2104,9 +2177,9 @@
         "high_usd": 450000
       },
       {
-        "item": "Oil-free compressor ~150 kW, standby unit, air line",
-        "low_usd": 120000,
-        "high_usd": 300000
+        "item": "Oil-free variable-speed compressor ~150 kW, standby unit, air line",
+        "low_usd": 150000,
+        "high_usd": 350000
       },
       {
         "item": "Ocean containment boom 300 m with 2 m skirt",
@@ -2119,9 +2192,9 @@
         "high_usd": 30000
       },
       {
-        "item": "Two workboats (or seasonal charter)",
-        "low_usd": 60000,
-        "high_usd": 300000
+        "item": "Two uncrewed surface vessels (USVs) with tow gear, shore-supervised",
+        "low_usd": 200000,
+        "high_usd": 800000
       },
       {
         "item": "Gap camera, pressure sensors, control PLC, software",
@@ -2129,16 +2202,41 @@
         "high_usd": 80000
       }
     ],
-    "capex_low_usd": 410000,
-    "capex_high_usd": 1280000,
-    "energy_cost_per_event_usd": 1110.0,
-    "energy_cost_per_season_usd": 11100.0,
+    "capex_low_usd": 580000,
+    "capex_high_usd": 1830000,
+    "energy_cost_per_event_usd": 974.0,
+    "energy_cost_per_season_usd": 9740.0,
+    "opex_items": [
+      {
+        "item": "Two shore-supervised operators on call through the bloom season (share of existing staff)",
+        "low_usd": 60000,
+        "high_usd": 150000
+      },
+      {
+        "item": "Uncrewed boats: maintenance, insurance, communications",
+        "low_usd": 40000,
+        "high_usd": 120000
+      },
+      {
+        "item": "Diver/ROV inspection and diffuser cleaning (warm-water fouling), 4-6 visits",
+        "low_usd": 30000,
+        "high_usd": 90000
+      },
+      {
+        "item": "Compressor service, boom and bag repair, spares",
+        "low_usd": 20000,
+        "high_usd": 60000
+      }
+    ],
+    "opex_low_usd_per_year": 160000.0,
+    "opex_high_usd_per_year": 430000.0,
     "outage_cost_12h_usd": 500000,
-    "outages_avoided_to_pay_back": "0.8-2.6"
+    "outages_avoided_to_pay_back": "1.2-3.7",
+    "outages_avoided_per_year_to_cover_running": "0.3-0.9"
   },
   "emissions": {
-    "energy_mwh_per_event": 11.1,
-    "tco2_grid": 4.4,
-    "tco2_nuclear_supply": 0.13
+    "energy_mwh_per_event": 9.74,
+    "tco2_grid": 3.9,
+    "tco2_nuclear_supply": 0.12
   }
 }

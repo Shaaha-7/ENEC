@@ -59,11 +59,12 @@ def herding_logistics(release_options, gather_t_h=10.0, bag_t=BAG_CAPACITY_T, to
     """
     rows = []
     for o in release_options:
-        tow_h = o.distance_km * 1000 / tow_m_s / 3600
+        tow_h = o.tow_hours  # over the ground, from planning.tow_over_ground
         trip_h = o.round_trip_h
         kept = 1 - o.p_return
         row = {"distance_km": o.distance_km, "bearing_deg": o.bearing_deg, "p_return": round(o.p_return, 2),
-               "p_strand": round(o.p_beach, 2), "tow_h": round(tow_h, 1), "round_trip_h": round(trip_h, 1)}
+               "p_strand": round(o.p_beach, 2), "tow_h": round(tow_h, 1), "tow_p90_h": round(o.tow_p90_h, 1),
+               "round_trip_h": round(trip_h, 1)}
         row["net_t_h_single_unit"] = round(bag_t * kept / (bag_t / gather_t_h + trip_h), 2)
         for n in tugs[1:]:
             row[f"net_t_h_with_{n}_tugs"] = round(min(gather_t_h, n * bag_t / trip_h) * kept, 2)

@@ -17,8 +17,8 @@ import numpy as np  # noqa: E402
 
 from qandeel.sim.boom import boom_grid, run_boom  # noqa: E402
 from qandeel.sim.curtain import CURTAIN_Y, GAP_W, bulson_surface_current, hold_grid, run_hold  # noqa: E402
-from qandeel.sim.env import Conditions, bearing_to_xy  # noqa: E402
-from qandeel.sim.forcing import load_record, load_site, source_label  # noqa: E402
+from qandeel.sim.env import WIND_DRIFT_FACTOR, Conditions, bearing_to_xy  # noqa: E402
+from qandeel.sim.forcing import load_record, load_site, source_label, with_wind_factor  # noqa: E402
 from qandeel.sim.planning import forecast_arrival, plan_release, switch_on_time  # noqa: E402
 from qandeel.sim.benefits import adaptive_airflow, cost_summary, emissions, hold_margin, smart_switching  # noqa: E402
 from qandeel.sim.sensitivity import tornado  # noqa: E402
@@ -342,13 +342,36 @@ def main():
     margin, pts = hold_margin()
     cap = {q: v for q, (_, v) in zip((1.5, 3.0, 4.5), pts)}
     results["curtain_capacity_m_s"] = {f"{q:g} L/s per m": round(v, 3) for q, v in cap.items()}
+    results["hold_duration"] = [
+        {"approach_m_s": v, "swim_max_m_s": sw_, "airflow_l_s_m": 3.0,
+         **{f"held_after_{h}h": round(run_hold(v, 3.0, hours=h, n=300, seed=0, swim_max=sw_).held_share, 3)
+            for h in (3, 24, 82)}}
+        for sw_ in (0.10, 0.20) for v in (0.15, 0.20, 0.25)]
     if record is not None:
         sw, _ = smart_switching(record, n_alerts=100, stress=True)
         sc, _ = smart_switching(record, n_alerts=100, stress=False)
         ad, approach, q_set = adaptive_airflow(record, margin)
         results["smart_switching"], results["smart_switching_self_consistency"] = sw, sc
+        results["smart_switching_other_seeds"] = [smart_switching(record, n_alerts=100, seed=s_)[0] for s_ in (8, 9)]
         results["adaptive_airflow"] = ad
+        results["adaptive_airflow_wind_3pct"] = adaptive_airflow(with_wind_factor(record, 0.03), margin)[0]
         fig_benefits(sw, approach, q_set, ad, cap)
+        sens = []
+        for f in (0.0, WIND_DRIFT_FACTOR, 0.03):
+            rr = with_wind_factor(record, f)
+            al = [forecast_arrival(d_, b_, record=rr, seed=k).p_arrive for k, (_, d_, b_) in enumerate(ALERTS)]
+            a_ = adaptive_airflow(rr, margin)[0]
+            br = plan_release(record=rr)[0]
+            st = smart_switching(rr, n_alerts=100)[0]
+            sens.append({"wind_drift_pct": round(100 * f, 1), "p_arrive_alerts": [round(x, 2) for x in al],
+                         "approach_mean_m_s": a_["approach_mean_m_s"], "approach_p95_m_s": a_["approach_p95_m_s"],
+                         "share_hours_above_design_max": a_["share_hours_above_max"],
+                         "best_release": f"{br.distance_km:g} km at {br.bearing_deg:.0f} deg, {br.tow_hours:.0f} h tow, "
+                                         f"{br.p_return:.0%} return",
+                         "unprotected_pct_camera_only": st["unprotected_pct_camera_only"],
+                         "unprotected_pct_qandeel": st["unprotected_pct_qandeel"],
+                         "swarms_that_arrived": st["swarms_that_arrived"]})
+        results["wind_drift_sensitivity"] = sens
     e = results["compressor"]["energy_mwh_per_event"]
     results["cost"] = cost_summary(e)
     results["emissions"] = emissions(e)
@@ -357,7 +380,8 @@ def main():
     print(f"Forcing: {src}")
     print(json.dumps({k: results[k] for k in ("alerts", "compressor", "boom", "cost", "emissions")
                       if k in results} | {k: results[k] for k in ("smart_switching", "smart_switching_self_consistency",
-                                                             "adaptive_airflow", "herding", "natural_fate")
+                                                             "adaptive_airflow", "herding", "natural_fate",
+                                                             "wind_drift_sensitivity", "hold_duration")
                                           if k in results}, indent=2, default=float))
     print("best release:", results["release_options"][0])
 
