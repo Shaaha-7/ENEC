@@ -1,14 +1,28 @@
 {
   "_note": "Site settings. Measure the gap with: python -m qandeel.measure_gap --a 'lat, lon' --b 'lat, lon' (see README).",
-  "site_name": "Barakah area (example site)",
+  "site_name": "Barakah intake channel mouth",
   "lat": 23.96,
   "lon": 52.23,
   "_latlon_note": "Approximate public location of the plant; the data point used for currents is offset ~5 km offshore.",
   "data_lat": 24.01,
   "data_lon": 52.23,
-  "gap_width_m": 300,
-  "gap_width_measured": false,
+  "gap_width_m": 967,
+  "gap_width_measured": true,
   "gap_depth_m": 9.5,
   "gap_depth_measured": false,
-  "gap_depth_source": "Public marine-works description of the Barakah intake channel: dredged to -5.5 to -9.5 m MSL; deepest value used (not a survey)."
+  "gap_depth_source": "Public marine-works description of the Barakah intake channel: dredged to -5.5 to -9.5 m MSL; deepest value used (not a survey).",
+  "gap_tip_a": [
+    23.989877777777778,
+    52.19934166666666
+  ],
+  "gap_tip_b": [
+    23.991500000000002,
+    52.20869722222223
+  ],
+  "gap_location": "Mouth of the intake channel at the end of the western breakwater, about 3 km offshore (Google Earth, Oct 2026). Tips measured by the team; depth not surveyed.",
+  "release_bearings_deg": [
+    -90,
+    30
+  ],
+  "_release_note": "Release only between west and north-north-east of the mouth: the cooling-water discharge lies to the east."
 }

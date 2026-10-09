@@ -4,7 +4,7 @@ Each unknown is set to a low and a high plausible value while everything else
 stays at the base case. The spread tells the team what to measure first.
 """
 from .boom import run_boom
-from .curtain import run_hold
+from .curtain import DEPTH, GAP_W, run_hold
 from .sizing import compressor
 
 BASE_APPROACH = 0.20  # m/s, a demanding but realistic approach current at the gap
@@ -23,7 +23,7 @@ def _boom(**kw):
 
 
 def _power(**kw):
-    args = dict(curtain_m=300.0, airflow_l_s_m=3.0, depth_m=9.5)
+    args = dict(curtain_m=GAP_W, airflow_l_s_m=3.0, depth_m=DEPTH)
     args.update(kw)
     return compressor(**args)["power_kw"]
 
@@ -64,7 +64,7 @@ def tornado():
                     "high": next(iter(hi.values())), "high_value": round(_boom(**hi), 1), "base": round(base, 1)})
     base = _power()
     for name, lo, hi in [
-        ("Gap width (m)", dict(curtain_m=150.0), dict(curtain_m=600.0)),
+        ("Gap width (m)", dict(curtain_m=500.0), dict(curtain_m=1200.0)),
         ("Bubble airflow (L/s per m)", dict(airflow_l_s_m=2.4), dict(airflow_l_s_m=3.6)),
         ("Water depth at gap (m)", dict(depth_m=6.0), dict(depth_m=12.0)),
     ]:

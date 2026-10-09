@@ -156,15 +156,25 @@ def adaptive_airflow(record: Record, margin: float, q_min=1.0, q_max=4.5):
     }, approach, q_set
 
 
-# Indicative capital costs in USD: order of magnitude for a 300 m gap, to confirm with suppliers.
-CAPEX_USD = [
-    ("Bubble curtain: diffuser pipe, flotation hose, anchors (300 m, installed)", 150_000, 450_000),
-    ("Oil-free variable-speed compressor ~150 kW, standby unit, air line", 150_000, 350_000),
+# Indicative capital costs in USD (low, high), to confirm with suppliers. The curtain scales with
+# its length and the compressor with its power; the rest does not.
+CURTAIN_USD_PER_M = (500, 1500)  # diffuser pipe, flotation hose, anchors, installed
+COMPRESSOR_USD_PER_KW = (1000, 2300)  # oil-free variable-speed unit, standby unit, air line
+CAPEX_FIXED_USD = [
     ("Ocean containment boom 300 m with 2 m skirt", 40_000, 120_000),
     ("Closed-bottom retention bags (2) and quick-release ends", 10_000, 30_000),
     ("Two uncrewed surface vessels (USVs) with tow gear, shore-supervised", 200_000, 800_000),
     ("Gap camera, pressure sensors, control PLC, software", 30_000, 80_000),
 ]
+
+
+def capex_items(curtain_m=300.0, power_kw=135.0):
+    return [(f"Bubble curtain: diffuser pipe, flotation hose, anchors ({curtain_m:.0f} m, installed)",
+             curtain_m * CURTAIN_USD_PER_M[0], curtain_m * CURTAIN_USD_PER_M[1]),
+            (f"Oil-free variable-speed compressor ~{power_kw:.0f} kW, standby unit, air line",
+             power_kw * COMPRESSOR_USD_PER_KW[0], power_kw * COMPRESSOR_USD_PER_KW[1])] + CAPEX_FIXED_USD
+
+
 # Indicative yearly running costs (USD) beyond electricity: to confirm with operators and suppliers.
 OPEX_USD_PER_YEAR = [
     ("Two shore-supervised operators on call through the bloom season (share of existing staff)", 60_000, 150_000),
@@ -175,13 +185,14 @@ OPEX_USD_PER_YEAR = [
 OUTAGE_COST_USD_PER_12H = 500_000  # industry figure for a 12-hour unit outage, as cited by EPRI
 
 
-def cost_summary(energy_mwh_per_event, events_per_season=10, usd_per_mwh=100.0):
-    lo = sum(r[1] for r in CAPEX_USD)
-    hi = sum(r[2] for r in CAPEX_USD)
+def cost_summary(energy_mwh_per_event, events_per_season=10, usd_per_mwh=100.0, curtain_m=300.0, power_kw=135.0):
+    items = capex_items(curtain_m, power_kw)
+    lo = sum(r[1] for r in items)
+    hi = sum(r[2] for r in items)
     run = energy_mwh_per_event * usd_per_mwh
     op_lo = sum(r[1] for r in OPEX_USD_PER_YEAR) + run * events_per_season
     op_hi = sum(r[2] for r in OPEX_USD_PER_YEAR) + run * events_per_season
-    return {"capex_items": [{"item": a, "low_usd": b, "high_usd": c} for a, b, c in CAPEX_USD],
+    return {"capex_items": [{"item": a, "low_usd": round(b, -3), "high_usd": round(c, -3)} for a, b, c in items],
             "capex_low_usd": lo, "capex_high_usd": hi,
             "energy_cost_per_event_usd": round(run, 0),
             "energy_cost_per_season_usd": round(run * events_per_season, 0),

@@ -43,7 +43,7 @@ ENEC already has an early-warning system that spots swarms offshore.
 3. **Herd and release.** Two **uncrewed boats**, supervised from shore, tow a floating
    **boom** in a U-shape and gently gather the swarm, still in the water. A closed-bottom
    **retention bag** at the end of the U stops them escaping underneath. They tow the
-   swarm about 3 km and release it alive. More than half drift back; the curtain
+   swarm about 3 km out to sea, away from the cooling-water discharge, and release it alive. More than half drift back; the curtain
    simply holds them again.
 
 An **AI camera** at the opening counts jellyfish and switches the curtain on if they
@@ -58,17 +58,17 @@ Base case: Copernicus currents plus 1% extra wind drift (0% and 3% are run as bo
 
 | Question | Answer |
 |---|---|
-| Is the prediction worth it? | In a **stress test** of 100 alerts (the "truth" uses physics the planner does not know: currents ×0.7–1.3, wind drift ×0.5–1.7, an unmodelled 0–3 cm/s current), **2.7–3.7%** of arriving jellyfish reached the gap before the curtain was running, vs **20–26%** for a daylight-only camera (three random seeds). The cost: about 12 more curtain hours per alert than camera-only (~USD 160 of energy), still ~80% fewer than running on every alert. Crews get **1–2 days of warning**. |
+| Is the prediction worth it? | In a **stress test** of 100 alerts (the "truth" uses physics the planner does not know: currents ×0.7–1.3, wind drift ×0.5–1.7, an unmodelled 0–3 cm/s current), **2.7–3.7%** of arriving jellyfish reached the gap before the curtain was running, vs **20–26%** for a daylight-only camera (three random seeds). The cost: about 12 more curtain hours per alert than camera-only (~USD 500 of energy), still ~80% fewer than running on every alert. Crews get **1–2 days of warning**. |
 | Is that real validation? | **No.** It is simulation against simulation. The next step is comparing the drift with real Gulf drifter tracks and ENEC swarm records. |
 | Does the bubble curtain hold them? | Water approaches the opening at **0.14 m/s** on average, **0.23 m/s** in the worst 5% of hours (0.20 / 0.36 m/s if wind drift is 3%). The normal setting (3 L/s of air per metre) holds about 0.27 m/s; the design maximum (4.5) about 0.33 m/s. Over a full 82-hour event it holds 100% at 0.2 m/s, but only **78%** if large adults swim 20 cm/s. |
 | Can a normal oil-spill boom gather jellyfish? | **No.** Jellyfish float at any depth, so they slip under the skirt: a 2 m skirt keeps only 0 to 55% at 0.2 m/s. A **closed-bottom bag** keeps **84 to 100%** in the model. |
-| How fast can the boats clear them? | The boom can only move 0.2 m/s through the water, and near the gap the water flows *toward* the gap, so tows are slow over the ground (median 6 h for 3 km, 21 h for 15 km, sometimes blocked). Net removal is about **0.6 t/h** per boom unit, about **1.9 t/h** with three uncrewed tugs swapping bags. The curtain does the bulk of the work; the boats clear what builds up. |
-| Where to release them? | About **3 km** north-east removes the most per hour: ~60% drift back and the curtain holds them again (2.4× handling). 10–15 km means few returns but 17–21 h tows. |
-| Don't released jellyfish strand anyway? | Left alone, **55%** of the same swarm strands within 4 days (summer winds blow onshore). Released 3 km out, 35% strand. |
+| How fast can the boats clear them? | The boom can only move 0.2 m/s through the water, and near the mouth the water flows *toward* the intake, so tows are slow over the ground (median 7 h for 3 km, up to a day against strong inflow; sometimes blocked). Net removal is about **0.4 t/h** per boom unit, about **1.4 t/h** with three uncrewed tugs swapping bags. The curtain does the bulk of the work; the boats clear what builds up. |
+| Where to release them? | About **3 km** north-north-west of the mouth removes the most per hour: ~60% drift back and the curtain holds them again (2.7× handling). Release is kept between west and north-north-east, away from the cooling-water discharge to the east. |
+| Don't released jellyfish strand anyway? | Left alone, **55%** of the same swarm strands within 4 days (summer winds blow onshore). Released 3 km out, 29% strand. |
 | Why not harvest them? | Blue Blubber is fished for food elsewhere (e.g. Australia). A full bag could go to a licensed processor instead of release; release is the default while there is no UAE market. |
-| How much power? | Compressor ~**135 kW** for a 300 m opening, ~10 MWh per long event. Setting the air hour by hour uses **29–46%** of the energy of full power (needs a variable-speed compressor). |
-| What does it cost? | Roughly **USD 0.6 to 1.8 million** to build, including two uncrewed boats, and **USD 0.16 to 0.43 million a year** to run (operators on call, boat upkeep, diver cleaning, servicing, energy). Estimates, to confirm with suppliers. One to four avoided 12-hour outages (~USD 0.5 million each) repay the capital. |
-| Emissions? | ~3.9 t CO2 per event on a gas grid, ~0.1 t on the plant's own low-carbon power. |
+| How much power? | The intake mouth we measured is **967 m** wide, so the curtain needs 2.9 m³/s of air: a compressor of ~**440 kW**, ~31 MWh per long event. Setting the air hour by hour uses **29–46%** of the energy of full power (needs a variable-speed compressor). A shorter curtain further inside the channel would cut this; to compare with ENEC. |
+| What does it cost? | Roughly **USD 1.2 to 3.5 million** to build (967 m curtain, compressor, boom, bags, two uncrewed boats, sensors) and **USD 0.18 to 0.45 million a year** to run (operators on call, boat upkeep, diver cleaning, servicing, energy). Estimates, to confirm with suppliers. Two to seven avoided 12-hour outages (~USD 0.5 million each) repay the capital. |
+| Emissions? | ~12.6 t CO2 per event on a gas grid, ~0.4 t on the plant's own low-carbon power. |
 
 ### How much the wind assumption matters
 
@@ -89,7 +89,7 @@ The curtain is sized for the 3% case.
 - Currents come from one ocean-model grid point (~9 km cells) through a free service that rounds speed to
   ~0.03 m/s (only ~10 distinct speeds in the season). `python -m qandeel.fetch_copernicus` downloads the
   full-precision data with a free Copernicus Marine account.
-- The coast is a straight line and the curtain model has no depth: near the bed a bubble curtain draws water
+- The coast is modelled as a straight line through the intake mouth, and the curtain model has no depth: near the bed a bubble curtain draws water
   *toward* it, so deeper or night-time jellyfish could pass underneath. The tank test checks three depths.
 - Swim speeds and depths come from Australian studies of the same species; the species at Barakah and the
   weight of 30–45 cm adults (the mass formula was fitted on 2–20 cm animals) need confirming.
@@ -231,7 +231,7 @@ ERA5 / Open-Meteo wind. Free and public.
 
 ### Main assumptions (all to be checked in the tank test)
 
-- The coast is a straight line with the intake opening in the middle; opening 300 m wide (assumed) and 9.5 m deep (public channel depth).
+- The coast is a straight line through the intake mouth. The mouth is 967 m wide, measured on satellite images between the two breakwater tips (`qandeel/site.json`); depth 9.5 m from the public channel description (not surveyed).
 - Jellyfish swim 2 to 10 cm/s (field data); 20 cm/s also tested for large adults.
 - Bubble curtain surface current from Bulson's formula, U0 = 1.46 (g q)^(1/3).
 - Boom: water flows down at the apex at 25% (worst case 50%) of tow speed; the bag fabric lets 20% of it through.

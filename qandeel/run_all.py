@@ -127,8 +127,9 @@ def fig_paths():
     for ax, q, title in ((axes[0], 0.0, "Curtain off: {:.0%} enter the gap in 3 h"),
                          (axes[1], 3.0, "Curtain on (3 L/s per m): {:.0%} enter")):
         res = run_hold(0.15, q, n=400, seed=3)
-        ax.plot([-600, -half], [0, 0], color=INK2, lw=4, solid_capstyle="butt")
-        ax.plot([half, 600], [0, 0], color=INK2, lw=4, solid_capstyle="butt")
+        edge = half + 200
+        ax.plot([-edge, -half], [0, 0], color=INK2, lw=4, solid_capstyle="butt")
+        ax.plot([half, edge], [0, 0], color=INK2, lw=4, solid_capstyle="butt")
         if q:
             ax.plot([-half, half], [CURTAIN_Y, CURTAIN_Y], color=ACCENT, lw=2, ls=(0, (2, 2)))
             ax.text(-half + 4, CURTAIN_Y + 14, "bubble curtain", ha="left", fontsize=9, color=ACCENT)
@@ -136,7 +137,7 @@ def fig_paths():
         held = ~res.entered_mask
         ax.scatter(res.final_xy[held, 0], res.final_xy[held, 1], s=9, color=INK, alpha=0.6, lw=0)
         ax.text(0, -40, "intake gap", ha="center", fontsize=9, color=INK2)
-        ax.set_xlim(-450, 450)
+        ax.set_xlim(-half - 150, half + 150)
         ax.set_ylim(-70, 520)
         ax.set_xlabel("metres along the breakwater", color=INK2, fontsize=9)
         _style(ax, title.format(1 - res.held_share))
@@ -314,7 +315,7 @@ def main():
     fig_hold(rows)
     fig_paths()
 
-    options = plan_release(cond=cond, record=record)
+    options = plan_release(cond=cond, record=record)  # bearings limited by site.json
     results["release_options"] = [o.__dict__ | {"score": round(o.score, 3), "load_factor": round(o.load_factor, 2)} for o in options]
     fig_release(options, src)
 
@@ -373,7 +374,7 @@ def main():
                          "swarms_that_arrived": st["swarms_that_arrived"]})
         results["wind_drift_sensitivity"] = sens
     e = results["compressor"]["energy_mwh_per_event"]
-    results["cost"] = cost_summary(e)
+    results["cost"] = cost_summary(e, curtain_m=GAP_W, power_kw=results["compressor"]["power_kw"])
     results["emissions"] = emissions(e)
 
     (OUT / "results.json").write_text(json.dumps(results, indent=2, default=float))

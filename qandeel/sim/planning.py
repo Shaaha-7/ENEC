@@ -11,7 +11,7 @@ from dataclasses import dataclass
 import numpy as np
 
 from .env import Conditions, bearing_to_xy
-from .forcing import Record, velocity_series
+from .forcing import Record, load_site, velocity_series
 
 DT_S = 600.0  # 10-minute steps
 EDDY_DIFFUSIVITY = 20.0  # m^2/s, horizontal mixing (assumed)
@@ -176,8 +176,13 @@ class ReleaseOption:
         return 1.0 / max(1e-9, 1.0 - self.p_return)
 
 
+def _site_bearings():
+    lo, hi = load_site().get("release_bearings_deg", [-75, 75])
+    return range(int(lo), int(hi) + 1, 15)
+
+
 def plan_release(cond: Conditions | None = None, record: Record | None = None, distances_km=(3, 5, 8, 10, 15),
-                 bearings_deg=range(-75, 76, 15), runs=60, n_particles=30, horizon_h=72.0,
+                 bearings_deg=None, runs=60, n_particles=30, horizon_h=72.0,
                  min_coast_km=2.0, seed=1, start_hour: float = 0.0):
     """Score candidate release points by simulating released jellyfish for 72 h.
 
@@ -189,6 +194,7 @@ def plan_release(cond: Conditions | None = None, record: Record | None = None, d
     MAX_TOW_H in most runs are skipped.
     """
     rng = np.random.default_rng(seed)
+    bearings_deg = _site_bearings() if bearings_deg is None else bearings_deg
     options = []
     for dist in distances_km:
         for b in bearings_deg:

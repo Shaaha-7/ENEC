@@ -53,7 +53,8 @@ class HoldResult:
 def run_hold(approach_speed=0.15, airflow=3.0, hours=3.0, n=500, swim_min=0.02, depth=None, gap_w=None,
              swim_max=0.10, alongshore_amp=0.08, seed=0, dt=2.0) -> HoldResult:
     rng = np.random.default_rng(seed)
-    pos = np.column_stack([rng.uniform(-400, 400, n), rng.uniform(150, 500, n)])
+    spread = (gap_w or GAP_W) / 2 + 100
+    pos = np.column_stack([rng.uniform(-spread, spread, n), rng.uniform(150, 500, n)])
     start = pos.copy()
     swim = rng.uniform(swim_min, swim_max, n)
     heading = rng.uniform(0, 2 * np.pi, n)

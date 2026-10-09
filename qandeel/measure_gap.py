@@ -5,7 +5,7 @@ opening and copy its coordinates, then:
 
     python -m qandeel.measure_gap --a "23.9612, 52.2301" --b "23.9618, 52.2335"
 
-Formats like "23.9612 N, 52.2301 E" also work. Add --depth 9.5 to set the depth.
+Formats like "23.9612 N, 52.2301 E" and Google Earth's 23°59'23.56"N 52°11'57.63"E also work. Add --depth 9.5 to set the depth.
 Use --dry-run to print the width without saving.
 """
 import argparse
@@ -19,11 +19,19 @@ EARTH_R = 6_371_008.8  # mean Earth radius, m
 
 
 def parse_point(text: str) -> tuple[float, float]:
+    """Read 'lat, lon' as decimals ("23.9612, 52.2301") or degrees-minutes-seconds
+    as Google Earth shows them ("23°59'23.56"N 52°11'57.63"E")."""
     nums = [float(x) for x in re.findall(r"-?\d+(?:\.\d+)?", text)]
-    if len(nums) != 2:
+    if len(nums) == 6:  # d m s, d m s
+        lat = nums[0] + nums[1] / 60 + nums[2] / 3600
+        lon = nums[3] + nums[4] / 60 + nums[5] / 3600
+    elif len(nums) == 4:  # d m, d m
+        lat, lon = nums[0] + nums[1] / 60, nums[2] + nums[3] / 60
+    elif len(nums) == 2:
+        lat, lon = nums
+    else:
         raise SystemExit(f"Could not read coordinates from {text!r}. Paste the numbers Google Maps shows, "
-                         'e.g. --a "23.96123, 52.23045"')
-    lat, lon = nums
+                         'e.g. --a "23.96123, 52.23045" or --a "23°59\'23.56\"N 52°11\'57.63\"E"')
     up = text.upper()
     if "S" in up:
         lat = -abs(lat)
