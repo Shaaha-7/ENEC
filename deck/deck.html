@@ -80,8 +80,8 @@
     <div>
       <div class="card" style="margin-bottom:14px"><h3>Problem</h3><p>Blue Blubber swarms (30–45 cm, 1–3 kg) drift onto seawater intakes. Clearing them takes heavy manual work and almost none survive.</p></div>
       <div class="card" style="margin-bottom:14px"><h3>Solution</h3><p>After ENEC’s alert, a drift planner decides when to act; a bubble curtain at the breakwater gap holds the swarm out; two uncrewed boats tow a boom with a closed-bottom bag and release the jellyfish alive. An AI gap camera is the backup.</p></div>
-      <div class="card" style="margin-bottom:14px"><h3>Evidence</h3><p>Simulation on real 2025 Gulf currents and wind, stress-tested against physics the planner does not know; online dashboard; 26 tests; open code.</p></div>
-      <div class="card"><h3>Next</h3><p>A 1:20 tank test (AED 300 kit) to measure what the model assumes, then a sea pilot with ENEC.</p></div>
+      <div class="card" style="margin-bottom:14px"><h3>Evidence</h3><p>Simulation on real 2025 Gulf currents and wind, stress-tested against physics the planner does not know; online dashboard; 25 tests; open code.</p></div>
+      <div class="card"><h3>Next</h3><p>Recalibrate the model with ENEC’s alert history, screen logs, flow and depth data, then a one-section sea pilot.</p></div>
     </div>
     <div style="display:grid; grid-template-rows: repeat(4, 1fr); gap: 22px">
       <div><div class="num">3% vs 23%</div><div class="numt">of arriving jellyfish reach the gap before the curtain runs: Qandeel vs a daylight camera alone (stress test, 3 × 100 alerts, real 2025 data)</div></div>
@@ -119,7 +119,7 @@
 <tr><td>Fixed nets offshore</td><td>die, bycatch</td><td>clog in big blooms</td></tr>
 <tr><td>Cutting robot (JEROS)</td><td>shredded</td><td>~0.9 t/h, kills</td></tr>
 <tr><td>Harvest for food</td><td>used</td><td>no UAE market yet</td></tr>
-<tr><td><b>Qandeel</b></td><td><b>released alive</b></td><td>unproven at sea: tank, then pilot</td></tr>
+<tr><td><b>Qandeel</b></td><td><b>released alive</b></td><td>unproven at sea: pilot first</td></tr>
 </table>
 <p style="font-size:19px; margin-top:10px">No management method has been tested on this species.</p></div>
 </div>
@@ -244,7 +244,7 @@
         <tr><th>Risk</th><th>How we reduce it</th></tr>
 <tr><td>Bubbles drawn into the intake</td><td>Curtain on the seaward side; bubbles surface in under a minute, in the outer basin; bubble detector on the intake line; curtain moved further out if the pilot shows carry-over</td></tr>
 <tr><td>Nuclear approval, security</td><td>FANR approval from day one; kit stays outside safety-related intake structures; boats operated by plant staff inside the security zone rules</td></tr>
-<tr><td>Jellyfish harmed</td><td>No cutting, pumping or mesh; coarse bubbles push them away at the surface (air under the bell checked in the tank test)</td></tr>
+<tr><td>Jellyfish harmed</td><td>No cutting, pumping or mesh; coarse bubbles push them away at the surface (air under the bell checked in the pilot)</td></tr>
 <tr><td>Turtles, dolphins, dugongs, seagrass</td><td>Escape gap, slow tow, camera stop on sighting; pipe routed away from seagrass and coral; release points kept out of protected areas</td></tr>
 <tr><td>Released jellyfish strand</td><td>Left alone, 55% of the same swarm strands within 4 days; release 3 km out strands 29%</td></tr>
 <tr><td>Sediment, bubbly water</td><td>Diffusers 0.5–1 m above the bed; turbidity watched at the intake; no boats or divers in the bubble zone while it runs</td></tr>
@@ -279,7 +279,7 @@
         <tr><td>Swarm in top 1 m; adults swim ≤10–20 cm/s</td><td>Field and lab studies (Australia)</td><td>Deeper skirt; tested at 20 cm/s</td></tr>
         <tr><td>Swarm density 0.1–1 per m³</td><td>No published figure</td><td>Capacity scales linearly</td></tr>
 <tr><td>Extra wind drift 1% of wind (0–3%)</td><td>Ocean model already has wind-driven drift</td><td>28 km N alert: 3–29% arrival; curtain sized for 3%</td></tr>
-        <tr><td>Apex downflow 25–50% of tow speed; bag passes 20%</td><td>Model hypothesis</td><td>Measured in the tank test</td></tr>
+        <tr><td>Apex downflow 25–50% of tow speed; bag passes 20%</td><td>Model hypothesis</td><td>Measured in the sea pilot; bag tested before scale-up</td></tr>
       </table>
       <p style="font-size:21px; color:var(--ink2); margin-top:18px"><b>Limitations:</b> tested only against simulations; currents from one model point, rounded to ~0.03 m/s by the free API (direct Copernicus download ready); no depth: the curtain draws water in near the bed, so deep or night-time jellyfish could pass under; species at Barakah and adult weight to confirm. <b>Why not harvest?</b> A full bag can go to a licensed processor; release is the default while no UAE market exists.</p>
     </div>
@@ -295,9 +295,9 @@
   <h1>From simulation to sea, one measured step at a time</h1>
   <div class="cols" style="grid-template-columns: repeat(4, 1fr); gap: 26px; margin-top: 18px">
     <div class="card" style="border-top:6px solid var(--green)"><span class="pill" style="background:#e3f6ec;color:#13a35b">Done</span>
-      <h3 style="margin-top:14px">1 · Simulation</h3><p>Real-data planner, curtain, boom, release and logistics models; online dashboard; stress test; 26 tests.</p></div>
-    <div class="card" style="border-top:6px solid var(--accent)"><span class="pill">Weeks 1–2</span>
-      <h3 style="margin-top:14px">2 · 1:20 tank test</h3><p>AED 300 kit: aquarium air line, pump, neutrally buoyant agar mock jellyfish. Measure curtain hold, apex downflow, bag retention.</p></div>
+      <h3 style="margin-top:14px">1 · Simulation</h3><p>Real-data planner, curtain, boom, release and logistics models; online dashboard; stress test; 25 tests.</p></div>
+    <div class="card" style="border-top:6px solid var(--accent)"><span class="pill">Months 1–2</span>
+      <h3 style="margin-top:14px">2 · ENEC data</h3><p>Alert history, screen-clearing logs, intake flow, depth survey and species ID: recalibrate the drift, curtain and release models on the real site.</p></div>
     <div class="card" style="border-top:6px solid var(--accent)"><span class="pill">With ENEC</span>
       <h3 style="margin-top:14px">3 · Sea pilot</h3><p>One curtain section and one uncrewed boom trial in bloom season; FANR approval; drift checked against tracked swarms; survival and effects on other species.</p></div>
     <div class="card" style="border-top:6px solid var(--accent)"><span class="pill">Then</span>
@@ -305,13 +305,13 @@
   </div>
   <div class="cols c2" style="margin-top:18px; gap:48px">
     <div><h2>Pass marks</h2>
-      <ul style="font-size:21px; margin:0"><li>Tank: ≥95% held at the scaled 0.2 m/s current</li><li>Tank: bag keeps ≥90% at the scaled 0.2 m/s tow</li><li>Pilot: no harm to non-target species; fewer screen-clearing hours</li></ul></div>
+      <ul style="font-size:21px; margin:0"><li>Pilot: ≥95% of jellyfish held at the curtain section at the measured current</li><li>Pilot: bag keeps ≥90% at 0.2 m/s; jellyfish alive after release</li><li>No harm to non-target species; fewer screen-clearing hours</li></ul></div>
     <div><h2>Open work and AI use</h2>
       <p style="font-size:19px; color:var(--ink2); margin:0">Live dashboard: enechackathon.streamlit.app. Code, data and tests: github.com/Shaaha-7/ENEC. AI assistants helped search and summarise literature, check claims, draft text and write simulation code, and an open text-to-speech model voices the video; the team reviewed every decision, assumption and figure, and can explain each in our own words.</p></div>
   </div>
   <div class="cols c3" style="margin-top:16px; gap:26px">
 <div class="card"><h3>Approvals we plan for</h3><p style="font-size:20px">FANR for any change at the intake; EAD for marine works and moving live animals; Coast Guard and plant security for boats; an engineering safety case for air near the pumps.</p></div>
-<div class="card"><h3>What we need from ENEC</h3><p style="font-size:20px">Screen-clearing logs and alert history; intake flow rate; bathymetry and the gap’s real width; species ID at Barakah; event frequency.</p></div>
+<div class="card"><h3>What we need from ENEC</h3><p style="font-size:20px">Screen-clearing logs and alert history; intake flow rate; a depth survey of the channel mouth; species ID at Barakah; event frequency.</p></div>
 <div class="card"><h3>Beyond the intake</h3><p style="font-size:20px">Survey polyps on the breakwater and intake structures, where blooms start. The same kit fits Gulf desalination plants (Taweelah, Fujairah, Oman) and other coastal power stations.</p></div>
 </div>
 <div class="foot"><span>Team Qandeel · ENEC track · ATP 2026</span><span>10</span></div>

@@ -129,13 +129,6 @@ def test_retention_bag_beats_open_boom():
     assert bag > open_ + 0.3
 
 
-def test_tank_scaling_is_froude_consistent():
-    from qandeel.sim.curtain import bulson_surface_current
-    full = bulson_surface_current(3.0)
-    model = bulson_surface_current(3.0 / 20 ** 1.5)
-    assert model == pytest.approx(full / math.sqrt(20), rel=1e-6)
-
-
 def test_airflow_inverse_of_bulson():
     from qandeel.sim.benefits import airflow_for
     assert airflow_for(bulson_surface_current(3.0)) == pytest.approx(3.0, rel=1e-6)

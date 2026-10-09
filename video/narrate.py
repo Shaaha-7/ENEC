@@ -31,7 +31,7 @@ LINES = [  # (start s, end s, text)
                  "and the curtain simply holds them again."),
     (74.3, 82.0, "The intake keeps running, and the jellyfish go back to the sea."),
     (82.3, 94.0, "In a stress test on real Gulf data, a camera alone let about a quarter through. "
-                 "Qandeel let about three percent. Next, a one to twenty tank test."),
+                 "Qandeel let about three percent. Next, a sea pilot with Ee-neck."),
     (94.6, 101.6, "Kandeel. Herd, don't harvest."),
 ]
 TOTAL = 102.0

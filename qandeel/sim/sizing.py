@@ -30,7 +30,7 @@ def boom_throughput(mouth_m=30.0, layer_m=1.0, tow_m_s=0.3, density_per_m3=(0.1,
                     mass_kg=2.0, retention=0.8):
     """Jellyfish swept per hour by one U-boom moving through a swarm.
 
-    retention = share not escaping under the skirt (assumed until tank tests).
+    retention = share not escaping under the skirt (assumed until measured at sea).
     """
     swept_m3_s = mouth_m * layer_m * tow_m_s
     rows = []
@@ -46,7 +46,7 @@ def jellyfish_mass_kg(bell_cm):
     return 0.08 * bell_cm ** 2.77 / 1000.0
 
 
-BAG_CAPACITY_T = 10.0  # assumed: ~20 m3 retention bag, half full of jellyfish (tank test to confirm)
+BAG_CAPACITY_T = 10.0  # assumed: ~20 m3 retention bag, half full of jellyfish (to confirm in the pilot)
 
 
 def herding_logistics(release_options, gather_t_h=10.0, bag_t=BAG_CAPACITY_T, tow_m_s=0.2, tugs=(1, 3)):

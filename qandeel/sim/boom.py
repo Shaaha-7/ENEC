@@ -15,14 +15,14 @@ why the field finds them near the surface) and partly a wandering heading.
 It escapes if it reaches the apex deeper than the skirt, or is pushed below
 the skirt while held at the apex.
 
-DOWNFLOW_FRACTION is not known for jellyfish: it is a key quantity for the tank
-test. Results are shown for two values.
+DOWNFLOW_FRACTION is not known for jellyfish: it is a key quantity for the sea
+pilot. Results are shown for two values.
 
 Design option, closed-bottom retention bag: a soft fabric pocket hung at the
 apex (no mesh, so nothing tangles), BAG_DEPTH_M deep with a floor. Water still
 leaks through the fabric, so the apex downflow is cut to BAG_LEAK of its open
 value, and a jellyfish only escapes by going below the bag floor. Both numbers
-are design hypotheses for the tank test, not measurements.
+are design hypotheses for the sea pilot, not measurements.
 """
 from dataclasses import dataclass
 

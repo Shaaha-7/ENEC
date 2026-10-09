@@ -90,7 +90,7 @@ The curtain is sized for the 3% case.
   ~0.03 m/s (only ~10 distinct speeds in the season). `python -m qandeel.fetch_copernicus` downloads the
   full-precision data with a free Copernicus Marine account.
 - The coast is modelled as a straight line through the intake mouth, and the curtain model has no depth: near the bed a bubble curtain draws water
-  *toward* it, so deeper or night-time jellyfish could pass underneath. The tank test checks three depths.
+  *toward* it, so deeper or night-time jellyfish could pass underneath. The sea pilot checks this.
 - Swim speeds and depths come from Australian studies of the same species; the species at Barakah and the
   weight of 30–45 cm adults (the mass formula was fitted on 2–20 cm animals) need confirming.
 - "Arrived" means within 2 km of the opening; within 500 m the 15 km NNW alert drops from 44% to 31%.
@@ -100,7 +100,7 @@ The curtain is sized for the 3% case.
 - *Bubbles sucked into the cooling pumps:* the curtain is on the seaward side; bubbles surface in under a minute, in the outer basin; a bubble detector watches the intake line; the curtain moves further out if the pilot shows carry-over.
 - *Approvals:* **FANR** for any change at the intake, **EAD** for marine works and moving live animals, Coast Guard and plant security for boats. Kit stays outside safety-related intake structures.
 - *Sediment and bubbly water:* diffusers sit 0.5–1 m above the bed; turbidity is watched at the intake; no boats or divers in the bubble zone while it runs (bubbly water gives less buoyancy).
-- *Air trapped under a bell:* coarse bubbles push jellyfish away at the surface rather than through the plume; checked in the tank test.
+- *Air trapped under a bell:* coarse bubbles push jellyfish away at the surface rather than through the plume; checked in the sea pilot.
 - *Wildlife:* turtles, dolphins and dugongs (escape gap, slow tow, camera stop on sighting); seagrass and protected areas kept clear of the pipe and the release points.
 
 ## What is in this repository
@@ -111,13 +111,12 @@ ENEC/
 ├── deck/                  the 10-slide deck (PDF, source HTML, slide images)
 ├── media/                 the explainer video and the dashboard recording
 ├── video/                 how the 3D video and the voice were made
-├── docs/TANK_TEST.md      step-by-step plan for a cheap 1:20 tank test
 ├── requirements.txt       Python packages needed
 └── qandeel/               the simulation (Python)
     ├── data/              real ocean data (currents + wind, June-Sept 2025)
     ├── sim/               the models (drift, curtain, boom, costs...)
     ├── outputs/           charts and results.json made by run_all
-    ├── tests/             automatic checks (26 tests, incl. the reported numbers on real data)
+    ├── tests/             automatic checks (25 tests, incl. the reported numbers on real data)
     ├── dashboard.py       the visual dashboard
     ├── run_all.py         runs every simulation
     └── site.json          size of the intake opening (width, depth)
@@ -193,7 +192,6 @@ The online app downloads a fresh 7-day forecast by itself (at most every 6 hours
 | **Retention bag** | Our addition: a closed-bottom pocket at the end of the boom so jellyfish cannot escape underneath |
 | **Monte Carlo** | Running the same simulation hundreds of times with small random changes, to get probabilities instead of one guess |
 | **Hindcast** | Testing the planner on past data where we already know what really happened |
-| **Froude scaling** | The rule for shrinking a sea test into a tank so the water behaves the same way |
 
 ---
 
@@ -224,12 +222,11 @@ ERA5 / Open-Meteo wind. Free and public.
 | `qandeel/data_fetch.py` | Downloads the ocean data (Open-Meteo) |
 | `qandeel/fetch_copernicus.py` | Full-precision currents direct from Copernicus Marine (free account) |
 | `qandeel/measure_gap.py` | Opening width from two map coordinates |
-| `qandeel/tank_scale.py` | Tank-test sizes (`--scale 20`) |
 | `qandeel/plan_alert.py` | Text plan for one alert |
 | `qandeel/dashboard.py` | The dashboard |
 | `qandeel/run_all.py` | Runs everything and writes `qandeel/outputs/` |
 
-### Main assumptions (all to be checked in the tank test)
+### Main assumptions (to be checked with ENEC data and the sea pilot)
 
 - The coast is a straight line through the intake mouth. The mouth is 967 m wide, measured on satellite images between the two breakwater tips (`qandeel/site.json`); depth 9.5 m from the public channel description (not surveyed).
 - Jellyfish swim 2 to 10 cm/s (field data); 20 cm/s also tested for large adults.
@@ -251,14 +248,13 @@ ERA5 / Open-Meteo wind. Free and public.
   simulations could only re-learn our equations. Once the camera and ENEC have real swarm records, a learning model
   can correct the physics forecast with them.
 
-### Deck, video and tank test
+### Deck and video
 
 - **Deck:** edit `deck/deck.html`; rebuild the PDF with `node deck/build.js` while
   `python -m http.server 8700` runs in the repo folder (needs Node.js and Playwright).
 - **Video:** the 3D scene is `video/scene.html` (three.js) and reads its numbers from
   `qandeel/outputs/results.json`. The voice is an open text-to-speech model (Kokoro-82M),
   made by `video/narrate.py`. Full steps in `video/VIDEO_SCRIPT.md`.
-- **Tank test:** `docs/TANK_TEST.md`, about AED 300 of materials.
 
 ### Use of AI tools
 
