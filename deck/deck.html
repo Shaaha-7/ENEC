@@ -79,7 +79,7 @@
   <h1>We keep swarms out of the intake and return them to the sea alive</h1>
   <div class="cols c64" style="margin-top:22px">
     <div>
-      <div class="card" style="margin-bottom:14px"><h3>Problem</h3><p>Blue Blubber swarms (30–45 cm, 1–3 kg) drift onto seawater intakes. Clearing them takes heavy manual work and almost none survive.</p></div>
+      <div class="card" style="margin-bottom:14px"><h3>Problem</h3><p>Blue Blubber swarms (bells up to ~35 cm) drift onto seawater intakes. Clearing them takes heavy manual work and almost none survive.</p></div>
       <div class="card" style="margin-bottom:14px"><h3>Solution</h3><p>After ENEC’s alert, a drift planner decides when to act; a bubble curtain at the breakwater gap holds the swarm out; two uncrewed boats tow a boom with a closed-bottom bag and release the jellyfish alive. An AI gap camera is the backup.</p></div>
       <div class="card" style="margin-bottom:14px"><h3>Evidence</h3><p>Simulation on real 2025 Gulf currents and wind, stress-tested against physics the planner does not know; online dashboard; 25 tests; open code.</p></div>
       <div class="card"><h3>Next</h3><p>Recalibrate the model with ENEC’s alert history, screen logs, flow and depth data, then a one-section sea pilot.</p></div>
@@ -102,27 +102,28 @@
   <div class="cols c3">
     <div class="card"><h3>The target: Blue Blubber</h3>
       <ul style="font-size:23px; color:var(--ink2)">
-        <li>One of the two dominant outbreak species on the UAE coast; reproduces year-round <span class="src">(Aravind 2024)</span></li>
-        <li>30–45 cm bell, ~1–3 kg each <span class="src">(Yang et al. 2018 mass formula)</span></li>
-        <li>87–100% sit in the top 1 m by day <span class="src">(Pitt &amp; Kingsford)</span></li>
-        <li>Large adults swim &gt;10 cm/s: not just passive drifters</li>
+        <li>One of the two dominant jellyfish on the UAE coast in 2019–2022 surveys <span class="src">(Aravind 2024, UAEU)</span></li>
+        <li>Bell up to ~35 cm <span class="src">(SeaLifeBase)</span>; no published weight, we assume ~2 kg</li>
+        <li>Lives near the surface of bays and estuaries, ~0–1 m <span class="src">(SeaLifeBase)</span></li>
+        <li>Small adults swim ~4 cm/s <span class="src">(lab data)</span>; large adults unmeasured, so we test 10 and 20 cm/s</li>
       </ul></div>
     <div class="card"><h3>What happens at intakes</h3>
       <ul style="font-size:23px; color:var(--ink2)">
-        <li>Swarms follow the intake flow through the breakwater opening and pile on screens</li>
-        <li>Worldwide this has forced power reductions and shutdowns (e.g. Torness 2011, Oskarshamn 2013)</li>
-        <li>In the region, ~300 t of jellyfish clogged intakes in Oman</li>
+        <li>Swarms follow the intake flow and pile on the screens, cutting cooling water</li>
+        <li>Worldwide this has forced power reductions and shutdowns (e.g. Torness 2011, Oskarshamn 2013) <span class="src">(press reports)</span></li>
+        <li>In the region, ~300 t of jellyfish clogged intakes in Oman <span class="src">(Gulf News, Ghubra)</span></li>
       </ul></div>
     <div class="card"><h3>Options today, compared</h3>
-<table style="font-size:19px">
+<table style="font-size:17px">
 <tr><th>Option</th><th>Jellyfish</th><th>Drawback</th></tr>
 <tr><td>Rake screens (now)</td><td>die</td><td>reactive, heavy labour, outage risk</td></tr>
 <tr><td>Fixed nets offshore</td><td>die, bycatch</td><td>clog in big blooms</td></tr>
 <tr><td>Cutting robot (JEROS)</td><td>shredded</td><td>~0.9 t/h, kills</td></tr>
+<tr><td>Water jets + LiDAR/drones (Kuwait proposal)</td><td>pushed away</td><td>jets only at the intake; no forecast</td></tr>
 <tr><td>Harvest for food</td><td>used</td><td>no UAE market yet</td></tr>
 <tr><td><b>Qandeel</b></td><td><b>released alive</b></td><td>unproven at sea: pilot first</td></tr>
 </table>
-<p style="font-size:19px; margin-top:10px">No management method has been tested on this species.</p></div>
+<p style="font-size:17px; margin-top:6px">We found no published management trial on this species.</p></div>
 </div>
 <div class="foot"><span>Team Qandeel · ENEC track · ATP 2026</span><span>3</span></div>
 </section>
@@ -223,7 +224,7 @@
   <h1>Our finding: oil-spill booms leak jellyfish, and a bag fixes it</h1>
   <div class="cols c2" style="margin-top:24px; gap:40px">
     <div><img class="fig" src="../qandeel/outputs/fig2_curtain_hold.png">
-      <div class="src">400 individually simulated jellyfish per point; surface current from Bulson’s pneumatic-barrier relation.</div></div>
+      <div class="src">400 individually simulated jellyfish per point; surface current from a Bulson-type relation, U ∝ (g·q)<sup>1/3</sup> (Bulson 1968); coefficient to confirm in the pilot.</div></div>
     <div><img class="fig" src="../qandeel/outputs/fig5_boom_retention.png">
       <div class="src">Jellyfish depth from field data; apex downflow 25% (pessimistic 50%) of tow speed.</div></div>
   </div>
@@ -247,9 +248,9 @@
 <tr><td>Nuclear approval, security</td><td>FANR approval from day one; kit stays outside safety-related intake structures; boats operated by plant staff inside the security zone rules</td></tr>
 <tr><td>Jellyfish harmed</td><td>No cutting, pumping or mesh; coarse bubbles push them away at the surface (air under the bell checked in the pilot)</td></tr>
 <tr><td>Turtles, dolphins, dugongs, seagrass</td><td>Escape gap, slow tow, camera stop on sighting; pipe routed away from seagrass and coral; release points kept out of protected areas</td></tr>
-<tr><td>Crowding in the bag during the tow</td><td>Bag stays underwater, where jellyfish weigh almost nothing: no crushing as in nets lifted out; seawater flows through the fabric. Bag at most half full; ~7 h tows; past 12 h it is opened early at sea. Survival is a pilot pass mark</td></tr>
+<tr><td>Crowding in the bag during the tow</td><td>Bag stays underwater, where jellyfish are nearly weightless, so we expect far less crushing than in nets hauled out; seawater flows through the fabric. At most half full; ~7 h tows; opened early at sea after 12 h. Not yet measured: survival is a pilot pass mark</td></tr>
 <tr><td>Released jellyfish strand</td><td>Left alone, 55% of the same swarm strands within 4 days; release 3 km out strands 29%</td></tr>
-<tr><td>Sediment, bubbly water</td><td>Diffusers 0.5–1 m above the bed; turbidity watched at the intake; no boats or divers in the bubble zone while it runs</td></tr>
+<tr><td>Sediment, bubbly water</td><td>Diffuser pipe on legs 0.5–1 m above the bed, so sand cannot bury the holes and block the air (less repair work); turbidity watched; no boats or divers in the bubble zone while it runs</td></tr>
 </table>
     </div>
     <div>
@@ -259,7 +260,7 @@
         <tr><td>Compressed air</td><td>2.9 m³/s, ~440 kW for the 967 m mouth, oil-free (ISO 8573-1 Class 0)</td></tr>
         <tr><td>Capital (indicative)</td><td>USD 1.2–3.5 M: 967 m curtain, variable-speed compressor + standby, boom, bags, two uncrewed boats, sensors</td></tr>
         <tr><td>Running cost</td><td>USD 0.18–0.45 M a year: operators on call, boat upkeep, diver cleaning, servicing, ~USD 3,100 energy per event (~31 MWh: 12.6 t CO₂ on a gas grid, 0.4 t on the plant’s own power)</td></tr>
-        <tr><td>Value</td><td>Two to seven avoided 12 h unit outages (~USD 0.5 M each, EPRI figure) repay the capital; under one a year covers running costs</td></tr>
+        <tr><td>Value</td><td>Torness (UK) lost an estimated ~£1 M a day while jellyfish kept it shut in 2011 (press estimate): about 1–2.5 such days avoided repay the capital</td></tr>
         <tr><td>Capacity</td><td>Gathering 4–43 t/h, but the loaded tow against the inflow sets the pace: ~0.4 t/h net per boom unit, ~1.4 t/h with three uncrewed tugs swapping bags. The curtain does the bulk work; boats clear what builds up</td></tr>
         <tr><td>Gulf hardening</td><td>Membrane diffusers, foul-release coating, modular sections, lifted out off-season</td></tr>
       </table>

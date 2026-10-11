@@ -67,7 +67,7 @@ Base case: Copernicus currents plus 1% extra wind drift (0% and 3% are run as bo
 | Don't released jellyfish strand anyway? | Left alone, **55%** of the same swarm strands within 4 days (summer winds blow onshore). Released 3 km out, 29% strand. |
 | Why not harvest them? | Blue Blubber is fished for food elsewhere (e.g. Australia). A full bag could go to a licensed processor instead of release; release is the default while there is no UAE market. |
 | How much power? | The intake mouth we measured is **967 m** wide, so the curtain needs 2.9 m³/s of air: a compressor of ~**440 kW**, ~31 MWh per long event. Setting the air hour by hour uses **29–46%** of the energy of full power (needs a variable-speed compressor). A shorter curtain further inside the channel would cut this; to compare with ENEC. |
-| What does it cost? | Roughly **USD 1.2 to 3.5 million** to build (967 m curtain, compressor, boom, bags, two uncrewed boats, sensors) and **USD 0.18 to 0.45 million a year** to run (operators on call, boat upkeep, diver cleaning, servicing, energy). Estimates, to confirm with suppliers. Two to seven avoided 12-hour outages (~USD 0.5 million each) repay the capital. |
+| What does it cost? | Roughly **USD 1.2 to 3.5 million** to build (967 m curtain, compressor, boom, bags, two uncrewed boats, sensors) and **USD 0.18 to 0.45 million a year** to run (operators on call, boat upkeep, diver cleaning, servicing, energy). Estimates, to confirm with suppliers. For scale: Torness (UK) lost an estimated ~£1 million (~USD 1.5 million) per day while jellyfish kept it shut in 2011 (press estimate), so about 1–2.5 avoided outage days repay the capital. |
 | Emissions? | ~12.6 t CO2 per event on a gas grid, ~0.4 t on the plant's own low-carbon power. |
 
 ### How much the wind assumption matters
@@ -100,7 +100,7 @@ The curtain is sized for the 3% case.
 - *Bubbles sucked into the cooling pumps:* the curtain is on the seaward side; bubbles surface in under a minute, in the outer basin; a bubble detector watches the intake line; the curtain moves further out if the pilot shows carry-over.
 - *Approvals:* **FANR** for any change at the intake, **EAD** for marine works and moving live animals, Coast Guard and plant security for boats. Kit stays outside safety-related intake structures.
 - *Sediment and bubbly water:* diffusers sit 0.5–1 m above the bed; turbidity is watched at the intake; no boats or divers in the bubble zone while it runs (bubbly water gives less buoyancy).
-- *Jellyfish crowded in the bag during a long tow:* the bag stays underwater, where jellyfish are nearly weightless, so they are not crushed the way they are in a net lifted out of the water, and seawater flows through the fabric. The bag is filled at most halfway, the base-case tow is ~7 h, and if a tow runs past 12 h the bag is opened early at sea (any returners meet the curtain again). Survival 24 h after release is a pilot pass mark; if it is low, a full bag goes to a licensed processor instead.
+- *Jellyfish crowded in the bag during a long tow:* the bag stays underwater, where jellyfish are nearly weightless, so we expect far less crushing than in a net hauled out of the water, and seawater flows through the fabric. This is reasoning, not a measurement: we found no published study of jellyfish survival in crowded holding. The bag is filled at most halfway, the base-case tow is ~7 h, and if a tow runs past 12 h the bag is opened early at sea (any returners meet the curtain again). Survival 24 h after release is a pilot pass mark; if it is low, a full bag goes to a licensed processor instead.
 - *Air trapped under a bell:* coarse bubbles push jellyfish away at the surface rather than through the plume; checked in the sea pilot.
 - *Wildlife:* turtles, dolphins and dugongs (escape gap, slow tow, camera stop on sighting); seagrass and protected areas kept clear of the pipe and the release points.
 
@@ -182,6 +182,35 @@ The online app downloads a fresh 7-day forecast by itself (at most every 6 hours
 
 ---
 
+## References
+
+Sources checked for the claims in the deck and this README. Press reports are marked as such.
+
+**The species and the region**
+- Aravind, A. (2024). *Reproductive Biology of the Jellyfish Outbreak Along the UAE Coastal Waters.* PhD dissertation, UAE University. Surveys Dec 2019–Aug 2022; *Catostylus mosaicus* and *Cassiopea andromeda* were the two dominant species. https://scholarworks.uaeu.ac.ae/all_dissertations/314
+- SeaLifeBase, *Catostylus mosaicus* species summary: maximum size ~35 cm; pelagic-neritic, 0–1 m (estimate); bays and estuaries. https://www.sealifebase.se/summary/Catostylus-mosaicus.html
+- Swimming: *Jet-paddling jellies: swimming performance in the Rhizostomeae jellyfish Catostylus mosaicus*, Journal of Experimental Biology 221 (2018), jeb191148 (kinematics of small adults, bells 2.3–4.6 cm). https://journals.biologists.com/jeb/article/221/24/jeb191148/20581 . A size-series study reports mean speeds of ~1 cm/s (small juveniles) to ~4.3 cm/s (adults with small bells) (table via ResearchGate; source paper to confirm). Speeds of 30–35 cm adults have not been measured, so the model tests 10 and 20 cm/s.
+- Edible jellyfish fishery for *C. mosaicus* in Victoria, Australia: FRDC project report 1999/138. https://www.frdc.com.au/sites/default/files/products/1999-138-DLD.pdf
+
+**Jellyfish at intakes**
+- Torness, UK, 2011 (both reactors shut ~1 week; est. ~£1 M/day) and Oskarshamn, Sweden, 2013 (unit 3, *Aurelia aurita*): press reports, e.g. National Geographic (2013) https://www.nationalgeographic.com/environment/article/jellyfish-invasion-shuts-down-nuclear-plant ; Vice (2021) https://vice.com/en/article/jellyfish-keep-attacking-nuclear-power-plants
+- Oman: ~300 t of jellyfish damaged intake screens at the Ghubra desalination plant, halving output (Gulf News, press report). https://gulfnews.com/news/uae/general/jellyfish-choke-oman-desalination-plants-1.355525
+- Kuwait: proposal for LiDAR, drones and water jets to keep jellyfish from power-plant intakes (PAAET). https://www.paaet.edu.kw/media/mimbolit/preventing-jellyfish-attacks-on-electrical-power-plants-in-kuwait.pdf
+- JEROS jellyfish-removal robots (KAIST): ~900 kg/h in 2013 field tests, jellyfish shredded (IEEE Spectrum). https://spectrum.ieee.org/jeros-jellyfish-elimination-robotic-swarm
+
+**Bubble curtains and booms**
+- Bulson, P.S. (1968). The theory and design of bubble breakwaters. *Coastal Engineering 1968*, ASCE. https://ascelibrary.com/doi/10.1061/9780872620131.064 ; Bulson, P.S. (1961). Currents produced by an air curtain in deep water. *Dock and Harbour Authority* 42.
+- Big bubble curtains for pile-driving noise at offshore wind farms: e.g. ~500 m nozzle hose laid around each pile (Trianel Borkum). https://hydrotechnik-luebeck.de/air-bubbles-protect-north-sea-porpoises
+- Oil-boom escape speed: about 0.35 m/s (0.7 knots), largely independent of skirt depth (University of Vermont Sea Grant, use of booms in oil-pollution response). https://uvm.edu/seagrant/sites/default/files/uploads/TIP3UseofBoomsinOilPollutionResponse.pdf
+
+**Ocean data**
+- Copernicus Marine Service, Global Ocean Physics Analysis and Forecast (SMOC surface currents), via the Open-Meteo Marine API. https://open-meteo.com/en/docs/marine-weather-api
+- ERA5 reanalysis (ECMWF / Copernicus Climate Change Service), via the Open-Meteo archive API. https://open-meteo.com/en/docs/historical-weather-api
+
+**Not found in the literature (our assumptions):** the weight of 30–35 cm Blue Blubbers, jellyfish survival in a crowded holding bag, the downflow under a towed boom for jellyfish, and bag leakage. These are flagged as assumptions in the deck and are what the sea pilot measures.
+
+---
+
 ## Glossary
 
 | Word | Meaning |
@@ -231,7 +260,7 @@ ERA5 / Open-Meteo wind. Free and public.
 
 - The coast is a straight line through the intake mouth. The mouth is 967 m wide, measured on satellite images between the two breakwater tips (`qandeel/site.json`); depth 9.5 m from the public channel description (not surveyed).
 - Jellyfish swim 2 to 10 cm/s (field data); 20 cm/s also tested for large adults.
-- Bubble curtain surface current from Bulson's formula, U0 = 1.46 (g q)^(1/3).
+- Bubble curtain surface current from a Bulson-type relation, U0 = 1.46 (g q)^(1/3) (Bulson 1968). The (g q)^(1/3) scaling is well established; the coefficient 1.46 should be confirmed against the original paper and in the pilot.
 - Boom: water flows down at the apex at 25% (worst case 50%) of tow speed; the bag fabric lets 20% of it through.
 - Forecast error: 15 to 20% on current strength plus a slowly drifting bias.
 - Currents and wind come from one model grid point offshore of the site; the curtain model treats the flow as flat (no depth layers).

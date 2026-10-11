@@ -263,13 +263,17 @@ const seg = (t, a, b) => ease((t - a) / (b - a));
 
 let heldCenter = new THREE.Vector2(0, CURT_Z - 12);
 function boomState(t) {
-  // centre of the boom's U and opening heading
+  // centre of the boom's U and heading. While gathering, the U faces the open sea with its
+  // apex just seaward of the curtain, so nothing crosses the breakwater; it turns toward the
+  // release point only once towing starts.
   if (t < T.boomStart) return null;
   const close = seg(t, T.boomStart, T.boomClosed);
   const tow = seg(t, T.boomClosed + 1, T.towEnd);
-  const c = new THREE.Vector2(lerp(heldCenter.x, RELEASE.x, tow), lerp(heldCenter.y, RELEASE.y, tow));
+  const c0 = new THREE.Vector2(heldCenter.x, Math.min(heldCenter.y, CURT_Z - 16) - 22);
+  const c = new THREE.Vector2(lerp(c0.x, RELEASE.x, tow), lerp(c0.y, RELEASE.y, tow));
   const spread = lerp(70, 26, close);
-  const ang = Math.atan2(RELEASE.y - heldCenter.y, RELEASE.x - heldCenter.x);
+  const angR = Math.atan2(RELEASE.y - c0.y, RELEASE.x - c0.x);
+  const ang = lerp(-Math.PI / 2, angR, ease(Math.min(1, tow * 4)));
   return { c, spread, close, tow, ang, open: seg(t, T.release, T.release + 4) };
 }
 function updateBoom(t) {
@@ -286,7 +290,7 @@ function updateBoom(t) {
   const enter = new THREE.Vector2(260, -120);
   const A2 = new THREE.Vector2(lerp(enter.x, pa.x, arrive), lerp(enter.y, pa.y, arrive));
   const B2 = new THREE.Vector2(lerp(enter.x + 20, pb.x, arrive), lerp(enter.y + 10, pb.y, arrive));
-  const apex = s.c.clone().sub(dir.clone().multiplyScalar(18 + 10 * s.close));
+  const apex = s.c.clone().sub(dir.clone().multiplyScalar(12 + 6 * s.close));
   const pts = [A2, s.c.clone().add(nrm.clone().multiplyScalar(s.spread * 0.9)).sub(dir.clone().multiplyScalar(4)), apex,
                s.c.clone().sub(nrm.clone().multiplyScalar(s.spread * 0.9)).sub(dir.clone().multiplyScalar(4)), B2]
     .map(v => new THREE.Vector3(v.x, 0.6, v.y));

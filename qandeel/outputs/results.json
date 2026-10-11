@@ -2112,9 +2112,9 @@
     ],
     "opex_low_usd_per_year": 181000.0,
     "opex_high_usd_per_year": 451000.0,
-    "outage_cost_12h_usd": 500000,
-    "outages_avoided_to_pay_back": "2.4-7.0",
-    "outages_avoided_per_year_to_cover_running": "0.4-0.9"
+    "outage_cost_per_day_usd": 1500000,
+    "outage_days_to_pay_back": "0.8-2.3",
+    "outage_days_per_year_to_cover_running": "0.12-0.30"
   },
   "emissions": {
     "energy_mwh_per_event": 31.41,

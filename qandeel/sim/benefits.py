@@ -182,7 +182,7 @@ OPEX_USD_PER_YEAR = [
     ("Diver/ROV inspection and diffuser cleaning (warm-water fouling), 4-6 visits", 30_000, 90_000),
     ("Compressor service, boom and bag repair, spares", 20_000, 60_000),
 ]
-OUTAGE_COST_USD_PER_12H = 500_000  # industry figure for a 12-hour unit outage, as cited by EPRI
+OUTAGE_COST_USD_PER_DAY = 1_500_000  # Torness 2011: ~GBP 1 M lost per day of jellyfish shutdown (press estimate)
 
 
 def cost_summary(energy_mwh_per_event, events_per_season=10, usd_per_mwh=100.0, curtain_m=300.0, power_kw=135.0):
@@ -198,10 +198,10 @@ def cost_summary(energy_mwh_per_event, events_per_season=10, usd_per_mwh=100.0, 
             "energy_cost_per_season_usd": round(run * events_per_season, 0),
             "opex_items": [{"item": a, "low_usd": b, "high_usd": c} for a, b, c in OPEX_USD_PER_YEAR],
             "opex_low_usd_per_year": round(op_lo, -3), "opex_high_usd_per_year": round(op_hi, -3),
-            "outage_cost_12h_usd": OUTAGE_COST_USD_PER_12H,
-            "outages_avoided_to_pay_back": f"{lo / OUTAGE_COST_USD_PER_12H:.1f}-{hi / OUTAGE_COST_USD_PER_12H:.1f}",
-            "outages_avoided_per_year_to_cover_running": f"{op_lo / OUTAGE_COST_USD_PER_12H:.1f}-"
-                                                         f"{op_hi / OUTAGE_COST_USD_PER_12H:.1f}"}
+            "outage_cost_per_day_usd": OUTAGE_COST_USD_PER_DAY,
+            "outage_days_to_pay_back": f"{lo / OUTAGE_COST_USD_PER_DAY:.1f}-{hi / OUTAGE_COST_USD_PER_DAY:.1f}",
+            "outage_days_per_year_to_cover_running": f"{op_lo / OUTAGE_COST_USD_PER_DAY:.2f}-"
+                                                     f"{op_hi / OUTAGE_COST_USD_PER_DAY:.2f}"}
 
 
 def emissions(energy_mwh_per_event, grid_t_per_mwh=0.4):
