@@ -1,6 +1,6 @@
 # Project Qandeel
 
-**Herd, don't harm.** A plan, a simulation and a working dashboard for keeping
+**Herd, don't harvest.** A plan, a simulation and a working dashboard for keeping
 jellyfish swarms out of coastal seawater intakes without killing them.
 
 Project Qandeel is Team Qandeel's entry to the **ATRC Advanced Technology Pioneers 2026**
@@ -54,6 +54,8 @@ corrects the drift forecast.
 
 ## What we found (from the simulation, real 2025 Gulf data)
 
+All numbers come from `python -m qandeel.run_all` (written to `qandeel/outputs/results.json`): 2025 bloom season (1 June to 30 September) from Copernicus SMOC currents and ERA5 wind; stress test = 100 random alerts × 3 seeds; base case 1% wind drift. The deck uses the same run.
+
 Base case: Copernicus currents plus 1% extra wind drift (0% and 3% are run as bounds; see below).
 
 | Question | Answer |
@@ -67,7 +69,7 @@ Base case: Copernicus currents plus 1% extra wind drift (0% and 3% are run as bo
 | Where to release them? | About **3 km** north-north-west of the mouth removes the most per hour: ~60% drift back and the curtain holds them again (2.7× handling). Release is kept between west and north-north-east, away from the cooling-water discharge to the east. |
 | Don't released jellyfish strand anyway? | Left alone, **55%** of the same swarm strands within 4 days (summer winds blow onshore). Released 3 km out, 29% strand, most of them still within 10 km of the plant, so release points need refining with real data. |
 | Why not harvest them? | Blue Blubber is fished for food elsewhere (e.g. Australia). A full bag could go to a licensed processor instead of release; release is the default while there is no UAE market. |
-| How much power? | The intake mouth we measured is **967 m** wide, so the curtain needs 2.9 m³/s of air: a compressor of ~**440 kW**, ~31 MWh per long event. Setting the air hour by hour uses **29–46%** of the energy of full power (needs a variable-speed compressor). A shorter curtain further inside the channel would cut this; to compare with ENEC. |
+| How much power? | The intake mouth we measured is **967 m** wide, so the curtain needs 2.9 m³/s of air: a compressor of ~**440 kW**, ~31 MWh (~USD 3,100) per long event. Setting the air hour by hour uses **29–46%** of the energy of full power (needs a variable-speed compressor). A shorter curtain further inside the channel would cut this; to compare with ENEC. |
 | What does it cost? | Roughly **USD 1.2 to 3.5 million** to build (967 m curtain, compressor, boom, bags, two uncrewed boats, sensors) and **USD 0.18 to 0.45 million a year** to run (operators on call, boat upkeep, diver cleaning, servicing, energy). Estimates, to confirm with suppliers. For scale: Torness (UK) lost an estimated ~£1 million (~USD 1.5 million) per day while jellyfish kept it shut in 2011 (press estimate), so avoiding 0.8–2.3 such outage days repays the capital. |
 | Emissions? | ~12.6 t CO2 per event on a gas grid, ~0.4 t on the plant's own low-carbon power. |
 
@@ -160,19 +162,7 @@ Then:
 
 Demo shortcut: `http://localhost:8501/?d=15&b=330&t=30` (15 km away, bearing 330°, hour 30).
 
-### Put the dashboard online (Streamlit Community Cloud, free)
-
-The repo must be **public** (or your GitHub account must give Streamlit access).
-
-1. Go to [share.streamlit.io](https://share.streamlit.io) and sign in with GitHub.
-2. Click **Create app** → **Deploy a public app from GitHub**.
-3. Repository `Shaaha-7/ENEC`, branch `main`, main file path `qandeel/dashboard.py`.
-4. Optional: set the app URL, e.g. `qandeel`. Under **Advanced settings** choose Python 3.11.
-5. Click **Deploy**. The first start takes a few minutes; after that every push to `main` updates the app.
-
-The online app downloads a fresh 7-day forecast by itself (at most every 6 hours), so
-**Live forecast** mode works without any setup. Demo link example:
-`https://<your-app>.streamlit.app/?d=15&b=330&t=30`.
+The dashboard is live at https://enechackathon.streamlit.app. To deploy your own copy, see [docs/DEPLOY.md](docs/DEPLOY.md).
 
 ### Live forecast (optional, for a live demo)
 
@@ -260,7 +250,7 @@ ERA5 / Open-Meteo wind. Free and public.
 ### Main assumptions (to be checked with ENEC data and the sea pilot)
 
 - The coast is a straight line through the intake mouth. The mouth is 967 m wide, measured on satellite images between the two breakwater tips (`qandeel/site.json`); depth 9.5 m from the public channel description (not surveyed).
-- Jellyfish swim 2 to 10 cm/s (field data); 20 cm/s also tested for large adults.
+- Small adults swim ~4 cm/s (lab data); large adults have never been measured, so the model tests 10 and 20 cm/s.
 - Bubble curtain surface current from a Bulson-type relation, U0 = 1.46 (g q)^(1/3) (Bulson 1968). The (g q)^(1/3) scaling is well established; the coefficient 1.46 should be confirmed against the original paper and in the pilot.
 - Boom: water flows down at the apex at 25% (worst case 50%) of tow speed; the bag fabric lets 20% of it through.
 - Forecast error: 15 to 20% on current strength plus a slowly drifting bias.
