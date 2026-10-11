@@ -78,7 +78,7 @@ Base case: Copernicus currents plus 1% extra wind drift (0% and 3% are run as bo
 The ocean model already includes wind-driven and wave drift; the extra wind drift felt by
 jellyfish just below the surface is uncertain. Results at 0%, 1% (base) and 3% extra:
 
-| Extra wind drift | Arrival chance: 15 km NNW / 28 km WNW / 28 km N | Approach at the gap (mean / worst 5%) | Through before the curtain: Qandeel vs camera |
+| Extra wind drift | Arrival chance: 15 km NNW / 28 km WNW / 28 km N | Approach at the gap (mean / worst 5%) | Through before the curtain, one run: Qandeel vs camera |
 |---|---|---|---|
 | 0% | 39% / 4% / 3% | 0.11 / 0.18 m/s | 4.2% vs 18% |
 | 1% (base) | 44% / 1% / 12% | 0.14 / 0.23 m/s | 2.7% vs 26% |
