@@ -100,6 +100,7 @@ The curtain is sized for the 3% case.
 - *Bubbles sucked into the cooling pumps:* the curtain is on the seaward side; bubbles surface in under a minute, in the outer basin; a bubble detector watches the intake line; the curtain moves further out if the pilot shows carry-over.
 - *Approvals:* **FANR** for any change at the intake, **EAD** for marine works and moving live animals, Coast Guard and plant security for boats. Kit stays outside safety-related intake structures.
 - *Sediment and bubbly water:* diffusers sit 0.5–1 m above the bed; turbidity is watched at the intake; no boats or divers in the bubble zone while it runs (bubbly water gives less buoyancy).
+- *Jellyfish crowded in the bag during a long tow:* the bag stays underwater, where jellyfish are nearly weightless, so they are not crushed the way they are in a net lifted out of the water, and seawater flows through the fabric. The bag is filled at most halfway, the base-case tow is ~7 h, and if a tow runs past 12 h the bag is opened early at sea (any returners meet the curtain again). Survival 24 h after release is a pilot pass mark; if it is low, a full bag goes to a licensed processor instead.
 - *Air trapped under a bell:* coarse bubbles push jellyfish away at the surface rather than through the plume; checked in the sea pilot.
 - *Wildlife:* turtles, dolphins and dugongs (escape gap, slow tow, camera stop on sighting); seagrass and protected areas kept clear of the pipe and the release points.
 
