@@ -1,6 +1,6 @@
 # Project Qandeel
 
-**Herd, don't harvest.** A plan, a simulation and a working dashboard for keeping
+**Herd, don't harm.** A plan, a simulation and a working dashboard for keeping
 jellyfish swarms out of coastal seawater intakes without killing them.
 
 Project Qandeel is Team Qandeel's entry to the **ATRC Advanced Technology Pioneers 2026**
