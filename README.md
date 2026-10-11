@@ -115,6 +115,7 @@ ENEC/
 ├── deck/                  the 10-slide proposal deck (PDF)
 ├── media/                 the explainer video, the dashboard recording and the annotated Barakah site map
 ├── requirements.txt       Python packages needed
+├── docs/DEPLOY.md         how to put the dashboard online
 └── qandeel/               the simulation (Python)
     ├── data/              real ocean data (currents + wind, June-Sept 2025)
     ├── sim/               the models (drift, curtain, boom, costs...)
@@ -276,12 +277,6 @@ ERA5 / Open-Meteo wind. Free and public.
   with a real dashboard clip and narration from an open text-to-speech model (Kokoro-82M).
 - **Site map:** `media/barakah_site_plan.jpg`, satellite image (© Google) annotated by the team: intake mouth
   (967 m, measured between the breakwater tips), curtain line, camera, compressor house, boat base, discharge.
-
-### Use of AI tools
-
-AI assistants helped search and summarise literature, check claims, draft text and write
-simulation code, and an open text-to-speech model voices the video. The team reviews every
-decision, assumption and figure and must be able to explain each in our own words.
 
 ---
 
