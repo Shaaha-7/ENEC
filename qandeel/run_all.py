@@ -16,7 +16,7 @@ import matplotlib.pyplot as plt  # noqa: E402
 import numpy as np  # noqa: E402
 
 from qandeel.sim.boom import boom_grid, run_boom  # noqa: E402
-from qandeel.sim.curtain import CURTAIN_Y, GAP_W, bulson_surface_current, hold_grid, run_hold  # noqa: E402
+from qandeel.sim.curtain import CURTAIN_Y, GAP_W, hold_grid, run_hold  # noqa: E402
 from qandeel.sim.env import WIND_DRIFT_FACTOR, Conditions, bearing_to_xy  # noqa: E402
 from qandeel.sim.forcing import load_record, load_site, source_label, with_wind_factor  # noqa: E402
 from qandeel.sim.planning import forecast_arrival, plan_release, switch_on_time  # noqa: E402
@@ -43,7 +43,7 @@ RELATIVE_TOW = 0.20  # m/s through the water with the retention bag, from the bo
 DESIGN_SKIRT = 2.0
 
 
-def _style(ax, title, subtitle=None):
+def _style(ax, title, subtitle=None, size=12):
     ax.set_facecolor(SURFACE)
     for s in ("top", "right"):
         ax.spines[s].set_visible(False)
@@ -52,9 +52,9 @@ def _style(ax, title, subtitle=None):
     ax.tick_params(colors=INK2, labelsize=9)
     ax.grid(color=GRID, linewidth=0.8)
     ax.set_axisbelow(True)
-    ax.set_title(title, loc="left", fontsize=12, fontweight="bold", color=INK, pad=22 if subtitle else 8)
+    ax.set_title(title, loc="left", fontsize=size, fontweight="bold", color=INK, pad=size * 1.9 if subtitle else 8)
     if subtitle:
-        ax.text(0, 1.02, subtitle, transform=ax.transAxes, fontsize=9, color=INK2)
+        ax.text(0, 1.02, subtitle, transform=ax.transAxes, fontsize=size * 0.75, color=INK2)
 
 
 def fig_arrival(fc, t_on, label, src):
@@ -97,27 +97,27 @@ def fig_arrival(fc, t_on, label, src):
 
 
 def fig_hold(rows):
-    fig, axes = plt.subplots(1, 2, figsize=(12, 4.6), facecolor=SURFACE, sharey=True)
+    # Sized to stay readable at half a slide: three airflow levels, large type, legend underneath.
+    fig, axes = plt.subplots(1, 2, figsize=(8.6, 4.25), facecolor=SURFACE, sharey=True)
     for ax, sw in zip(axes, (0.10, 0.20)):
-        for q in (0.0, 1.5, 3.0, 4.5):
+        for q in (0.0, 3.0, 4.5):
             rr = [r for r in rows if r["airflow_l_s_m"] == q and r["swim_max_m_s"] == sw]
-            name = "curtain off" if q == 0 else f"{q:g} L/s per m ({bulson_surface_current(q):.2f} m/s current)"
+            name = "curtain off" if q == 0 else f"{q:g} L/s of air per m"
             ax.plot([r["approach_m_s"] for r in rr], [100 * r["held_share"] for r in rr], color=BLUES[q],
-                    lw=2, marker="o", ms=5, label=name)
-        ax.axvspan(0.0, 0.10, color=GRID, alpha=0.6)
+                    lw=3, marker="o", ms=6, label=name)
         ax.set_xlim(0.03, 0.42)
         ax.set_ylim(-3, 105)
-        ax.set_xlabel("approach current toward the gap (m/s)", color=INK2, fontsize=9)
-        _style(ax, f"Jellyfish swimming up to {sw * 100:.0f} cm/s",
-               "field data (>14 cm)" if sw == 0.10 else "faster adults, never measured")
-    axes[0].set_ylabel("held outside the gap after 3 h (%)", color=INK2, fontsize=9)
-    axes[0].text(0.052, 4, "typical sheltered\ngap flow (assumed)", fontsize=8, color=INK2)
-    axes[1].legend(frameon=False, fontsize=8.5, loc="center left", bbox_to_anchor=(1.01, 0.5),
-                   labelcolor=INK2, title="bubble airflow", title_fontsize=9)
-    fig.suptitle("At 3 L/s per m the curtain holds the swarm up to 0.2 m/s, even if adults swim 20 cm/s",
-                 x=0.01, ha="left", fontsize=12, fontweight="bold", color=INK)
-    fig.tight_layout()
-    fig.savefig(OUT / "fig2_curtain_hold.png", dpi=160)
+        ax.set_xlabel("current toward the gap (m/s)", color=INK2, fontsize=12.5)
+        _style(ax, f"Adults swim {sw * 100:.0f} cm/s", "above measured (small adults ~4 cm/s)" if sw == 0.10
+               else "never measured", size=14.5)
+        ax.tick_params(labelsize=12)
+    axes[0].set_ylabel("held outside after 3 h (%)", color=INK2, fontsize=12.5)
+    h, l = axes[0].get_legend_handles_labels()
+    fig.legend(h, l, frameon=False, fontsize=12, loc="lower center", ncol=3, labelcolor=INK2,
+               handlelength=1.6, columnspacing=1.2)
+    fig.suptitle("More air holds against faster water", x=0.01, ha="left", fontsize=16, fontweight="bold", color=INK)
+    fig.tight_layout(rect=(0, 0.075, 1, 1))
+    fig.savefig(OUT / "fig2_curtain_hold.png", dpi=200)
     plt.close(fig)
 
 
@@ -184,29 +184,31 @@ def fig_release(options, src):
 
 
 def fig_boom(rows):
-    fig, axes = plt.subplots(1, 2, figsize=(12, 4.6), facecolor=SURFACE, sharey=True)
+    # Open 2 m boom vs the same boom with the retention bag, at the base and pessimistic downflow.
+    fig, axes = plt.subplots(1, 2, figsize=(8.6, 4.25), facecolor=SURFACE, sharey=True)
+    lines = ((False, 0.25, GREY, "-", "o", "open oil-spill boom"),
+             (True, 0.25, GOOD_GREEN, "-", "s", "with closed bag"),
+             (True, 0.5, GOOD_GREEN, ":", "s", "with bag, 2x downflow"))
     for ax, sw in zip(axes, (0.10, 0.20)):
-        for d in (1.0, 1.5, 2.0):
-            rr = [r for r in rows if r["swim_max_m_s"] == sw and r["skirt_m"] == d
-                  and r["downflow_fraction"] == 0.25 and not r["bag"]]
-            ax.plot([r["tow_m_s"] for r in rr], [100 * r["retained_share"] for r in rr], color=SKIRT_BLUES[d],
-                    lw=2, marker="o", ms=5, label=f"{d:g} m skirt, open")
-        for k, ls in ((0.25, "-"), (0.5, ":")):
-            rr = [r for r in rows if r["swim_max_m_s"] == sw and r["bag"] and r["downflow_fraction"] == k]
-            ax.plot([r["tow_m_s"] for r in rr], [100 * r["retained_share"] for r in rr], color=GOOD_GREEN,
-                    lw=2.5, ls=ls, marker="s", ms=5,
-                    label="2 m skirt + retention bag" + (" (pessimistic downflow)" if k == 0.5 else ""))
-        ax.axvline(0.35, color=MUTED, lw=1, ls="--")
-        ax.text(0.355, 92, "oil-boom\nlimit", fontsize=8, color=INK2)
+        for bag, k, c, ls, m, name in lines:
+            rr = [r for r in rows if r["swim_max_m_s"] == sw and r["skirt_m"] == DESIGN_SKIRT
+                  and r["bag"] == bag and r["downflow_fraction"] == k]
+            ax.plot([r["tow_m_s"] for r in rr], [100 * r["retained_share"] for r in rr], color=c,
+                    lw=3, ls=ls, marker=m, ms=6, label=name)
+        ax.axvline(0.35, color=MUTED, lw=1.2, ls="--")
+        ax.text(0.36, 50, "oil-boom\nlimit", fontsize=11.5, color=INK2)
         ax.set_ylim(-3, 105)
-        ax.set_xlabel("boom speed through the water (m/s)", color=INK2, fontsize=9)
-        _style(ax, f"Jellyfish swimming up to {sw * 100:.0f} cm/s", "30 min in the boom pocket")
-    axes[0].set_ylabel("jellyfish kept in the boom (%)", color=INK2, fontsize=9)
-    axes[1].legend(frameon=False, fontsize=8.5, loc="center left", bbox_to_anchor=(1.01, 0.5), labelcolor=INK2)
-    fig.suptitle("Open booms leak jellyfish; a closed-bottom retention bag keeps over 90% up to 0.3 m/s (model)",
-                 x=0.01, ha="left", fontsize=12, fontweight="bold", color=INK)
-    fig.tight_layout()
-    fig.savefig(OUT / "fig5_boom_retention.png", dpi=160)
+        ax.set_xlabel("boom speed through the water (m/s)", color=INK2, fontsize=12.5)
+        _style(ax, f"Adults swim {sw * 100:.0f} cm/s", "2 m skirt, 30 min in the boom", size=14.5)
+        ax.tick_params(labelsize=12)
+    axes[0].set_ylabel("jellyfish kept in the boom (%)", color=INK2, fontsize=12.5)
+    h, l = axes[0].get_legend_handles_labels()
+    fig.legend(h, l, frameon=False, fontsize=12, loc="lower center", ncol=3, labelcolor=INK2,
+               handlelength=1.8, columnspacing=1.2)
+    fig.suptitle("Open booms leak jellyfish; the bag keeps them", x=0.01, ha="left", fontsize=16,
+                 fontweight="bold", color=INK)
+    fig.tight_layout(rect=(0, 0.075, 1, 1))
+    fig.savefig(OUT / "fig5_boom_retention.png", dpi=200)
     plt.close(fig)
 
 
