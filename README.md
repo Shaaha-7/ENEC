@@ -109,9 +109,8 @@ The curtain is sized for the 3% case.
 ```
 ENEC/
 ├── README.md              ← you are here
-├── deck/                  the 10-slide deck (PDF, source HTML, slide images)
-├── media/                 the explainer video and the dashboard recording
-├── video/                 how the 3D video and the voice were made
+├── deck/                  the 10-slide proposal deck (PDF)
+├── media/                 the explainer video, the dashboard recording and the annotated Barakah site map
 ├── requirements.txt       Python packages needed
 └── qandeel/               the simulation (Python)
     ├── data/              real ocean data (currents + wind, June-Sept 2025)
@@ -280,11 +279,11 @@ ERA5 / Open-Meteo wind. Free and public.
 
 ### Deck and video
 
-- **Deck:** edit `deck/deck.html`; rebuild the PDF with `node deck/build.js` while
-  `python -m http.server 8700` runs in the repo folder (needs Node.js and Playwright).
-- **Video:** the 3D scene is `video/scene.html` (three.js) and reads its numbers from
-  `qandeel/outputs/results.json`. The voice is an open text-to-speech model (Kokoro-82M),
-  made by `video/narrate.py`. Full steps in `video/VIDEO_SCRIPT.md`.
+- **Deck:** `deck/Qandeel_Deck.pdf`, 10 slides (16:9). All its numbers come from `qandeel/outputs/results.json`.
+- **Video:** `media/Qandeel_explainer.mp4`, 1 min 42 s: a 3D animation (three.js) driven by the same results,
+  with a real dashboard clip and narration from an open text-to-speech model (Kokoro-82M).
+- **Site map:** `media/barakah_site_plan.jpg`, satellite image (© Google) annotated by the team: intake mouth
+  (967 m, measured between the breakwater tips), curtain line, camera, compressor house, boat base, discharge.
 
 ### Use of AI tools
 

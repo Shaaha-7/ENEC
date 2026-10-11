@@ -1,9 +1,0 @@
-{
-  "name": "qandeel-video",
-  "private": true,
-  "description": "3D explainer video and deck rendering for Project Qandeel",
-  "dependencies": {
-    "three": "0.170.0",
-    "@fontsource/inter": "5.1.0"
-  }
-}
