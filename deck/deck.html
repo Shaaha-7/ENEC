@@ -198,8 +198,15 @@
       <div class="step"><div class="n">7</div><div><span class="tag">Learn.</span><p>An AI camera counts jellyfish at the gap and starts the curtain if they arrive early. Its records are the training data for a learning model that corrects the drift forecast.</p></div></div>
     </div>
     <div>
-      <img class="fig" src="img/dashboard.png">
-      <div class="src">Qandeel operator dashboard (working prototype, Streamlit): chance of arrival, window, switch-on clock time, swarm map, curtain status, release point. Data: Copernicus SMOC currents + ERA5 wind, summer 2025.</div>
+      <img class="fig" src="img/dashboard.png" style="height:250px; object-fit:cover; object-position:top">
+      <div class="src">Working dashboard (live online): chance of arrival, window, switch-on time, swarm map, release point. Data: Copernicus SMOC + ERA5, summer 2025.</div>
+      <div class="card" style="margin-top:10px; padding:12px 18px">
+        <h3 style="font-size:22px; margin-bottom:6px">How the plan is calculated</h3>
+        <p style="font-size:16.5px; line-height:1.36"><b>Arrival:</b> 400 runs × 60 virtual jellyfish, each moved every 10 min by real current + 1% wind drift + its own swimming + random mixing. Chance = share of runs where 5% of the swarm comes within 2 km of the mouth.<br>
+        <b>Switch-on:</b> only if the chance is ≥10%; at the earliest likely arrival (10th percentile) minus 3 h. Runs until 12 h after the late edge; the camera can start it earlier.<br>
+        <b>Release point:</b> 50+ candidates west to NNE of the mouth (away from the discharge), each simulated for 72 h. Choose the most jellyfish removed per hour: (1 − share drifting back) ÷ (tow over the ground + return), penalising strandings near the plant.<br>
+        <b>Airflow:</b> set hourly to beat the approach current with a safety margin.</p>
+      </div>
     </div>
   </div>
   <div class="foot"><span>Team Qandeel · ENEC track · ATP 2026</span><span>5</span></div>
@@ -306,16 +313,17 @@
     <div class="card" style="border-top:6px solid var(--accent)"><span class="pill">Then</span>
       <h3 style="margin-top:14px">4 · Scale-up</h3><p>Full gap; live ENEC alerts into the planner; learning model trained on camera and swarm records corrects the forecast.</p></div>
   </div>
-  <div class="cols c2" style="margin-top:18px; gap:48px">
+  <div class="cols c2" style="margin-top:10px; gap:48px">
     <div><h2>Pass marks</h2>
-      <ul style="font-size:21px; margin:0"><li>Pilot: ≥95% of jellyfish held at the curtain section at the measured current</li><li>Pilot: bag keeps ≥90% at 0.2 m/s; ≥90% still alive 24 h after release</li><li>No harm to non-target species; fewer screen-clearing hours</li></ul></div>
+      <ul style="font-size:18px; margin:0"><li>Pilot: ≥95% of jellyfish held at the curtain section at the measured current</li><li>Pilot: bag keeps ≥90% at 0.2 m/s; ≥90% still alive 24 h after release</li><li>No harm to non-target species; fewer screen-clearing hours</li></ul></div>
     <div><h2>Open work and AI use</h2>
-      <p style="font-size:19px; color:var(--ink2); margin:0">Live dashboard: enechackathon.streamlit.app. Code, data and tests: github.com/Shaaha-7/ENEC. AI assistants helped search and summarise literature, check claims, draft text and write simulation code, and an open text-to-speech model voices the video; the team reviewed every decision, assumption and figure, and can explain each in our own words.</p></div>
+      <p style="font-size:17px; color:var(--ink2); margin:0">Live dashboard: enechackathon.streamlit.app · code, data, 25 tests: github.com/Shaaha-7/ENEC. AI assistants helped search literature, check claims, draft text and write code; an open text-to-speech model voices the video. The team reviewed every decision and figure.</p>
+      <p style="font-size:13.5px; color:#7d8796; margin:8px 0 0; line-height:1.35"><b>Sources:</b> Aravind 2024, PhD, UAE University (UAE species) · SeaLifeBase, <i>C. mosaicus</i> · J. Exp. Biol. 221 (2018) jeb191148 (swimming) · FRDC 1999/138 (jellyfish fishery) · Bulson 1961, 1968 (bubble curtains) · UVM Sea Grant, booms in oil response (0.7 kn) · Copernicus Marine SMOC; ERA5 (ECMWF) · Gulf News (Ghubra, Oman); National Geographic 2013 (Oskarshamn); Vice 2021 (Torness) · IEEE Spectrum (JEROS) · PAAET Kuwait (water jets) · Hydrotechnik Lübeck (offshore bubble curtains). Full links in the GitHub README.</p></div>
   </div>
-  <div class="cols c3" style="margin-top:16px; gap:26px">
-<div class="card"><h3>Approvals we plan for</h3><p style="font-size:20px">FANR for any change at the intake; EAD for marine works and moving live animals; Coast Guard and plant security for boats; an engineering safety case for air near the pumps.</p></div>
-<div class="card"><h3>What we need from ENEC</h3><p style="font-size:20px">Screen-clearing logs and alert history; intake flow rate; a depth survey of the channel mouth; species ID at Barakah; event frequency.</p></div>
-<div class="card"><h3>Beyond the intake</h3><p style="font-size:20px">Survey polyps on the breakwater and intake structures, where blooms start. The same kit fits Gulf desalination plants (Taweelah, Fujairah, Oman) and other coastal power stations.</p></div>
+  <div class="cols c3" style="margin-top:10px; gap:26px">
+<div class="card"><h3>Approvals we plan for</h3><p style="font-size:18px">FANR for any change at the intake; EAD for marine works and moving live animals; Coast Guard and plant security for boats; an engineering safety case for air near the pumps.</p></div>
+<div class="card"><h3>What we need from ENEC</h3><p style="font-size:18px">Screen-clearing logs and alert history; intake flow rate; a depth survey of the channel mouth; species ID at Barakah; event frequency.</p></div>
+<div class="card"><h3>Beyond the intake</h3><p style="font-size:18px">Survey polyps on the breakwater and intake structures, where blooms start. The same kit fits Gulf desalination plants (Taweelah, Fujairah, Oman) and other coastal power stations.</p></div>
 </div>
 <div class="foot"><span>Team Qandeel · ENEC track · ATP 2026</span><span>10</span></div>
 </section>
