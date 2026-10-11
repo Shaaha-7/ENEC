@@ -58,11 +58,12 @@ Base case: Copernicus currents plus 1% extra wind drift (0% and 3% are run as bo
 
 | Question | Answer |
 |---|---|
-| Is the prediction worth it? | In a **stress test** of 100 alerts (the "truth" uses physics the planner does not know: currents ×0.7–1.3, wind drift ×0.5–1.7, an unmodelled 0–3 cm/s current), **2.7–3.7%** of arriving jellyfish reached the gap before the curtain was running, vs **20–26%** for a daylight-only camera (three random seeds). The cost: about 12 more curtain hours per alert than camera-only (~USD 500 of energy), still ~80% fewer than running on every alert. Crews get **1–2 days of warning**. |
+| Is the prediction worth it? | In a **stress test** of 100 alerts (the "truth" uses physics the planner does not know: currents ×0.7–1.3, wind drift ×0.5–1.7, an unmodelled 0–3 cm/s current), **~3%** of arriving jellyfish reached the gap before the curtain was running, vs **~23%** for a daylight-only camera (mean of three runs; range 2.7–3.7% vs 20–26%). The cost: about 12 more curtain hours per alert than camera-only (~USD 500 of extra energy vs camera-only), still ~80% fewer than running on every alert. Crews get **1–2 days of warning**. |
 | Is that real validation? | **No.** It is simulation against simulation. The next step is comparing the drift with real Gulf drifter tracks and ENEC swarm records. |
 | Does the bubble curtain hold them? | Water approaches the opening at **0.14 m/s** on average, **0.23 m/s** in the worst 5% of hours (0.20 / 0.36 m/s if wind drift is 3%). The normal setting (3 L/s of air per metre) holds about 0.27 m/s; the design maximum (4.5) about 0.33 m/s. Over a full 82-hour event it holds 100% at 0.2 m/s, but only **78%** if large adults swim 20 cm/s. |
 | Can a normal oil-spill boom gather jellyfish? | **No.** Jellyfish float at any depth, so they slip under the skirt: a 2 m skirt keeps only 0 to 55% at 0.2 m/s. A **closed-bottom bag** keeps **84 to 100%** in the model. |
 | How fast can the boats clear them? | The boom can only move 0.2 m/s through the water, and near the mouth the water flows *toward* the intake, so tows are slow over the ground (median 7 h for 3 km, up to a day against strong inflow; sometimes blocked). Net removal is about **0.4 t/h** per boom unit, about **1.4 t/h** with three uncrewed tugs swapping bags. The curtain does the bulk of the work; the boats clear what builds up. |
+| What happens to a held swarm? | Boats clear only ~0.4–1.4 t/h, so a 300 t bloom (Oman) would take them 9–30 days: they clear what piles up at the mouth, not the whole swarm. The curtain holds the swarm while the sea moves it on: in the 2025 data the flow runs along the coast at ~0.07 m/s (~6 km a day) and turns offshore 22% of the time (onshore spells last a median 14 h). The curtain stays on until the planner's window has passed and the camera has seen no jellyfish at the mouth for 6 h. |
 | Where to release them? | About **3 km** north-north-west of the mouth removes the most per hour: ~60% drift back and the curtain holds them again (2.7× handling). Release is kept between west and north-north-east, away from the cooling-water discharge to the east. |
 | Don't released jellyfish strand anyway? | Left alone, **55%** of the same swarm strands within 4 days (summer winds blow onshore). Released 3 km out, 29% strand. |
 | Why not harvest them? | Blue Blubber is fished for food elsewhere (e.g. Australia). A full bag could go to a licensed processor instead of release; release is the default while there is no UAE market. |
@@ -81,7 +82,7 @@ jellyfish just below the surface is uncertain. Results at 0%, 1% (base) and 3% e
 | 1% (base) | 44% / 1% / 12% | 0.14 / 0.23 m/s | 2.7% vs 26% |
 | 3% | 40% / 1% / 29% | 0.20 / 0.36 m/s | 0.7% vs 26% |
 
-The curtain is sized for the 3% case.
+The curtain is sized for the 1% base case. At 3%, the worst 5% of hours reach 0.36 m/s, above the ~0.33 m/s the design maximum (4.5 L/s per m) holds: about 8% of hours would be flagged to operators.
 
 ### Limitations
 
@@ -206,7 +207,7 @@ Sources checked for the claims in the deck and this README. Press reports are ma
 - Copernicus Marine Service, Global Ocean Physics Analysis and Forecast (SMOC surface currents), via the Open-Meteo Marine API. https://open-meteo.com/en/docs/marine-weather-api
 - ERA5 reanalysis (ECMWF / Copernicus Climate Change Service), via the Open-Meteo archive API. https://open-meteo.com/en/docs/historical-weather-api
 
-**Not found in the literature (our assumptions):** the weight of 30–35 cm Blue Blubbers, jellyfish survival in a crowded holding bag, the downflow under a towed boom for jellyfish, and bag leakage. These are flagged as assumptions in the deck and are what the sea pilot measures.
+**Not found in the literature (our assumptions):** the weight of 30–45 cm Blue Blubbers (the ENEC brief gives 30–45 cm; SeaLifeBase lists ~35 cm), jellyfish survival in a crowded holding bag, the downflow under a towed boom for jellyfish, and bag leakage. These are flagged as assumptions in the deck and are what the sea pilot measures.
 
 ---
 

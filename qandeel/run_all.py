@@ -239,7 +239,7 @@ def fig_tornado(rows):
     plt.close(fig)
 
 
-def fig_benefits(sw, approach, q_set, ad, cap):
+def fig_benefits(sw, approach, q_set, ad, cap, seeds=()):
     fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(16, 4.7), facecolor=SURFACE,
                                         gridspec_kw={"width_ratios": [1, 1, 1.5]})
     names = ["Every alert\n(96 h each)", "Camera only\n(daylight)", "Qandeel\n+ camera backup"]
@@ -275,9 +275,13 @@ def fig_benefits(sw, approach, q_set, ad, cap):
     ax3.set_ylabel("airflow needed (L/s per m)", color=INK2, fontsize=9)
     _style(ax3, f"Approach at the gap: mean {ad['approach_mean_m_s']:.2f} m/s, worst 5% {ad['approach_p95_m_s']:.2f} m/s",
            f"intake draw + current + wind drift; {100 * ad['share_hours_above_max']:.0f}% of hours exceed the design maximum")
-    fig.suptitle(f"Model-error stress test, {sw['alerts']} alerts in the real 2025 season: Qandeel lets "
-                 f"{sw['unprotected_pct_qandeel']:.1f}% through vs {sw['unprotected_pct_camera_only']:.0f}% for a camera alone",
-                 x=0.01, ha="left", fontsize=12, fontweight="bold", color=INK)
+    runs = [sw, *seeds]
+    q = [r["unprotected_pct_qandeel"] for r in runs]
+    c = [r["unprotected_pct_camera_only"] for r in runs]
+    fig.suptitle(f"Stress test, real 2025 season: Qandeel lets ~{np.mean(q):.0f}% through vs "
+                 f"~{np.mean(c):.0f}% for a camera alone (mean of {len(runs)} runs; range {min(q):.1f}-{max(q):.1f}% vs "
+                 f"{min(c):.0f}-{max(c):.0f}%)",
+                 x=0.01, ha="left", fontsize=11.5, fontweight="bold", color=INK)
     fig.tight_layout(w_pad=3)
     fig.savefig(OUT / "fig7_smart_operation.png", dpi=160)
     plt.close(fig)
@@ -356,7 +360,7 @@ def main():
         results["smart_switching_other_seeds"] = [smart_switching(record, n_alerts=100, seed=s_)[0] for s_ in (8, 9)]
         results["adaptive_airflow"] = ad
         results["adaptive_airflow_wind_3pct"] = adaptive_airflow(with_wind_factor(record, 0.03), margin)[0]
-        fig_benefits(sw, approach, q_set, ad, cap)
+        fig_benefits(sw, approach, q_set, ad, cap, results["smart_switching_other_seeds"])
         sens = []
         for f in (0.0, WIND_DRIFT_FACTOR, 0.03):
             rr = with_wind_factor(record, f)
