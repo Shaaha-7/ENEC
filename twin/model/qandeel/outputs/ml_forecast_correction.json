@@ -1,0 +1,91 @@
+{
+  "note": "Synthetic demonstration: the 'real sea' is the 2025 record plus an invented hidden site bias; not a result on real Barakah events.",
+  "hidden_bias": {
+    "current_scale": 1.25,
+    "onshore_m_s": 0.015,
+    "wind_scale": 1.6
+  },
+  "events": 600,
+  "arrived": 138,
+  "full_split": {
+    "n_train": 360,
+    "n_test": 240,
+    "arrived_test": 54,
+    "physics_brier": 0.07737185185185184,
+    "physics_auc": 0.9705296694544007,
+    "physics_missed": 0,
+    "physics_false_alarms": 29,
+    "recalibrated_brier": 0.06277209212228345,
+    "recalibrated_auc": 0.9705296694544007,
+    "recalibrated_missed": 0,
+    "recalibrated_false_alarms": 33,
+    "ml_brier": 0.04476532777605614,
+    "ml_auc": 0.9812823576264436,
+    "ml_missed": 0,
+    "ml_false_alarms": 24,
+    "n_time_train": 84,
+    "n_time_test": 54,
+    "physics_time_mae_h": 12.027777777777779,
+    "physics_time_bias_h": 7.617283950617285,
+    "recalibrated_time_mae_h": 8.172839506172838,
+    "recalibrated_time_bias_h": -4.216049382716053,
+    "ml_time_mae_h": 6.657097487002577,
+    "ml_time_bias_h": -3.7792762335366548
+  },
+  "learning_curve": [
+    {
+      "n_train": 10,
+      "physics_brier": 0.07737185185185184,
+      "physics_time_mae_h": 12.027777777777779,
+      "recalibrated_brier": 0.06425641994044758,
+      "recalibrated_time_mae_h": null,
+      "ml_brier": 0.16398829928500172,
+      "ml_time_mae_h": null
+    },
+    {
+      "n_train": 20,
+      "physics_brier": 0.07737185185185184,
+      "physics_time_mae_h": 12.027777777777779,
+      "recalibrated_brier": 0.06589988844610271,
+      "recalibrated_time_mae_h": 10.39814814814815,
+      "ml_brier": 0.08103799761319301,
+      "ml_time_mae_h": null
+    },
+    {
+      "n_train": 40,
+      "physics_brier": 0.07737185185185184,
+      "physics_time_mae_h": 12.027777777777779,
+      "recalibrated_brier": 0.060306085209054075,
+      "recalibrated_time_mae_h": 7.94753086419753,
+      "ml_brier": 0.09364386366016031,
+      "ml_time_mae_h": null
+    },
+    {
+      "n_train": 80,
+      "physics_brier": 0.07737185185185184,
+      "physics_time_mae_h": 12.027777777777779,
+      "recalibrated_brier": 0.06022370754232951,
+      "recalibrated_time_mae_h": 8.064814814814813,
+      "ml_brier": 0.06482714516376424,
+      "ml_time_mae_h": 8.346332578868811
+    },
+    {
+      "n_train": 160,
+      "physics_brier": 0.07737185185185184,
+      "physics_time_mae_h": 12.027777777777779,
+      "recalibrated_brier": 0.06105267698045587,
+      "recalibrated_time_mae_h": 8.12962962962963,
+      "ml_brier": 0.0389335432386167,
+      "ml_time_mae_h": 7.425162014822677
+    },
+    {
+      "n_train": 360,
+      "physics_brier": 0.07737185185185184,
+      "physics_time_mae_h": 12.027777777777779,
+      "recalibrated_brier": 0.06277209212228345,
+      "recalibrated_time_mae_h": 8.172839506172838,
+      "ml_brier": 0.04635551265655908,
+      "ml_time_mae_h": 6.943936294991755
+    }
+  ]
+}

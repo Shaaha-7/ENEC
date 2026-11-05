@@ -1,0 +1,23 @@
+node_modules/
+*.pt
+__pycache__/
+.tmp.driveupload/
+*.zip
+# built player (rebuild with tools/unity_setup.ps1 -From player)
+stand/Qandeel/
+# Unity generated folders
+unity/**/Library/
+unity/**/Temp/
+unity/**/Logs/
+unity/**/obj/
+unity/**/Build/
+unity/**/Builds/
+unity/**/UserSettings/
+unity/**/*.csproj
+unity/**/*.sln
+# .NET test build output
+**/bin/
+**/obj/
+# secrets
+.env
+*.key

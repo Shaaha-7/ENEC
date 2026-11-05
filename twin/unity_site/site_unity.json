@@ -1,0 +1,21 @@
+{
+ "source": "S2C_39QXG_20251101 (Sentinel-2 L2A, Copernicus); heights approximate (not surveyed)",
+ "size_m": 20000,
+ "resolution": 2049,
+ "height_min_m": -12.0,
+ "height_range_m": 20.0,
+ "terrain_origin_xz": [
+  -9999.997279306815,
+  -10000.008012804901
+ ],
+ "tip_a_xz": [
+  -475.12,
+  -93.88
+ ],
+ "tip_b_xz": [
+  475.12,
+  93.88
+ ],
+ "gap_m_measured": 967,
+ "theta_rad": 0.19508191592183632
+}

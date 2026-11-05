@@ -1,0 +1,61 @@
+{
+ "surface_hold_at_0.2": 1.0,
+ "rows": [
+  {
+   "mean_depth_m": 0.35,
+   "outflow_layer_m": 1.0,
+   "share_in_layer": 0.94,
+   "held_worst": 0.94,
+   "held_best": 0.97
+  },
+  {
+   "mean_depth_m": 0.35,
+   "outflow_layer_m": 2.0,
+   "share_in_layer": 1.0,
+   "held_worst": 1.0,
+   "held_best": 1.0
+  },
+  {
+   "mean_depth_m": 1.0,
+   "outflow_layer_m": 1.0,
+   "share_in_layer": 0.63,
+   "held_worst": 0.63,
+   "held_best": 0.82
+  },
+  {
+   "mean_depth_m": 1.0,
+   "outflow_layer_m": 2.0,
+   "share_in_layer": 0.86,
+   "held_worst": 0.86,
+   "held_best": 0.93
+  },
+  {
+   "mean_depth_m": 2.0,
+   "outflow_layer_m": 1.0,
+   "share_in_layer": 0.39,
+   "held_worst": 0.39,
+   "held_best": 0.7
+  },
+  {
+   "mean_depth_m": 2.0,
+   "outflow_layer_m": 2.0,
+   "share_in_layer": 0.63,
+   "held_worst": 0.63,
+   "held_best": 0.82
+  },
+  {
+   "mean_depth_m": 3.0,
+   "outflow_layer_m": 1.0,
+   "share_in_layer": 0.28,
+   "held_worst": 0.28,
+   "held_best": 0.64
+  },
+  {
+   "mean_depth_m": 3.0,
+   "outflow_layer_m": 2.0,
+   "share_in_layer": 0.49,
+   "held_worst": 0.49,
+   "held_best": 0.74
+  }
+ ]
+}

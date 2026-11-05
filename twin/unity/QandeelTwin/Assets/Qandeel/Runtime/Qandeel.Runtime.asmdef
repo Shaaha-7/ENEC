@@ -1,0 +1,6 @@
+{
+    "name": "Qandeel.Runtime",
+    "rootNamespace": "Qandeel",
+    "references": ["Qandeel.Core", "Unity.RenderPipelines.HighDefinition.Runtime", "Unity.RenderPipelines.Core.Runtime"],
+    "autoReferenced": true
+}

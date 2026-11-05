@@ -1,0 +1,464 @@
+{
+  "inputs": {
+    "gap_m": 967.0,
+    "depth_m": 9.5,
+    "depth_surveyed": false,
+    "sections": 10,
+    "diffuser_height_above_bed_m": 0.75
+  },
+  "geometry": {
+    "straight_tip_to_tip_m": 967.0,
+    "seaward_arc_100m_bulge_m": 994,
+    "seaward_arc_200m_bulge_m": 1074
+  },
+  "air_free_m3_min": {
+    "normal": 174,
+    "maximum": 261
+  },
+  "pressure": {
+    "normal": {
+      "water_column_bar": 0.879834375,
+      "diffuser_bar": [
+        0.03,
+        0.09
+      ],
+      "main_pipe_bar": 0.050386832596456786,
+      "valves_fittings_margin_bar": [
+        0.1,
+        0.2
+      ],
+      "main_velocity_m_s": 6.826201603314278,
+      "discharge_bar_g": [
+        1.06,
+        1.22
+      ]
+    },
+    "maximum": {
+      "water_column_bar": 0.879834375,
+      "diffuser_bar": [
+        0.03,
+        0.09
+      ],
+      "main_pipe_bar": 0.11337037334202778,
+      "valves_fittings_margin_bar": [
+        0.1,
+        0.2
+      ],
+      "main_velocity_m_s": 10.239302404971417,
+      "discharge_bar_g": [
+        1.12,
+        1.28
+      ]
+    }
+  },
+  "main_pipe_options": {
+    "DN400": 0.346,
+    "DN500": 0.113,
+    "DN600": 0.046
+  },
+  "section": {
+    "normal": {
+      "section_length_m": 96.7,
+      "air_free_m3_s": 0.29,
+      "air_free_m3_min": 17.4,
+      "air_actual_m3_s_at_depth": 0.151,
+      "pipe_id_required_mm": 139,
+      "pipe_choice": "HDPE PE100 OD200 SDR17 (ID ~176 mm), sized for the maximum airflow",
+      "hole_d_mm": 2.0,
+      "hole_pressure_drop_bar": 0.05,
+      "holes_per_section": 1133,
+      "holes_per_m": 11.7,
+      "hole_spacing_cm": 8.5,
+      "uplift_kn_per_section": 30.5,
+      "ballast_submerged_t_per_section": 4.7
+    },
+    "maximum": {
+      "section_length_m": 96.7,
+      "air_free_m3_s": 0.435,
+      "air_free_m3_min": 26.1,
+      "air_actual_m3_s_at_depth": 0.227,
+      "pipe_id_required_mm": 170,
+      "pipe_choice": "HDPE PE100 OD200 SDR17 (ID ~176 mm), sized for the maximum airflow",
+      "hole_d_mm": 2.0,
+      "hole_pressure_drop_bar": 0.05,
+      "holes_per_section": 1700,
+      "holes_per_m": 17.6,
+      "hole_spacing_cm": 5.7,
+      "uplift_kn_per_section": 30.5,
+      "ballast_submerged_t_per_section": 4.7
+    }
+  },
+  "plume": {
+    "normal_cross_0.14": {
+      "surface_current_m_s": 0.45,
+      "rise_time_s": 19,
+      "plume_shift_m": 2.7
+    },
+    "normal_cross_0.23": {
+      "surface_current_m_s": 0.45,
+      "rise_time_s": 19,
+      "plume_shift_m": 4.5
+    },
+    "maximum_cross_0.14": {
+      "surface_current_m_s": 0.52,
+      "rise_time_s": 17,
+      "plume_shift_m": 2.4
+    },
+    "maximum_cross_0.23": {
+      "surface_current_m_s": 0.52,
+      "rise_time_s": 17,
+      "plume_shift_m": 3.9
+    }
+  },
+  "boom_boats": {
+    "bigger_bags": {
+      "20_t_bag": {
+        "volume_half_full_m3": 39,
+        "per_boat_kn_at_0.2_m_s": [
+          1.2,
+          2.0
+        ]
+      },
+      "30_t_bag": {
+        "volume_half_full_m3": 59,
+        "per_boat_kn_at_0.2_m_s": [
+          1.3,
+          2.2
+        ]
+      }
+    },
+    "boom": {
+      "model": "Desmi RO-BOOM 2000 class",
+      "skirt_m": 1.1,
+      "freeboard_m": 0.6,
+      "length_m": 200.0,
+      "u_opening_m": 66,
+      "sections": "4 x 50 m"
+    },
+    "bag": {
+      "jellyfish_t": 10.0,
+      "jellyfish_m3": 9.8,
+      "volume_half_full_m3": 20,
+      "mouth_w_m": 4.0,
+      "depth_m": 3.0,
+      "length_m": 3.3,
+      "shape": "tapered sock, mouth 4 m x 3 m, closed bottom, permeable fabric"
+    },
+    "tow_force": {
+      "0.2_m_s": {
+        "total_kn": [
+          2.1,
+          3.5
+        ],
+        "per_boat_kn": [
+          1.0,
+          1.7
+        ]
+      },
+      "0.35_m_s": {
+        "total_kn": [
+          6.4,
+          10.6
+        ],
+        "per_boat_kn": [
+          3.2,
+          5.3
+        ]
+      }
+    },
+    "boat_bollard_pull_t_recommended": "~1-2 t per boat (2-3x the calm-water force at 0.35 m/s, for waves and gusts)"
+  },
+  "capacity_200t_day": {
+    "target_t_h": 8.3,
+    "rows": [
+      {
+        "release_km": 3,
+        "bag_t": 10.0,
+        "shuttle_tugs": 0,
+        "net_t_h_per_unit": 0.41,
+        "units_for_target": 21,
+        "boats_for_target": 42
+      },
+      {
+        "release_km": 3,
+        "bag_t": 10.0,
+        "shuttle_tugs": 3,
+        "net_t_h_per_unit": 1.37,
+        "units_for_target": 7,
+        "boats_for_target": 35
+      },
+      {
+        "release_km": 3,
+        "bag_t": 10.0,
+        "shuttle_tugs": 5,
+        "net_t_h_per_unit": 2.28,
+        "units_for_target": 4,
+        "boats_for_target": 28
+      },
+      {
+        "release_km": 3,
+        "bag_t": 20.0,
+        "shuttle_tugs": 0,
+        "net_t_h_per_unit": 0.73,
+        "units_for_target": 12,
+        "boats_for_target": 24
+      },
+      {
+        "release_km": 3,
+        "bag_t": 20.0,
+        "shuttle_tugs": 3,
+        "net_t_h_per_unit": 2.74,
+        "units_for_target": 4,
+        "boats_for_target": 20
+      },
+      {
+        "release_km": 3,
+        "bag_t": 20.0,
+        "shuttle_tugs": 5,
+        "net_t_h_per_unit": 3.7,
+        "units_for_target": 3,
+        "boats_for_target": 21
+      },
+      {
+        "release_km": 3,
+        "bag_t": 30.0,
+        "shuttle_tugs": 0,
+        "net_t_h_per_unit": 1.0,
+        "units_for_target": 9,
+        "boats_for_target": 18
+      },
+      {
+        "release_km": 3,
+        "bag_t": 30.0,
+        "shuttle_tugs": 3,
+        "net_t_h_per_unit": 3.7,
+        "units_for_target": 3,
+        "boats_for_target": 15
+      },
+      {
+        "release_km": 3,
+        "bag_t": 30.0,
+        "shuttle_tugs": 5,
+        "net_t_h_per_unit": 3.7,
+        "units_for_target": 3,
+        "boats_for_target": 21
+      },
+      {
+        "release_km": 5,
+        "bag_t": 10.0,
+        "shuttle_tugs": 0,
+        "net_t_h_per_unit": 0.46,
+        "units_for_target": 19,
+        "boats_for_target": 38
+      },
+      {
+        "release_km": 5,
+        "bag_t": 10.0,
+        "shuttle_tugs": 3,
+        "net_t_h_per_unit": 1.48,
+        "units_for_target": 6,
+        "boats_for_target": 30
+      },
+      {
+        "release_km": 5,
+        "bag_t": 10.0,
+        "shuttle_tugs": 5,
+        "net_t_h_per_unit": 2.46,
+        "units_for_target": 4,
+        "boats_for_target": 28
+      },
+      {
+        "release_km": 5,
+        "bag_t": 20.0,
+        "shuttle_tugs": 0,
+        "net_t_h_per_unit": 0.85,
+        "units_for_target": 10,
+        "boats_for_target": 20
+      },
+      {
+        "release_km": 5,
+        "bag_t": 20.0,
+        "shuttle_tugs": 3,
+        "net_t_h_per_unit": 2.95,
+        "units_for_target": 3,
+        "boats_for_target": 15
+      },
+      {
+        "release_km": 5,
+        "bag_t": 20.0,
+        "shuttle_tugs": 5,
+        "net_t_h_per_unit": 4.92,
+        "units_for_target": 2,
+        "boats_for_target": 14
+      },
+      {
+        "release_km": 5,
+        "bag_t": 30.0,
+        "shuttle_tugs": 0,
+        "net_t_h_per_unit": 1.19,
+        "units_for_target": 7,
+        "boats_for_target": 14
+      },
+      {
+        "release_km": 5,
+        "bag_t": 30.0,
+        "shuttle_tugs": 3,
+        "net_t_h_per_unit": 4.43,
+        "units_for_target": 2,
+        "boats_for_target": 10
+      },
+      {
+        "release_km": 5,
+        "bag_t": 30.0,
+        "shuttle_tugs": 5,
+        "net_t_h_per_unit": 6.2,
+        "units_for_target": 2,
+        "boats_for_target": 14
+      },
+      {
+        "release_km": 8,
+        "bag_t": 10.0,
+        "shuttle_tugs": 0,
+        "net_t_h_per_unit": 0.42,
+        "units_for_target": 20,
+        "boats_for_target": 40
+      },
+      {
+        "release_km": 8,
+        "bag_t": 10.0,
+        "shuttle_tugs": 3,
+        "net_t_h_per_unit": 1.35,
+        "units_for_target": 7,
+        "boats_for_target": 35
+      },
+      {
+        "release_km": 8,
+        "bag_t": 10.0,
+        "shuttle_tugs": 5,
+        "net_t_h_per_unit": 2.24,
+        "units_for_target": 4,
+        "boats_for_target": 28
+      },
+      {
+        "release_km": 8,
+        "bag_t": 20.0,
+        "shuttle_tugs": 0,
+        "net_t_h_per_unit": 0.81,
+        "units_for_target": 11,
+        "boats_for_target": 22
+      },
+      {
+        "release_km": 8,
+        "bag_t": 20.0,
+        "shuttle_tugs": 3,
+        "net_t_h_per_unit": 2.69,
+        "units_for_target": 4,
+        "boats_for_target": 20
+      },
+      {
+        "release_km": 8,
+        "bag_t": 20.0,
+        "shuttle_tugs": 5,
+        "net_t_h_per_unit": 4.49,
+        "units_for_target": 2,
+        "boats_for_target": 14
+      },
+      {
+        "release_km": 8,
+        "bag_t": 30.0,
+        "shuttle_tugs": 0,
+        "net_t_h_per_unit": 1.15,
+        "units_for_target": 8,
+        "boats_for_target": 16
+      },
+      {
+        "release_km": 8,
+        "bag_t": 30.0,
+        "shuttle_tugs": 3,
+        "net_t_h_per_unit": 4.04,
+        "units_for_target": 3,
+        "boats_for_target": 15
+      },
+      {
+        "release_km": 8,
+        "bag_t": 30.0,
+        "shuttle_tugs": 5,
+        "net_t_h_per_unit": 6.73,
+        "units_for_target": 2,
+        "boats_for_target": 14
+      },
+      {
+        "release_km": 10,
+        "bag_t": 10.0,
+        "shuttle_tugs": 0,
+        "net_t_h_per_unit": 0.38,
+        "units_for_target": 23,
+        "boats_for_target": 46
+      },
+      {
+        "release_km": 10,
+        "bag_t": 10.0,
+        "shuttle_tugs": 3,
+        "net_t_h_per_unit": 1.18,
+        "units_for_target": 8,
+        "boats_for_target": 40
+      },
+      {
+        "release_km": 10,
+        "bag_t": 10.0,
+        "shuttle_tugs": 5,
+        "net_t_h_per_unit": 1.97,
+        "units_for_target": 5,
+        "boats_for_target": 35
+      },
+      {
+        "release_km": 10,
+        "bag_t": 20.0,
+        "shuttle_tugs": 0,
+        "net_t_h_per_unit": 0.72,
+        "units_for_target": 12,
+        "boats_for_target": 24
+      },
+      {
+        "release_km": 10,
+        "bag_t": 20.0,
+        "shuttle_tugs": 3,
+        "net_t_h_per_unit": 2.37,
+        "units_for_target": 4,
+        "boats_for_target": 20
+      },
+      {
+        "release_km": 10,
+        "bag_t": 20.0,
+        "shuttle_tugs": 5,
+        "net_t_h_per_unit": 3.94,
+        "units_for_target": 3,
+        "boats_for_target": 21
+      },
+      {
+        "release_km": 10,
+        "bag_t": 30.0,
+        "shuttle_tugs": 0,
+        "net_t_h_per_unit": 1.04,
+        "units_for_target": 9,
+        "boats_for_target": 18
+      },
+      {
+        "release_km": 10,
+        "bag_t": 30.0,
+        "shuttle_tugs": 3,
+        "net_t_h_per_unit": 3.55,
+        "units_for_target": 3,
+        "boats_for_target": 15
+      },
+      {
+        "release_km": 10,
+        "bag_t": 30.0,
+        "shuttle_tugs": 5,
+        "net_t_h_per_unit": 5.92,
+        "units_for_target": 2,
+        "boats_for_target": 14
+      }
+    ]
+  }
+}

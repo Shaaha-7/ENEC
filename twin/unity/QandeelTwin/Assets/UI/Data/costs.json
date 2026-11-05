@@ -1,0 +1,505 @@
+{
+  "note": "Budget estimates without vendor quotes. Confidence A/B/C per item (see module docstring).",
+  "capex_items": [
+    {
+      "group": "Air supply",
+      "item": "Oil-free low-pressure screw compressors, VSD, ~87 m3/min at 1.5 bar(g) (e.g. Atlas Copco ZE/ZA VSD class), 2 duty + 1 standby/peak",
+      "qty": 654,
+      "unit": "kW installed",
+      "unit_low": 1000,
+      "unit_high": 2300,
+      "low_usd": 654000,
+      "high_usd": 1504000,
+      "basis": "budget USD/kW for packaged oil-free units",
+      "confidence": "C"
+    },
+    {
+      "group": "Air supply",
+      "item": "Compressor house: building, aftercoolers, filters, MV/LV switchgear, transformer",
+      "qty": 1,
+      "unit": "lot",
+      "unit_low": 300000,
+      "unit_high": 800000,
+      "low_usd": 300000,
+      "high_usd": 800000,
+      "basis": "budget range",
+      "confidence": "B"
+    },
+    {
+      "group": "Air supply",
+      "item": "Air main DN500 along the western breakwater, with supports and valves",
+      "qty": 3000,
+      "unit": "m",
+      "unit_low": 300,
+      "unit_high": 700,
+      "low_usd": 900000,
+      "high_usd": 2100000,
+      "basis": "budget installed rate for large-bore pipe on a breakwater",
+      "confidence": "B"
+    },
+    {
+      "group": "Curtain",
+      "item": "Diffuser sections: HDPE OD200 pipe, 2 mm holes, steel frames, ~4.7 t ballast each, 10 x 97 m",
+      "qty": 967,
+      "unit": "m",
+      "unit_low": 500,
+      "unit_high": 1500,
+      "low_usd": 484000,
+      "high_usd": 1450000,
+      "basis": "budget installed rate (fabricated on land)",
+      "confidence": "B"
+    },
+    {
+      "group": "Curtain",
+      "item": "Feed hoses DN150, one per section, valve chamber to section (~5 km in total)",
+      "qty": 5000,
+      "unit": "m",
+      "unit_low": 50,
+      "unit_high": 150,
+      "low_usd": 250000,
+      "high_usd": 750000,
+      "basis": "budget rate for reinforced air hose / HDPE",
+      "confidence": "B"
+    },
+    {
+      "group": "Curtain",
+      "item": "Valve chamber on the western tip: 10 remote valves, pressure sensors, PLC",
+      "qty": 1,
+      "unit": "lot",
+      "unit_low": 100000,
+      "unit_high": 300000,
+      "low_usd": 100000,
+      "high_usd": 300000,
+      "basis": "budget range",
+      "confidence": "B"
+    },
+    {
+      "group": "Marine works",
+      "item": "Installation: crane barge or multicat + dive team, ~20-40 working days",
+      "qty": 30,
+      "unit": "days",
+      "unit_low": 15000,
+      "unit_high": 30000,
+      "low_usd": 450000,
+      "high_usd": 900000,
+      "basis": "budget day rate, vessel + divers",
+      "confidence": "C"
+    },
+    {
+      "group": "Marine works",
+      "item": "Survey (bathymetry, seabed, currents, waves), detailed design, permits",
+      "qty": 1,
+      "unit": "lot",
+      "unit_low": 200000,
+      "unit_high": 500000,
+      "low_usd": 200000,
+      "high_usd": 500000,
+      "basis": "budget range",
+      "confidence": "B"
+    },
+    {
+      "group": "Gathering",
+      "item": "Ocean boom, 1.1 m skirt (Desmi RO-BOOM 2000 class): 2 gathering units x 200 m + 2 tip catch pockets x 100 m",
+      "qty": 600,
+      "unit": "m",
+      "unit_low": 200,
+      "unit_high": 600,
+      "low_usd": 120000,
+      "high_usd": 360000,
+      "basis": "budget USD/m for heavy offshore boom",
+      "confidence": "C"
+    },
+    {
+      "group": "Gathering",
+      "item": "Custom closed-bottom bags, permeable fabric, quick-release (6 bags)",
+      "qty": 6,
+      "unit": "bags",
+      "unit_low": 10000,
+      "unit_high": 30000,
+      "low_usd": 60000,
+      "high_usd": 180000,
+      "basis": "budget range, custom fabrication",
+      "confidence": "C"
+    },
+    {
+      "group": "Gathering",
+      "item": "Workboats 8-10 m, >= 2 t bollard pull, slow-speed control (owned: 2)",
+      "qty": 2,
+      "unit": "boats",
+      "unit_low": 150000,
+      "unit_high": 400000,
+      "low_usd": 300000,
+      "high_usd": 800000,
+      "basis": "budget range for small aluminium workboats",
+      "confidence": "C"
+    },
+    {
+      "group": "Monitoring",
+      "item": "Cameras (mouth + both tips), edge computer for the jellyfish detector, radar/AIS link",
+      "qty": 1,
+      "unit": "lot",
+      "unit_low": 60000,
+      "unit_high": 150000,
+      "low_usd": 60000,
+      "high_usd": 150000,
+      "basis": "budget range",
+      "confidence": "B"
+    }
+  ],
+  "capex_subtotal_usd": [
+    3880000.0,
+    9790000.0
+  ],
+  "contingency_usd": [
+    780000.0,
+    2940000.0
+  ],
+  "capex_total_usd": [
+    4700000.0,
+    12700000.0
+  ],
+  "opex_items": [
+    {
+      "item": "Operators on call in the bloom season (share of existing plant staff)",
+      "low_usd": 60000,
+      "high_usd": 150000,
+      "confidence": "B"
+    },
+    {
+      "item": "Extra boats chartered during large blooms (8-13 boats, ~10 bloom days a year)",
+      "low_usd": 120000,
+      "high_usd": 390000,
+      "confidence": "C"
+    },
+    {
+      "item": "Diver/ROV inspection and cleaning of diffusers, 4-6 visits",
+      "low_usd": 30000,
+      "high_usd": 90000,
+      "confidence": "B"
+    },
+    {
+      "item": "Compressor, boom and bag maintenance, spares",
+      "low_usd": 40000,
+      "high_usd": 100000,
+      "confidence": "B"
+    }
+  ],
+  "energy_per_season_usd": 31410.0,
+  "opex_total_usd_per_year": [
+    280000.0,
+    760000.0
+  ],
+  "unit_outage_day": {
+    "unit_mw": 1400,
+    "mwh_per_day": 33600,
+    "value_usd": [
+      1680000,
+      2688000
+    ],
+    "value_basis": "ASSUMED USD 50-80 per MWh"
+  },
+  "unit_outage_days_to_repay_capex": [
+    1.7,
+    7.6
+  ],
+  "unit_outage_days_per_year_to_cover_opex": [
+    0.1,
+    0.45
+  ],
+  "pilot_items": [
+    {
+      "item": "Rental oil-free compressor (Atlas Copco ZE rental class), 6 months",
+      "low_usd": 60000,
+      "high_usd": 150000
+    },
+    {
+      "item": "One 97 m diffuser section on frames + feed hose",
+      "low_usd": 50000,
+      "high_usd": 150000
+    },
+    {
+      "item": "Installation and removal, dive team",
+      "low_usd": 60000,
+      "high_usd": 150000
+    },
+    {
+      "item": "Boom 200 m + 2 bags + charter workboat",
+      "low_usd": 60000,
+      "high_usd": 150000
+    },
+    {
+      "item": "Cameras, sonar, drifters, survival tests, monitoring",
+      "low_usd": 50000,
+      "high_usd": 120000
+    }
+  ],
+  "pilot_total_usd": [
+    280000,
+    720000
+  ],
+  "lean": {
+    "note": "Budget estimates without vendor quotes. Confidence A/B/C per item (see module docstring).",
+    "capex_items": [
+      {
+        "group": "Air supply",
+        "item": "Oil-free screw blowers 0.3-1.5 bar(g), VSD, ISO 8573-1 Class 0 (Atlas Copco ZS / Aerzen Delta Hybrid class), 2 duty + 1 standby/peak, in ISO containers",
+        "qty": 654,
+        "unit": "kW installed",
+        "unit_low": 600,
+        "unit_high": 1500,
+        "low_usd": 392000,
+        "high_usd": 981000,
+        "basis": "budget USD/kW for packaged aeration blowers",
+        "confidence": "C"
+      },
+      {
+        "group": "Air supply",
+        "item": "Containers' foundation on the western tip, small transformer, LV switchgear",
+        "qty": 1,
+        "unit": "lot",
+        "unit_low": 150000,
+        "unit_high": 400000,
+        "low_usd": 150000,
+        "high_usd": 400000,
+        "basis": "budget range",
+        "confidence": "B"
+      },
+      {
+        "group": "Air supply",
+        "item": "11 kV power cable along the breakwater (instead of a 3 km DN500 air main)",
+        "qty": 3000,
+        "unit": "m",
+        "unit_low": 100,
+        "unit_high": 250,
+        "low_usd": 300000,
+        "high_usd": 750000,
+        "basis": "budget installed rate for MV cable in duct",
+        "confidence": "B"
+      },
+      {
+        "group": "Curtain",
+        "item": "Diffuser sections: HDPE OD200 on precast concrete sleepers (support + ballast in one), float-and-sink installation",
+        "qty": 967,
+        "unit": "m",
+        "unit_low": 300,
+        "unit_high": 900,
+        "low_usd": 290000,
+        "high_usd": 870000,
+        "basis": "budget installed rate",
+        "confidence": "B"
+      },
+      {
+        "group": "Curtain",
+        "item": "Feed lines DN150, 5 lines each serving 2 sections (~2.6 km in total)",
+        "qty": 2600,
+        "unit": "m",
+        "unit_low": 50,
+        "unit_high": 150,
+        "low_usd": 130000,
+        "high_usd": 390000,
+        "basis": "budget rate",
+        "confidence": "B"
+      },
+      {
+        "group": "Curtain",
+        "item": "Valve manifold at the tip: 5 remote valves, pressure sensors, PLC",
+        "qty": 1,
+        "unit": "lot",
+        "unit_low": 60000,
+        "unit_high": 180000,
+        "low_usd": 60000,
+        "high_usd": 180000,
+        "basis": "budget range",
+        "confidence": "B"
+      },
+      {
+        "group": "Marine works",
+        "item": "Installation: multicat + dive team, ~20 working days (sections pre-assembled on land)",
+        "qty": 20,
+        "unit": "days",
+        "unit_low": 15000,
+        "unit_high": 30000,
+        "low_usd": 300000,
+        "high_usd": 600000,
+        "basis": "budget day rate",
+        "confidence": "C"
+      },
+      {
+        "group": "Marine works",
+        "item": "Survey gaps, detailed design, permits (reusing ENEC's existing site surveys)",
+        "qty": 1,
+        "unit": "lot",
+        "unit_low": 100000,
+        "unit_high": 300000,
+        "low_usd": 100000,
+        "high_usd": 300000,
+        "basis": "budget range",
+        "confidence": "B"
+      },
+      {
+        "group": "Gathering",
+        "item": "Ocean boom 1.1 m skirt: 1 gathering unit 200 m + 2 tip catch pockets x 100 m",
+        "qty": 400,
+        "unit": "m",
+        "unit_low": 200,
+        "unit_high": 600,
+        "low_usd": 80000,
+        "high_usd": 240000,
+        "basis": "budget USD/m for heavy offshore boom",
+        "confidence": "C"
+      },
+      {
+        "group": "Gathering",
+        "item": "Custom closed-bottom bags (4)",
+        "qty": 4,
+        "unit": "bags",
+        "unit_low": 10000,
+        "unit_high": 30000,
+        "low_usd": 40000,
+        "high_usd": 120000,
+        "basis": "budget range",
+        "confidence": "C"
+      },
+      {
+        "group": "Monitoring",
+        "item": "Cameras (mouth + both tips), edge computer for the jellyfish detector, radar/AIS link",
+        "qty": 1,
+        "unit": "lot",
+        "unit_low": 60000,
+        "unit_high": 150000,
+        "low_usd": 60000,
+        "high_usd": 150000,
+        "basis": "budget range",
+        "confidence": "B"
+      }
+    ],
+    "capex_subtotal_usd": [
+      1900000.0,
+      4980000.0
+    ],
+    "contingency_usd": [
+      380000.0,
+      1490000.0
+    ],
+    "capex_total_usd": [
+      2300000.0,
+      6500000.0
+    ],
+    "opex_items": [
+      {
+        "item": "Operators on call in the bloom season (share of existing plant staff)",
+        "low_usd": 60000,
+        "high_usd": 150000,
+        "confidence": "B"
+      },
+      {
+        "item": "Charter 2 workboats on alert days (~40 days a season) + extra boats in large blooms",
+        "low_usd": 240000,
+        "high_usd": 630000,
+        "confidence": "C"
+      },
+      {
+        "item": "Diver/ROV inspection and cleaning of diffusers, 4-6 visits",
+        "low_usd": 30000,
+        "high_usd": 90000,
+        "confidence": "B"
+      },
+      {
+        "item": "Blower, boom and bag maintenance, spares",
+        "low_usd": 30000,
+        "high_usd": 80000,
+        "confidence": "B"
+      }
+    ],
+    "energy_per_season_usd": 31410.0,
+    "opex_total_usd_per_year": [
+      390000.0,
+      980000.0
+    ],
+    "unit_outage_day": {
+      "unit_mw": 1400,
+      "mwh_per_day": 33600,
+      "value_usd": [
+        1680000,
+        2688000
+      ],
+      "value_basis": "ASSUMED USD 50-80 per MWh"
+    },
+    "unit_outage_days_to_repay_capex": [
+      0.8,
+      3.9
+    ],
+    "unit_outage_days_per_year_to_cover_opex": [
+      0.15,
+      0.58
+    ],
+    "pilot_items": [
+      {
+        "item": "Rental oil-free compressor (Atlas Copco ZE rental class), 6 months",
+        "low_usd": 60000,
+        "high_usd": 150000
+      },
+      {
+        "item": "One 97 m diffuser section on frames + feed hose",
+        "low_usd": 50000,
+        "high_usd": 150000
+      },
+      {
+        "item": "Installation and removal, dive team",
+        "low_usd": 60000,
+        "high_usd": 150000
+      },
+      {
+        "item": "Boom 200 m + 2 bags + charter workboat",
+        "low_usd": 60000,
+        "high_usd": 150000
+      },
+      {
+        "item": "Cameras, sonar, drifters, survival tests, monitoring",
+        "low_usd": 50000,
+        "high_usd": 120000
+      }
+    ],
+    "pilot_total_usd": [
+      280000,
+      720000
+    ],
+    "changes": [
+      {
+        "change": "Screw blowers instead of 4-bar compressors",
+        "why": "our pressure need is 1.06-1.28 bar(g); blowers go to 1.5 bar(g)",
+        "depends_on": "the mouth must be <= ~11 m deep (survey)"
+      },
+      {
+        "change": "Blowers in containers at the western tip, fed by a power cable",
+        "why": "removes the 3 km DN500 air main and the compressor building",
+        "depends_on": "ENEC confirms space, power route and security rules on the breakwater"
+      },
+      {
+        "change": "Concrete sleepers instead of steel frames",
+        "why": "one precast part gives support and ballast",
+        "depends_on": "seabed survey"
+      },
+      {
+        "change": "Feed lines in pairs (5 instead of 10)",
+        "why": "curtain switched in 194 m blocks instead of 97 m",
+        "depends_on": "none"
+      },
+      {
+        "change": "Shorter marine works (20 days)",
+        "why": "sections built and ballasted on land, float-and-sink",
+        "depends_on": "contractor"
+      },
+      {
+        "change": "Reuse ENEC surveys",
+        "why": "Barakah's marine works were surveyed already",
+        "depends_on": "ENEC shares data"
+      },
+      {
+        "change": "One gathering unit + two tip pockets, no owned boats",
+        "why": "the tide brings the swarm to the pockets; boats chartered on alert days",
+        "depends_on": "pilot shows the pockets fill"
+      }
+    ]
+  }
+}

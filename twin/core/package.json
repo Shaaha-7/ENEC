@@ -1,0 +1,7 @@
+{
+  "name": "com.qandeel.core",
+  "version": "0.1.0",
+  "displayName": "Qandeel Core",
+  "description": "Renderer-independent Qandeel physics (curtain hold, depth risk, smart air, drift planner). Same sources as core/tests.",
+  "unity": "6000.0"
+}

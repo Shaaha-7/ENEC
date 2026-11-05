@@ -1,0 +1,97 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <Style src="ControlRoom.uss" />
+    <ui:VisualElement name="root" class="root" picking-mode="Ignore">
+
+        <ui:VisualElement class="topbar">
+            <ui:VisualElement class="brand">
+                <ui:Label text="QANDEEL" class="brand__name" />
+                <ui:Label text="Jellyfish swarm defence · Barakah seawater intake" class="brand__sub" />
+            </ui:VisualElement>
+            <ui:VisualElement class="kpis">
+                <ui:VisualElement class="kpi"><ui:Label text="SEA TIME" class="kpi__k" /><ui:Label name="kpi-time" class="kpi__v" /></ui:VisualElement>
+                <ui:VisualElement class="kpi"><ui:Label text="HELD AT SEA" class="kpi__k" /><ui:Label name="kpi-held" class="kpi__v kpi__v--good" /></ui:VisualElement>
+                <ui:VisualElement class="kpi"><ui:Label text="PASSED CURTAIN" class="kpi__k" /><ui:Label name="kpi-passed" class="kpi__v" /></ui:VisualElement>
+                <ui:VisualElement class="kpi"><ui:Label text="IN BAG" class="kpi__k" /><ui:Label name="kpi-bag" class="kpi__v" /></ui:VisualElement>
+                <ui:VisualElement class="kpi"><ui:Label text="RELEASED ALIVE" class="kpi__k" /><ui:Label name="kpi-released" class="kpi__v" /></ui:VisualElement>
+                <ui:VisualElement class="kpi kpi--wide"><ui:Label text="AIR → OUTFLOW" class="kpi__k" /><ui:Label name="kpi-air" class="kpi__v" /></ui:VisualElement>
+                <ui:VisualElement class="kpi"><ui:Label text="APPROACH" class="kpi__k" /><ui:Label name="kpi-approach" class="kpi__v" /></ui:VisualElement>
+            </ui:VisualElement>
+            <ui:Button name="btn-tour" text="▶  Guided tour" class="btn btn--primary" />
+        </ui:VisualElement>
+
+        <ui:VisualElement name="tabs" class="tabs" />
+
+        <ui:VisualElement name="left" class="panel panel--left">
+            <ui:Label text="SCENARIO" class="panel__title" />
+            <ui:VisualElement name="scenarios" class="scenarios" />
+            <ui:Label name="scenario-source" class="note" />
+            <ui:Label text="BOAT" class="panel__title panel__title--gap" />
+            <ui:Label name="boat-state" class="boat" />
+            <ui:Label text="AIR SUPPLY · 3 oil-free screw blowers" class="panel__title panel__title--gap" />
+            <ui:Label name="gauges" class="gauges" />
+            <ui:Label name="season" class="note" />
+            <ui:Label text="Crewed, chartered 8–10 m workboat · boom 200 m (RO-BOOM 2000 class), ~66 m opening · closed bag towed at 0.2 m/s to the release point 3 km at 330°. In the model ~63% drift back and are held again." class="note" />
+        </ui:VisualElement>
+
+        <ui:VisualElement name="right" class="panel panel--right">
+            <ui:Label text="CURTAIN SECTIONS  ·  keys 1–0" class="panel__title" />
+            <ui:VisualElement name="sections" class="sections" />
+            <ui:Label text="VIEW  ·  key V" class="panel__title panel__title--gap" />
+            <ui:VisualElement class="row">
+                <ui:Button name="view-0" text="Overview" class="btn btn--seg" />
+                <ui:Button name="view-1" text="Mouth" class="btn btn--seg" />
+                <ui:Button name="view-2" text="Underwater" class="btn btn--seg" />
+            </ui:VisualElement>
+            <ui:Button name="btn-follow" text="Follow boat" class="btn" />
+            <ui:Label text="INPUTS" class="panel__title panel__title--gap" />
+            <ui:Toggle name="auto-air" label="Auto air (2025 replay)" class="toggle" />
+            <ui:Slider name="in-air" label="Air L/s/m" low-value="0" high-value="4.5" show-input-field="true" class="slider" />
+            <ui:Slider name="in-approach" label="Approach m/s" low-value="0" high-value="0.4" show-input-field="true" class="slider" />
+            <ui:Label text="DEMO CONTROLS" class="panel__title panel__title--gap" />
+            <ui:VisualElement class="row">
+                <ui:Button name="demo-deep" text="Deep swarm 2 m" class="btn btn--seg" />
+                <ui:Button name="demo-high" text="High air" class="btn btn--seg" />
+            </ui:VisualElement>
+            <ui:Label name="demo-deep-note" class="note" />
+            <ui:VisualElement class="row">
+                <ui:Button name="sea-0" text="Sea &lt;1 m" class="btn btn--seg" />
+                <ui:Button name="sea-1" text="1–2 m" class="btn btn--seg" />
+                <ui:Button name="sea-2" text="&gt;2 m" class="btn btn--seg" />
+            </ui:VisualElement>
+            <ui:Label name="sea-note" class="note" />
+            <ui:VisualElement class="row">
+                <ui:Button name="fail-blower" text="Blower trip" class="btn btn--seg" />
+                <ui:Button name="fail-section" text="Section 5 off" class="btn btn--seg" />
+                <ui:Button name="fail-camera" text="Camera off" class="btn btn--seg" />
+            </ui:VisualElement>
+            <ui:Label name="fail-note" class="note" />
+            <ui:Label text="TIME" class="panel__title panel__title--gap" />
+            <ui:VisualElement class="row">
+                <ui:Button name="btn-pause" text="Pause" class="btn btn--seg" />
+                <ui:Button name="btn-restart" text="Restart" class="btn btn--seg" />
+                <ui:Button name="btn-speed" text="x120" class="btn btn--seg" />
+            </ui:VisualElement>
+            <ui:Button name="btn-tier" text="Graphics: High (auto)" class="btn" />
+        </ui:VisualElement>
+
+        <ui:VisualElement name="legend" class="legend" picking-mode="Ignore">
+            <ui:VisualElement class="legend__row"><ui:VisualElement class="dot dot--held" /><ui:Label text="Held at sea" class="legend__t" /></ui:VisualElement>
+            <ui:VisualElement class="legend__row"><ui:VisualElement class="dot dot--passed" /><ui:Label text="Passed into the intake channel" class="legend__t" /></ui:VisualElement>
+            <ui:VisualElement class="legend__row"><ui:VisualElement class="dot dot--deep" /><ui:Label text="Below the outflow layer (assumed thickness)" class="legend__t" /></ui:VisualElement>
+            <ui:Label name="legend-scale" class="legend__t legend__t--small" />
+        </ui:VisualElement>
+
+        <ui:VisualElement name="events" class="events" picking-mode="Ignore">
+            <ui:Label text="EVENT LOG" class="panel__title" />
+            <ui:Label name="event-list" class="events__list" />
+        </ui:VisualElement>
+
+        <ui:VisualElement name="caption" class="caption" picking-mode="Ignore">
+            <ui:Label name="caption-step" class="caption__step" />
+            <ui:Label name="caption-text" class="caption__text" />
+            <ui:VisualElement class="caption__bar"><ui:VisualElement name="caption-progress" class="caption__fill" /></ui:VisualElement>
+        </ui:VisualElement>
+
+        <ui:Label text="Contains modified Copernicus Sentinel data 2025 · Copernicus Marine Service · ERA5 · Heights approximate, not surveyed · Plant: illustrative massing" class="credits" picking-mode="Ignore" />
+    </ui:VisualElement>
+</ui:UXML>

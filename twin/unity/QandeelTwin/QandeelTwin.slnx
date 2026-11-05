@@ -1,0 +1,5 @@
+﻿<Solution>
+  <Project Path="Qandeel.Runtime.csproj" />
+  <Project Path="Qandeel.Core.csproj" />
+  <Project Path="Assembly-CSharp-Editor.csproj" />
+</Solution>
