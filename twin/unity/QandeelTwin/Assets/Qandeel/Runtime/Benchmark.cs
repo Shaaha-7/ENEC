@@ -26,6 +26,7 @@ namespace Qandeel
             var args = Environment.GetCommandLineArgs();
             if (Array.IndexOf(args, "-benchmark") >= 0) StartCoroutine(Run());
             if (Array.IndexOf(args, "-tourtest") >= 0) StartCoroutine(TourTest());
+            if (Array.IndexOf(args, "-standtest") >= 0) StartCoroutine(StandTest());
             int s = Array.IndexOf(args, "-soak");
             if (s >= 0 && s + 1 < args.Length && int.TryParse(args[s + 1], out int minutes)) StartCoroutine(Soak(minutes));
         }
@@ -53,6 +54,41 @@ namespace Qandeel
                 }
                 yield return null;
             }
+            Application.Quit();
+        }
+
+        /// <summary>Plays the stand moments once: swarm incoming, curtain OFF (plant alarm), curtain ON (recovery),
+        /// section 5 off, blower trip, rough sea. Saves stand_*.png and stand_test.json next to the executable, then quits.</summary>
+        IEnumerator StandTest()
+        {
+            string dir = Path.GetDirectoryName(Application.dataPath);
+            var cv = FindFirstObjectByType<CurtainView>();
+            var log = new System.Text.StringBuilder("{");
+            void Shot(string n) => ScreenCapture.CaptureScreenshot(Path.Combine(dir, $"stand_{n}.png"));
+            yield return new WaitForSecondsRealtime(5f);
+            cv.SwarmIncoming();
+            yield return new WaitForSecondsRealtime(6f); Shot("1_swarm"); yield return null;
+            cv.speed = 600f; cv.SetCurtain(false);
+            float t0 = Time.realtimeSinceStartup;
+            while (cv.UnitsOnline >= 4 && Time.realtimeSinceStartup - t0 < 60f) yield return null;
+            yield return new WaitForSecondsRealtime(4f);
+            log.Append(string.Format(CultureInfo.InvariantCulture, "\"off_units\": {0}, \"off_alarm_after_s\": {1:F1}, \"off_passed\": {2}, ", cv.UnitsOnline, Time.realtimeSinceStartup - t0, cv.Sim.Entered));
+            Shot("2_curtain_off"); yield return null;
+            cv.SetCurtain(true); t0 = Time.realtimeSinceStartup;
+            while (cv.UnitsOnline < 4 && Time.realtimeSinceStartup - t0 < 90f) yield return null;
+            log.Append(string.Format(CultureInfo.InvariantCulture, "\"on_units\": {0}, \"recovered_after_s\": {1:F1}, ", cv.UnitsOnline, Time.realtimeSinceStartup - t0));
+            yield return new WaitForSecondsRealtime(2f); Shot("3_curtain_on"); yield return null;
+            cv.SwarmIncoming(); cv.speed = 240f; yield return new WaitForSecondsRealtime(3f);
+            cv.ToggleSection(4, true);
+            yield return new WaitForSecondsRealtime(10f); Shot("4_section_off"); yield return null;
+            cv.ToggleSection(4, true); yield return new WaitForSecondsRealtime(3f);
+            cv.TripBlower(); yield return new WaitForSecondsRealtime(2.2f); Shot("5_blower_trip"); yield return null;
+            yield return new WaitForSecondsRealtime(3f); Shot("6_standby_on"); yield return null;
+            cv.ResetBlowers(); cv.SetWaves(2.5);
+            yield return new WaitForSecondsRealtime(8f); Shot("7_rough_sea"); yield return null;
+            log.Append($"\"errors\": {errors}}}");
+            File.WriteAllText(Path.Combine(dir, "stand_test.json"), log.ToString());
+            yield return null; yield return null;
             Application.Quit();
         }
 

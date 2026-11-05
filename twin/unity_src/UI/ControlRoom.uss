@@ -160,7 +160,28 @@
 .slider TextField { width: 52px; }
 .slider .unity-base-text-field__input { background-color: rgba(255, 255, 255, 0.08); color: rgb(232, 242, 247); border-color: rgba(255, 255, 255, 0.15); }
 .events {
-    position: absolute; right: 16px; bottom: 40px; width: 340px; padding: 10px 14px;
+    position: absolute; left: 16px; bottom: 146px; width: 300px; max-height: 170px; overflow: hidden; padding: 10px 14px;
     background-color: var(--panel); border-width: 1px; border-color: var(--line); border-radius: 10px;
 }
 .events__list { font-size: 13px; color: var(--ink-2); white-space: normal; margin: 0; padding: 0; }
+
+/* Stand moments: alarm banner, red frame, action buttons, plant output */
+.alarm {
+    position: absolute; left: 340px; right: 340px; top: 140px; padding: 12px 20px; border-radius: 10px;
+    border-width: 2px; display: none; align-items: center;
+}
+.alarm--on { display: flex; }
+.alarm--0 { background-color: rgba(10, 60, 50, 0.92); border-color: var(--good); }
+.alarm--1 { background-color: rgba(70, 40, 5, 0.92); border-color: var(--warn); }
+.alarm--2 { background-color: rgba(90, 8, 8, 0.94); border-color: var(--bad); }
+.alarm__text { font-size: 24px; -unity-font-style: bold; color: rgb(255, 255, 255); white-space: normal; -unity-text-align: middle-center; margin: 0; padding: 0; }
+.alarm-frame { position: absolute; left: 0; top: 0; right: 0; bottom: 0; border-width: 14px; border-color: rgb(255, 40, 40); opacity: 0; }
+.actions { position: absolute; left: 340px; right: 380px; bottom: 40px; flex-direction: row; justify-content: center; }
+.act { height: 64px; padding: 0 28px; margin: 0 8px; font-size: 22px; -unity-font-style: bold; border-width: 2px; border-radius: 10px; }
+.act--swarm { background-color: rgba(255, 138, 61, 0.28); border-color: var(--warn); }
+.act--swarm:hover { background-color: rgba(255, 138, 61, 0.45); border-color: var(--warn); }
+.act--curtain { background-color: rgba(120, 230, 170, 0.22); border-color: var(--good); min-width: 260px; }
+.act--off { background-color: rgba(255, 90, 90, 0.35); border-color: var(--bad); }
+.plant-note { position: absolute; left: 340px; right: 380px; bottom: 110px; font-size: 12px; color: var(--ink-3); -unity-text-align: middle-center; margin: 0; padding: 0; }
+.root--tour .actions, .root--info .actions, .root--tour .plant-note, .root--info .plant-note { display: none; }
+.root--info .alarm { display: none; }

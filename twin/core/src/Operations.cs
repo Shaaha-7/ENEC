@@ -40,5 +40,15 @@ namespace Qandeel.Core
             double layer = highAir ? LayerHighAirM : LayerNormalM;
             return (DepthRisk.HeldWorst(DeepSwarmMeanM, layer), DepthRisk.HeldBest(DeepSwarmMeanM, layer));
         }
+
+        /// <summary>Plant response for the stand: Barakah has 4 units of ~1,400 MWe (5,600 MW). ILLUSTRATIVE, NOT MODELLED:
+        /// one unit is taken offline for every 10% of the modelled swarm that reaches the intake screens within an hour.
+        /// Shows why holding the swarm matters; the real screen capacity and trip logic are the operator's.</summary>
+        public const int PlantUnits = 4; public const double UnitMW = 1400.0, TripSharePerUnit = 0.10;
+
+        public static int UnitsOnline(double passedLastHourShare) =>
+            Math.Max(0, PlantUnits - (int)Math.Floor(Math.Max(0, passedLastHourShare) / TripSharePerUnit));
+
+        public static double PlantMW(double passedLastHourShare) => UnitsOnline(passedLastHourShare) * UnitMW;
     }
 }

@@ -29,7 +29,9 @@ namespace Qandeel
         Slider inAir, inApproach;
         Button demoDeep, demoHigh, failBlower, failSection, failCamera;
         Button[] seaBtns;
-        Label deepNote, seaNote, failNote;
+        Label deepNote, seaNote, failNote, kPlant, alarmText;
+        VisualElement alarm, alarmFrame;
+        Button actSwarm, actCurtain;
         float nextUi;
         GraphicsTier tierCtl; Button tierBtn;
 
@@ -85,8 +87,12 @@ namespace Qandeel
             double[] hs = { 0.5, 1.5, 2.5 };
             for (int i = 0; i < 3; i++) { int k = i; seaBtns[i].clicked += () => view.SetWaves(hs[k]); }
             failBlower = root.Q<Button>("fail-blower"); failBlower.clicked += () => { if (view.BlowersTripped > 0) view.ResetBlowers(); else view.TripBlower(); };
-            failSection = root.Q<Button>("fail-section"); failSection.clicked += () => view.ToggleSection(4);
+            failSection = root.Q<Button>("fail-section"); failSection.clicked += () => view.ToggleSection(4, true);
             failCamera = root.Q<Button>("fail-camera"); failCamera.clicked += () => view.SetCameraOff(!view.CameraOff);
+            Q(out kPlant, "kpi-plant"); Q(out alarmText, "alarm-text");
+            alarm = root.Q("alarm"); alarmFrame = root.Q("alarm-frame");
+            actSwarm = root.Q<Button>("act-swarm"); actSwarm.clicked += () => view.SwarmIncoming();
+            actCurtain = root.Q<Button>("act-curtain"); actCurtain.clicked += () => view.SetCurtain(!view.CurtainOn);
             Q(out deepNote, "demo-deep-note"); Q(out seaNote, "sea-note"); Q(out failNote, "fail-note");
 
             if (forecastMeta != null)
@@ -95,7 +101,7 @@ namespace Qandeel
             for (int i = 0; i < secBtns.Length; i++)
             {
                 int k = i;
-                var b = new Button(() => view.ToggleSection(k)) { text = (i + 1).ToString() };
+                var b = new Button(() => view.ToggleSection(k, true)) { text = (i + 1).ToString() };
                 b.AddToClassList("sec");
                 sectionsBox.Add(b); secBtns[i] = b;
             }
@@ -115,6 +121,14 @@ namespace Qandeel
             if (tour == null && Time.unscaledTime - lastInput > idleToAttractS) StartTour();
             if (tour != null && Input.GetKeyDown(KeyCode.Escape)) StopTour();
 
+            // Alarm: the plant alarm (units offline) wins over passing alerts; the red frame pulses while it is on
+            int units = view.UnitsOnline;
+            bool plantAlarm = units < Operations.PlantUnits;
+            bool alertOn = Time.unscaledTime < view.AlertUntil;
+            int level = alertOn ? view.AlertLevel : plantAlarm ? 2 : -1;   // a fresh event is shown first; the plant alarm returns after it
+            float pulse = level == 2 || plantAlarm ? 0.25f + 0.55f * Mathf.Abs(Mathf.Sin(Time.unscaledTime * 3.2f)) : 0f;
+            alarmFrame.style.opacity = pulse;
+
             // Readouts at 10 Hz: per-frame text and slider updates force UI layout passes and cost FPS
             if (Time.unscaledTime < nextUi) return;
             nextUi = Time.unscaledTime + 0.1f;
@@ -130,6 +144,18 @@ namespace Qandeel
             kReleased.text = view.Released.ToString();
             kAir.text = $"{sim.AirflowLps:F1} L/s/m → {Bulson.SurfaceCurrent(sim.AirflowLps):F2} m/s";
             kApproach.text = $"{sim.ApproachSpeed:F2} m/s";
+            kPlant.text = $"{view.PlantMW:N0} MW · {units}/4";
+            kPlant.EnableInClassList("kpi__v--good", !plantAlarm);
+            kPlant.EnableInClassList("kpi__v--bad", plantAlarm);
+            alarm.EnableInClassList("alarm--on", level >= 0);
+            for (int i = 0; i < 3; i++) alarm.EnableInClassList($"alarm--{i}", level == i);
+            if (alertOn) alarmText.text = view.AlertText;
+            else if (plantAlarm)
+                alarmText.text = $"INTAKE ALARM  ·  jellyfish on the cooling-water screens  ·  {4 - units} of 4 units offline  ·  {view.PlantMW:N0} MW*";
+            bool cOn = view.CurtainOn;
+            actCurtain.text = cOn ? "CURTAIN: ON   (switch off)" : "CURTAIN: OFF   (switch on)";
+            actCurtain.EnableInClassList("act--off", !cOn);
+            actSwarm.EnableInClassList("btn--on", view.SwarmMode);
             source.text = view.CurrentScenario.Source;
             boat.text = view.BoatStatus;
             var (plo, phi) = view.PressureBarG;
@@ -151,7 +177,7 @@ namespace Qandeel
             for (int i = 0; i < 3; i++) seaBtns[i].EnableInClassList("btn--on", i == si);
             seaNote.text = (si == 0 ? "Boats run." : si == 1 ? "Boats stand by; the held swarm waits at the curtain." : "Boats in port; the held swarm waits at the curtain.")
                            + " Curtain keeps running. Wave effect on the curtain not modelled.";
-            failBlower.text = view.BlowersTripped > 0 ? "Reset blowers" : "Blower trip";
+            failBlower.text = view.BlowersTripped > 0 ? "Reset air" : "Blower trip";
             failBlower.EnableInClassList("btn--on", view.BlowersTripped > 0);
             failSection.EnableInClassList("btn--on", !sim.SectionOn[4]);
             failCamera.EnableInClassList("btn--on", view.CameraOff);

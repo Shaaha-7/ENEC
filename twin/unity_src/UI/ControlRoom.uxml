@@ -15,11 +15,16 @@
                 <ui:VisualElement class="kpi"><ui:Label text="RELEASED ALIVE" class="kpi__k" /><ui:Label name="kpi-released" class="kpi__v" /></ui:VisualElement>
                 <ui:VisualElement class="kpi kpi--wide"><ui:Label text="AIR → OUTFLOW" class="kpi__k" /><ui:Label name="kpi-air" class="kpi__v" /></ui:VisualElement>
                 <ui:VisualElement class="kpi"><ui:Label text="APPROACH" class="kpi__k" /><ui:Label name="kpi-approach" class="kpi__v" /></ui:VisualElement>
+                <ui:VisualElement name="kpi-plant-box" class="kpi kpi--wide"><ui:Label text="PLANT OUTPUT*" class="kpi__k" /><ui:Label name="kpi-plant" class="kpi__v kpi__v--good" /></ui:VisualElement>
             </ui:VisualElement>
             <ui:Button name="btn-tour" text="▶  Guided tour" class="btn btn--primary" />
         </ui:VisualElement>
 
+        <ui:VisualElement name="alarm-frame" class="alarm-frame" picking-mode="Ignore" />
         <ui:VisualElement name="tabs" class="tabs" />
+        <ui:VisualElement name="alarm" class="alarm" picking-mode="Ignore">
+            <ui:Label name="alarm-text" class="alarm__text" />
+        </ui:VisualElement>
 
         <ui:VisualElement name="left" class="panel panel--left">
             <ui:Label text="SCENARIO" class="panel__title" />
@@ -85,6 +90,12 @@
             <ui:Label text="EVENT LOG" class="panel__title" />
             <ui:Label name="event-list" class="events__list" />
         </ui:VisualElement>
+
+        <ui:VisualElement name="actions" class="actions">
+            <ui:Button name="act-swarm" text="SWARM INCOMING" class="btn act act--swarm" />
+            <ui:Button name="act-curtain" text="CURTAIN: ON" class="btn act act--curtain" />
+        </ui:VisualElement>
+        <ui:Label name="plant-note" text="* Illustrative plant response, not modelled: one of 4 units (~1,400 MW each) offline per 10% of the swarm reaching the screens in an hour." class="plant-note" picking-mode="Ignore" />
 
         <ui:VisualElement name="caption" class="caption" picking-mode="Ignore">
             <ui:Label name="caption-step" class="caption__step" />

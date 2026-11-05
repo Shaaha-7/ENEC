@@ -67,18 +67,117 @@ namespace Qandeel
         public void SetWaves(double hs)
         {
             WaveHs = hs;
-            if (sea != null) sea.largeWindSpeed = hs < 1 ? 14f : hs <= 2 ? 32f : 55f; // look only; waves do not change the physics
-            Log($"Sea state Hs ~{hs:F1} m: boats {SeaRule switch { Operations.Boats.Run => "run", Operations.Boats.StandBy => "stand by", _ => "shelter in port" }}; curtain keeps running");
+            if (sea != null) sea.largeWindSpeed = hs < 1 ? 14f : hs <= 2 ? 40f : 80f; // look only; waves do not change the physics
+            var rule = SeaRule;
+            Log($"Sea state Hs ~{hs:F1} m: boats {rule switch { Operations.Boats.Run => "run", Operations.Boats.StandBy => "stand by", _ => "shelter in port" }}; curtain keeps running");
+            if (rule == Operations.Boats.InPort) { Alert("ROUGH SEA  ·  Hs > 2 m  ·  boats return to port  ·  curtain keeps running", 1, 10f); FlyToView(0); speed = 600; }
+            else if (rule == Operations.Boats.StandBy) Alert("SEA 1–2 m  ·  boats stand by  ·  the held swarm waits at the curtain", 1, 8f);
+            else Alert("CALM SEA  ·  boats back to work", 0, 5f);
         }
         public void TripBlower()
         {
             BlowersTripped = Mathf.Min(BlowersTripped + 1, Operations.Blowers);
-            ApplyDemo();
             Log(BlowersTripped == 1 ? "Blower trip: standby blower takes over, no loss of air"
-                                    : $"Blower trip: {Operations.RunningBlowers(BlowersTripped)} blower(s) running, air {sim.AirflowLps:F1} L/s/m");
+                                    : $"Blower trip: {Operations.RunningBlowers(BlowersTripped)} blower(s) running");
+            StopCoroutine(nameof(BlowerTripFx)); StartCoroutine(nameof(BlowerTripFx));
         }
-        public void ResetBlowers() { BlowersTripped = 0; ApplyDemo(); Log("Blowers reset: 2 duty + 1 standby"); }
-        public void SetCameraOff(bool off) { CameraOff = off; Log(off ? "AI camera off: the forecast still switches the curtain on" : "AI camera back on"); }
+        /// <summary>The bubbles visibly die along the whole curtain, then the standby blower restores them (after the
+        /// first trip the air is back to full; after a second trip half the air, so half the boil).</summary>
+        System.Collections.IEnumerator BlowerTripFx()
+        {
+            FlyToView(1);
+            Alert($"BLOWER TRIP  ·  duty blower {BlowersTripped} down  ·  air pressure falling", 2, 3f);
+            fxDown = true; RefreshSections();
+            yield return new WaitForSecondsRealtime(4f);
+            fxDown = false; ApplyDemo();
+            Alert(BlowersTripped == 1 ? "STANDBY BLOWER ONLINE  ·  full air restored  ·  no loss"
+                                      : $"ONLY {Operations.RunningBlowers(BlowersTripped)} BLOWER(S)  ·  air {sim.AirflowLps:F1} L/s/m  ·  curtain weaker",
+                  BlowersTripped == 1 ? 0 : 2, 8f);
+        }
+        bool fxDown;
+        public void ResetBlowers() { BlowersTripped = 0; ApplyDemo(); Log("Blowers reset: 2 duty + 1 standby"); Alert("BLOWERS RESET  ·  2 duty + 1 standby", 0, 4f); }
+        public void SetCameraOff(bool off)
+        {
+            CameraOff = off; Log(off ? "AI camera off: the forecast still switches the curtain on" : "AI camera back on");
+            Alert(off ? "AI CAMERA OFFLINE  ·  the forecast still switches the curtain on (+13 h warning)" : "AI CAMERA BACK ONLINE", off ? 1 : 0, 8f);
+        }
+
+        // ---- stand moments: swarm incoming, curtain master switch, on-screen alerts, camera moves
+        public bool SwarmMode { get; private set; }
+        public string AlertText { get; private set; } = "";
+        public int AlertLevel { get; private set; }   // 0 info, 1 warning, 2 alarm
+        public float AlertUntil { get; private set; }
+        public void Alert(string text, int level, float seconds) { AlertText = text; AlertLevel = level; AlertUntil = Time.unscaledTime + seconds; }
+
+        /// <summary>A 2,500-jellyfish swarm arrives at the mouth (5x the normal model); the curtain runs at full air.</summary>
+        public void SwarmIncoming()
+        {
+            Load(0, 2500);
+            SwarmMode = true; speed = 240;
+            Log("Swarm detected 15 km NNW: 2,500 modelled jellyfish (5x normal)");
+            Alert("SWARM INCOMING  ·  2,500 jellyfish heading for the intake  ·  curtain at full air", 1, 14f);
+            FlyToView(1);
+        }
+
+        public bool CurtainOn { get { foreach (var s in sim.SectionOn) if (s) return true; return false; } }
+
+        /// <summary>Master switch: all ten sections off (what happens without Qandeel) or all on.</summary>
+        public void SetCurtain(bool on)
+        {
+            for (int i = 0; i < sim.SectionOn.Length; i++) sim.SectionOn[i] = on;
+            RefreshSections();
+            Log(on ? "Curtain ON: all 10 sections" : "Curtain OFF: no protection at the intake");
+            Alert(on ? "CURTAIN ON  ·  the swarm is pushed back to sea" : "CURTAIN OFF  ·  nothing stops the swarm reaching the intake", on ? 0 : 2, 6f);
+            FlyToView(1);
+        }
+
+        // Rolling count of jellyfish reaching the intake in the last sea hour (one sample per sea minute)
+        readonly int[] enteredAt = new int[61]; int samples; double nextSample;
+        public double PassedLastHourShare
+        {
+            get
+            {
+                if (samples == 0) return 0;
+                int old = samples <= enteredAt.Length ? enteredAt[0] : enteredAt[samples % enteredAt.Length]; // oldest = ~60 sea minutes ago
+                return (double)(sim.Entered - old) / sim.N;
+            }
+        }
+        void SamplePassed()
+        {
+            while (sim.TimeHours * 60.0 >= nextSample) { enteredAt[samples % enteredAt.Length] = sim.Entered; samples++; nextSample += 1.0; }
+        }
+        public int UnitsOnline => Operations.UnitsOnline(PassedLastHourShare);
+        public double PlantMW => Operations.PlantMW(PassedLastHourShare);
+
+        public void FlyToView(int i) { if (views != null && i < views.Length) FlyTo(views[i].position, views[i].rotation, 2.5f); currentView = i; }
+
+        /// <summary>Camera to a curtain section, low and from the sea side, so its jellyfish are easy to see.</summary>
+        public void FocusSection(int i)
+        {
+            double w = Site.GapWidthM / sim.SectionOn.Length, x = -Site.GapWidthM / 2 + (i + 0.5) * w;
+            var c = ToWorld(x, 0);
+            var pos = c + seaward * 260f + Vector3.up * 120f;
+            FlyTo(pos, Quaternion.LookRotation(c - seaward * 40f - pos), 2.5f);
+        }
+
+        public void FlyTo(Vector3 pos, Quaternion rot, float seconds)
+        {
+            followBoat = false;
+            if (fly != null) StopCoroutine(fly);
+            fly = StartCoroutine(FlyRoutine(pos, rot, seconds));
+        }
+        Coroutine fly;
+        System.Collections.IEnumerator FlyRoutine(Vector3 pos, Quaternion rot, float seconds)
+        {
+            var cam = Camera.main.transform; Vector3 p0 = cam.position; Quaternion r0 = cam.rotation;
+            for (float t = 0; t < seconds; t += Time.unscaledDeltaTime)
+            {
+                float u = Mathf.SmoothStep(0f, 1f, t / seconds);
+                cam.SetPositionAndRotation(Vector3.Lerp(p0, pos, u), Quaternion.Slerp(r0, rot, u));
+                yield return null;
+            }
+            cam.SetPositionAndRotation(pos, rot); fly = null;
+        }
 
         /// <summary>Applies the demo controls on top of the scenario; the physics core is unchanged.</summary>
         void ApplyDemo()
@@ -86,6 +185,7 @@ namespace Qandeel
             double demand = HighAir ? Operations.HighAirLps : scenario.AirflowLps;
             sim.AirflowLps = Operations.AirflowAfterTrips(demand, BlowersTripped);
             sim.WithSwarmDepth(DeepSwarm ? Operations.DeepSwarmMeanM : 0.0, HighAir ? Operations.LayerHighAirM : Operations.LayerNormalM);
+            RefreshSections();
         }
 
         public int scenarioIndex;
@@ -147,11 +247,14 @@ namespace Qandeel
             Camera.main.transform.SetPositionAndRotation(views[currentView].position, views[currentView].rotation);
         }
 
-        public void Load(int i)
+        public void Load(int i) => Load(i, 500);
+
+        public void Load(int i, int n)
         {
             scenarioIndex = Mathf.Clamp(i, 0, Scenario.All.Length - 1);
             scenario = Scenario.All[scenarioIndex];
-            sim = scenario.Create(seed: 0);
+            sim = scenario.Create(seed: 0, n: n);
+            SwarmMode = false; samples = 0; nextSample = 0; fxDown = false; lastUnits = Operations.PlantUnits;
             if (grid == null && waterMask != null)
                 grid = new WaterGrid(waterMask.bytes, 2000, 10.0, maskCenterPx.x, maskCenterPx.y, 0);
             if (grid != null) sim.ConstrainToWater((x, y) => { var w = ToWorld(x, y); return grid.IsWaterAt(w.x, w.z); });
@@ -172,29 +275,48 @@ namespace Qandeel
             RefreshSections();
         }
 
-        public void ToggleSection(int i)
+        public void ToggleSection(int i) => ToggleSection(i, false);
+
+        /// <summary>Switches one section; with focus the camera flies to it so the gap and the jellyfish going through show.</summary>
+        public void ToggleSection(int i, bool focus)
         {
             sim.SectionOn[i] = !sim.SectionOn[i];
             Log($"Section {i + 1} {(sim.SectionOn[i] ? "on" : "off")}");
             RefreshSections();
+            if (!sim.SectionOn[i]) Alert($"SECTION {i + 1} OFF  ·  gap in the curtain  ·  jellyfish (red) slip through to the screens", 2, 8f);
+            else Alert($"SECTION {i + 1} BACK ON", 0, 4f);
+            if (focus) FocusSection(i);
         }
 
         void RefreshSections()
         {
+            float airShare = Mathf.Clamp((float)sim.AirflowLps / 3f, 0f, 1.5f);
             for (int i = 0; i < sectionRenderers.Length && i < sim.SectionOn.Length; i++)
             {
-                bool on = sim.SectionOn[i] && sim.AirflowLps > 0;
+                bool on = sim.SectionOn[i] && sim.AirflowLps > 0 && !fxDown;
                 sectionRenderers[i].sharedMaterial = on ? sectionOn : sectionOff;
-                if (sectionFx != null && i < sectionFx.Length && sectionFx[i] != null) sectionFx[i].SetActive(on);
+                if (sectionFx == null || i >= sectionFx.Length || sectionFx[i] == null) continue;
+                if (fxDown) foreach (var ps in sectionFx[i].GetComponentsInChildren<ParticleSystem>(true)) ps.Clear(true);
+                sectionFx[i].SetActive(on);
+                // boil strength follows the air actually delivered (half air after two blower trips = half the boil)
+                foreach (var ps in sectionFx[i].GetComponentsInChildren<ParticleSystem>(true))
+                {
+                    if (!fxBase.TryGetValue(ps, out float b0)) fxBase[ps] = b0 = ps.emission.rateOverTimeMultiplier;
+                    var em = ps.emission; em.rateOverTimeMultiplier = b0 * airShare;
+                }
             }
         }
+
+        readonly System.Collections.Generic.Dictionary<ParticleSystem, float> fxBase = new System.Collections.Generic.Dictionary<ParticleSystem, float>();
 
         Vector3 ToWorld(double x, double y) => mid + along * ((float)x * xScale) + seaward * (float)y;
 
         void Update()
         {
             for (int k = 0; k < 10; k++)
-                if (Input.GetKeyDown(k == 9 ? KeyCode.Alpha0 : KeyCode.Alpha1 + k)) ToggleSection(k);
+                if (Input.GetKeyDown(k == 9 ? KeyCode.Alpha0 : KeyCode.Alpha1 + k)) ToggleSection(k, true);
+            if (Input.GetKeyDown(KeyCode.S)) SwarmIncoming();
+            if (Input.GetKeyDown(KeyCode.C)) SetCurtain(!CurtainOn);
             if (Input.GetKeyDown(KeyCode.Space)) paused = !paused;
             if (Input.GetKeyDown(KeyCode.R)) Load(scenarioIndex);
             if (Input.GetKeyDown(KeyCode.F)) followBoat = !followBoat;
@@ -283,17 +405,21 @@ namespace Qandeel
                 Log($"Air set to {sim.AirflowLps:F1} L/s/m (approach {sim.ApproachSpeed:F2} m/s)");
             }
             EnergyMWh += PowerKW * seaS / 3600.0 / 1000.0;
+            SamplePassed();
+            int units = UnitsOnline;
+            if (units != lastUnits) { if (units < lastUnits) Log($"Screens clogging: {units}/4 units online*"); else Log($"Screens clearing: {units}/4 units online*"); lastUnits = units; }
             if (!loggedPass && sim.Entered > 0) { loggedPass = true; Log("First jellyfish passed the curtain"); }
             if (state != lastBoatState) { lastBoatState = state; Log("Boat: " + BoatStatus + (state == BoatState.Towing ? $" ({inBag} in bag)" : "")); }
         }
 
         BoatState lastBoatState;
+        int lastUnits = Operations.PlantUnits;
 
         public void Log(string msg)
         {
             double t = sim != null ? sim.TimeHours : 0;
             Events.Insert(0, $"T+{(int)t}:{(int)(t * 60 % 60):00}  {msg}");
-            if (Events.Count > 7) Events.RemoveAt(Events.Count - 1);
+            if (Events.Count > 4) Events.RemoveAt(Events.Count - 1);
         }
 
         Vector3 ToPhysics(Vector3 w) { var d = w - mid; return new Vector3(Vector3.Dot(d, along) / xScale, 0, Vector3.Dot(d, seaward)); }
@@ -478,6 +604,7 @@ namespace Qandeel
         {
             int steps = (int)(hours * 3600 / sim.Dt);
             for (int k = 0; k < steps; k++) { sim.Step(); if (boat != null && k % 30 == 0) BoatStep(30f * (float)sim.Dt); }
+            SamplePassed();
         }
 
         void Styles()

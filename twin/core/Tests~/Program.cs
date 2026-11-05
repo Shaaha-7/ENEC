@@ -186,6 +186,16 @@ static class Program
             Check("Demo failure: camera off", fc.SwitchOnH != null,
                   $"forecast alone still switches the curtain on at +{fc.SwitchOnH:F0} h (camera is only the backup)");
         }
+        // Stand: curtain OFF vs ON and the (illustrative) plant response
+        {
+            var on = Scenario.All[0].Create(seed: 0).Run(2);
+            var off = Scenario.All[0].Create(seed: 0); for (int i = 0; i < off.SectionOn.Length; i++) off.SectionOn[i] = false; off.Run(2);
+            int uOn = Operations.UnitsOnline((double)on.Entered / on.N / 2), uOff = Operations.UnitsOnline((double)off.Entered / off.N / 2);
+            Check("Stand: curtain OFF vs ON", uOn == 4 && uOff < 4 && off.Entered > 5 * Math.Max(1, on.Entered),
+                  $"2 h: ON {on.Entered} passed, {uOn}/4 units; OFF {off.Entered} passed, {uOff}/4 units (illustrative plant rule)");
+            var big = Scenario.All[0].Create(seed: 0, n: 2500).Run(2);
+            Check("Stand: swarm incoming (2,500)", big.HeldShare >= 0.9, $"held {big.HeldShare:P0} of {big.N}");
+        }
         // Real-site boundary from the Sentinel-2 mask: no jellyfish on land; report the effect on the hold
         {
             var site = Json("unity_site/site_unity.json"); var c0 = Json("data/meta.json").GetProperty("center_px");
