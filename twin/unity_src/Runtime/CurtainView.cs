@@ -309,10 +309,100 @@ namespace Qandeel
 
         readonly System.Collections.Generic.Dictionary<ParticleSystem, float> fxBase = new System.Collections.Generic.Dictionary<ParticleSystem, float>();
 
+        public Vector3 World(double x, double y) => ToWorld(x, y);
+        public ForcingRecord Record => rec;
+        public bool HideSwarm;
+        public bool IsWater(Vector3 w) => grid == null || grid.IsWaterAt(w.x, w.z);
+
+        /// <summary>Switches one section without an alert or camera move (start-up / shut-down sequences).</summary>
+        public void SetSectionQuiet(int i, bool on) { sim.SectionOn[i] = on; RefreshSections(); }
+
+        /// <summary>Moves the modelled swarm into an offshore patch (sim frame: x along the mouth, y seaward, metres),
+        /// on water only, e.g. as it arrives from the forecast track.</summary>
+        public void PlaceSwarm(double cx, double cy, double rx, double ry, ulong seed = 3)
+        {
+            var r = new Rng(seed);
+            for (int i = 0; i < sim.N; i++)
+            {
+                for (int tries = 0; tries < 30; tries++)
+                {
+                    double a = r.Uniform(0, 2 * System.Math.PI), d = System.Math.Sqrt(r.Uniform(0, 1));
+                    double x = cx + System.Math.Cos(a) * rx * d, y = cy + System.Math.Sin(a) * ry * d;
+                    var w = ToWorld(x, y);
+                    if (grid == null || grid.IsWaterAt(w.x, w.z)) { sim.X[i] = x; sim.Y[i] = y; sim.StartX[i] = x; sim.StartY[i] = y; break; }
+                }
+            }
+            samples = 0; nextSample = 0; lastUnits = Operations.PlantUnits;
+        }
+
         Vector3 ToWorld(double x, double y) => mid + along * ((float)x * xScale) + seaward * (float)y;
+
+        double fxAir = -1;
+
+        /// <summary>Scenario button: loads it, says on screen what it changes and what to watch, and runs fast enough
+        /// for the effect to show within seconds.</summary>
+        public void LoadScenario(int k)
+        {
+            Load(k);
+            string watch = k switch
+            {
+                0 => "normal air 3 L/s/m against the 2025 mean current: watch the swarm held at sea",
+                1 => "stronger current 0.23 m/s pushes the swarm harder against the curtain",
+                2 => "only 1 L/s/m of air: weak bubbles, watch jellyfish (red) slip through",
+                3 => "swarm 2 m deep: grey bells swim under the outflow layer and some pass",
+                4 => "section 5 off: a 97 m gap, watch the jellyfish funnel through it",
+                5 => "real hourly 2025 currents; auto air sets the airflow each hour",
+                _ => "a 200 t/day bloom: the curtain holds it, the boats have to shuttle",
+            };
+            Alert($"{scenario.Name.ToUpperInvariant()}  ·  {watch}", k == 2 || k == 3 || k == 4 ? 1 : 0, 10f);
+            speed = 300f;
+            if (k == 4) FocusSection(4); else FlyToView(1);
+        }
+
+        /// <summary>Air slider: sets the airflow, the bubbles follow it, and the banner gives the outflow it makes.</summary>
+        public void SetAirflow(double q)
+        {
+            autoAir = false; sim.AirflowLps = q; RefreshSections(); fxAir = q;
+            Alert($"AIR {q:F1} L/s/m  ·  surface outflow {Bulson.SurfaceCurrent(q):F2} m/s  ·  checking the model...", 0, 5f);
+            Predict();
+        }
+
+        /// <summary>Approach slider: the current carrying the swarm toward the intake.</summary>
+        public void SetApproach(double v)
+        {
+            sim.ApproachSpeed = v;
+            Alert($"APPROACH CURRENT {v:F2} m/s  ·  checking the model...", 0, 5f);
+            Predict();
+        }
+
+        // Model prediction for the slider banner: the same CurtainHold physics, 300 jellyfish over 2 sea hours,
+        // run off the main thread after the slider has been still for 0.4 s.
+        float predictAt = -1; System.Threading.Tasks.Task<double> predictTask; double pQ, pV;
+        void Predict() { predictAt = Time.unscaledTime + 0.4f; }
+        void PredictTick()
+        {
+            if (predictAt > 0 && Time.unscaledTime >= predictAt && predictTask == null)
+            {
+                predictAt = -1; pQ = sim.AirflowLps; pV = sim.ApproachSpeed;
+                double q = pQ, v = pV;
+                predictTask = System.Threading.Tasks.Task.Run(() => CurtainHold.HeldShareOf(v, q, hours: 2.0, n: 300));
+            }
+            if (predictTask != null && predictTask.IsCompleted)
+            {
+                if (predictTask.Status == System.Threading.Tasks.TaskStatus.RanToCompletion)
+                {
+                    double h = predictTask.Result;
+                    Alert($"AIR {pQ:F1} L/s/m (outflow {Bulson.SurfaceCurrent(pQ):F2} m/s) vs APPROACH {pV:F2} m/s  ·  model: {h:P0} held over 2 h  ·  " +
+                          (h >= 0.97 ? "the curtain holds" : h >= 0.8 ? "some get through" : "the current overpowers the curtain"), h >= 0.97 ? 0 : h >= 0.8 ? 1 : 2, 8f);
+                }
+                predictTask = null;
+            }
+        }
 
         void Update()
         {
+            PredictTick();
+            if (sim != null && System.Math.Abs(sim.AirflowLps - fxAir) > 0.05) { fxAir = sim.AirflowLps; RefreshSections(); }
             for (int k = 0; k < 10; k++)
                 if (Input.GetKeyDown(k == 9 ? KeyCode.Alpha0 : KeyCode.Alpha1 + k)) ToggleSection(k, true);
             if (Input.GetKeyDown(KeyCode.S)) SwarmIncoming();
@@ -339,6 +429,7 @@ namespace Qandeel
             }
 
             if (benchmark && !reported && sim.TimeHours >= 4.0) ReportResult();
+            if (HideSwarm) return;   // live operation: the swarm is still offshore (drawn by Operation)
 
             // Draw Blue Blubber: real size up close, enlarged from the air so the swarm reads (factor shown on screen).
             // Each swims through a 6-frame cycle (~1 Hz bell pulse, arms swaying) with its own phase.
@@ -350,8 +441,12 @@ namespace Qandeel
             for (int i = 0; i < sim.N; i++)
             {
                 float ph = (i * 0.6180339f % 1f) * 6.2831f;
-                int frame = (int)((tt + ph / 6.2831f) * JellyfishMesh.Frames) % JellyfishMesh.Frames;
-                var sc = Vector3.one * drawScale;
+                float cyc = tt * (0.85f + 0.3f * ((i * 0.3819f) % 1f)) + ph / 6.2831f;   // each pulses at its own rate
+                int frame = (int)(cyc * JellyfishMesh.Frames) % JellyfishMesh.Frames;
+                var sc = Vector3.one * drawScale * (0.8f + 0.45f * ((i * 0.7548f) % 1f));  // mixed sizes
+                // gentle tilt and rock as it swims (bell leans into each stroke)
+                var rot = Quaternion.Euler(14f * Mathf.Sin(tt * 0.7f + ph), ph * 57.3f + 8f * Mathf.Sin(tt * 0.3f + ph * 2f), 14f * Mathf.Cos(tt * 0.55f + ph * 1.3f));
+                float bob = 0.06f * Mathf.Sin(cyc * 6.2831f);                                        // rises on each contraction
                 if (sim.Pocketed[i])
                 {
                     // Caught: packed in the bag at the bottom of the boom U while it is out; afterwards released alive at 3 km, 330°
@@ -361,13 +456,14 @@ namespace Qandeel
                     if (inBagNow) { c = unitPos - unitDir * (4.5f * boatDrawScale + BoomDepth); off = new Vector3(Mathf.Cos(a), 0, Mathf.Sin(a)) * r * 12f; }
                     else if (released > 0 && towRoute != null && towRoute.Length > 0) { c = towRoute[towRoute.Length - 1]; off = new Vector3(Mathf.Cos(a), 0, Mathf.Sin(a)) * r * 120f; }
                     else continue;
-                    var bm = Matrix4x4.TRS(c + off + Vector3.up * 0.02f * drawScale, Quaternion.Euler(0, ph * 57.3f, 0), sc);
+                    var bm = Matrix4x4.TRS(c + off + Vector3.up * 0.02f * drawScale, rot, sc);
                     Put(0, frame, bm);
                     continue;
                 }
                 float depth = (float)sim.DepthM[i] + 0.15f;
-                var pos = ToWorld(sim.X[i], sim.Y[i]) + Vector3.up * (drawScale > 1.5f ? 0.02f * drawScale : -depth);
-                var m = Matrix4x4.TRS(pos, Quaternion.Euler(0, ph * 57.3f, 0), sc);
+                var pos = ToWorld(sim.X[i], sim.Y[i]) + Vector3.up * (drawScale > 1.5f ? 0.02f * drawScale : -depth + bob);
+                if (grid != null && !grid.IsWaterAt(pos.x, pos.z)) continue;   // never drawn on a breakwater or the beach
+                var m = Matrix4x4.TRS(pos, drawScale > 1.5f ? Quaternion.Euler(0, ph * 57.3f, 0) : rot, sc);
                 Put(sim.Inside[i] ? 2 : !sim.InLayer(i) ? 1 : 0, frame, m);
             }
             var mats = underwater && heldClear != null ? new[] { heldClear, deepClear, passedClear } : new[] { heldMat, deepMat, passedMat };

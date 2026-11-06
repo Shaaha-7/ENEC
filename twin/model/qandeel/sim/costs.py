@@ -70,7 +70,7 @@ def _lean_items(design, res):
          1, "lot", 60_000, 180_000, "budget range", "B"),
         ("Marine works", "Installation: multicat + dive team, ~20 working days (sections pre-assembled on land)",
          20, "days", 15_000, 30_000, "budget day rate", "C"),
-        ("Marine works", "Survey gaps, detailed design, permits (reusing ENEC's existing site surveys)",
+        ("Marine works", "Survey gaps, detailed design, permits (reusing the operator's existing site surveys)",
          1, "lot", 100_000, 300_000, "budget range", "B"),
         ("Gathering", "Ocean boom 1.1 m skirt: 1 gathering unit 200 m + 2 tip catch pockets x 100 m",
          400, "m", 200, 600, "budget USD/m for heavy offshore boom", "C"),
@@ -84,11 +84,11 @@ LEAN_CHANGES = [
     ("Screw blowers instead of 4-bar compressors", "our pressure need is 1.06-1.28 bar(g); blowers go to 1.5 bar(g)",
      "the mouth must be <= ~11 m deep (survey)"),
     ("Blowers in containers at the western tip, fed by a power cable", "removes the 3 km DN500 air main and the "
-     "compressor building", "ENEC confirms space, power route and security rules on the breakwater"),
+     "compressor building", "The operator confirms space, power route and security rules on the breakwater"),
     ("Concrete sleepers instead of steel frames", "one precast part gives support and ballast", "seabed survey"),
     ("Feed lines in pairs (5 instead of 10)", "curtain switched in 194 m blocks instead of 97 m", "none"),
     ("Shorter marine works (20 days)", "sections built and ballasted on land, float-and-sink", "contractor"),
-    ("Reuse ENEC surveys", "Barakah's marine works were surveyed already", "ENEC shares data"),
+    ("Reuse existing surveys", "The plant's marine works were surveyed already", "The operator shares data"),
     ("One gathering unit + two tip pockets, no owned boats", "the tide brings the swarm to the pockets; boats "
      "chartered on alert days", "pilot shows the pockets fill"),
 ]
@@ -108,9 +108,9 @@ OPEX = [
 ]
 CONTINGENCY = (0.20, 0.30)
 
-# Value of avoided outage: Barakah has 4 units of ~1,400 MW (5.6 GW in total, ENEC).
+# Value of avoided outage: The plant has 4 units of ~1,400 MW (5.6 GW in total).
 UNIT_MW = 1400
-VALUE_USD_PER_MWH = (50, 80)  # ASSUMED value of lost generation; to agree with ENEC
+VALUE_USD_PER_MWH = (50, 80)  # ASSUMED value of lost generation; to agree with the operator
 
 
 def build(design, res, items=None, opex=None):

@@ -326,7 +326,7 @@
       },
       {
         "group": "Marine works",
-        "item": "Survey gaps, detailed design, permits (reusing ENEC's existing site surveys)",
+        "item": "Survey gaps, detailed design, permits (reusing the operator's existing site surveys)",
         "qty": 1,
         "unit": "lot",
         "unit_low": 100000,
@@ -473,7 +473,7 @@
       {
         "change": "Blowers in containers at the western tip, fed by a power cable",
         "why": "removes the 3 km DN500 air main and the compressor building",
-        "depends_on": "ENEC confirms space, power route and security rules on the breakwater"
+        "depends_on": "The operator confirms space, power route and security rules on the breakwater"
       },
       {
         "change": "Concrete sleepers instead of steel frames",
@@ -491,9 +491,9 @@
         "depends_on": "contractor"
       },
       {
-        "change": "Reuse ENEC surveys",
-        "why": "Barakah's marine works were surveyed already",
-        "depends_on": "ENEC shares data"
+        "change": "Reuse existing surveys",
+        "why": "The plant's marine works were surveyed already",
+        "depends_on": "The operator shares data"
       },
       {
         "change": "One gathering unit + two tip pockets, no owned boats",

@@ -27,6 +27,9 @@ namespace Qandeel
             if (Array.IndexOf(args, "-benchmark") >= 0) StartCoroutine(Run());
             if (Array.IndexOf(args, "-tourtest") >= 0) StartCoroutine(TourTest());
             if (Array.IndexOf(args, "-standtest") >= 0) StartCoroutine(StandTest());
+            if (Array.IndexOf(args, "-challengetest") >= 0) StartCoroutine(ChallengeTest());
+            if (Array.IndexOf(args, "-optest") >= 0) StartCoroutine(OperationTest());
+            if (Array.IndexOf(args, "-scenariotest") >= 0) StartCoroutine(ScenarioTest());
             int s = Array.IndexOf(args, "-soak");
             if (s >= 0 && s + 1 < args.Length && int.TryParse(args[s + 1], out int minutes)) StartCoroutine(Soak(minutes));
         }
@@ -88,6 +91,115 @@ namespace Qandeel
             yield return new WaitForSecondsRealtime(8f); Shot("7_rough_sea"); yield return null;
             log.Append($"\"errors\": {errors}}}");
             File.WriteAllText(Path.Combine(dir, "stand_test.json"), log.ToString());
+            yield return null; yield return null;
+            Application.Quit();
+        }
+
+        /// <summary>Attract loop, then one full operator challenge played by the auto-operator (every incident answered
+        /// correctly after 1.5 s), result and leaderboard. Uses a separate test leaderboard file. Saves challenge_*.png
+        /// and challenge_test.json next to the executable, then quits.</summary>
+        IEnumerator ChallengeTest()
+        {
+            string dir = Path.GetDirectoryName(Application.dataPath);
+            void Shot(string n) => ScreenCapture.CaptureScreenshot(Path.Combine(dir, $"challenge_{n}.png"));
+            yield return new WaitForSecondsRealtime(4f);
+            var ch = Challenge.I; ch.UseBoardFile("leaderboard_test.json");
+            ch.StartAttract();
+            yield return new WaitForSecondsRealtime(3f); Shot("1_attract_closeup"); yield return null;
+            yield return new WaitForSecondsRealtime(10f); Shot("2_attract_alarm"); yield return null;
+            ch.ShowIntro(); yield return new WaitForSecondsRealtime(1.5f); Shot("3_intro"); yield return null;
+            ch.AutoPlay = true; ch.StartGame();
+            while (ch.State != Challenge.Phase.Playing) yield return null;
+            int shots = 0; string seen = null;
+            while (ch.State == Challenge.Phase.Playing)
+            {
+                if (ch.CurrentIncident != null && ch.CurrentIncident != seen) { seen = ch.CurrentIncident; yield return new WaitForSecondsRealtime(0.8f); if (shots < 3) Shot($"4_incident_{++shots}"); }
+                yield return null;
+            }
+            while (ch.State != Challenge.Phase.Result && ch.State != Challenge.Phase.Board) yield return null;
+            yield return new WaitForSecondsRealtime(1f); Shot("5_result"); yield return null;
+            ch.SaveName(); yield return new WaitForSecondsRealtime(1f); Shot("6_board"); yield return null;
+            File.WriteAllText(Path.Combine(dir, "challenge_test.json"), string.Format(CultureInfo.InvariantCulture,
+                "{{\"score\": {0}, \"avg_mw\": {1:F0}, \"bonus\": {2}, \"handled\": {3}, \"incidents\": {4}, \"avg_fps_note\": \"see bench\", \"errors\": {5}}}",
+                ch.Score, ch.AvgMW, ch.Bonus, ch.Handled, ch.Incidents, errors));
+            yield return null; yield return null;
+            Application.Quit();
+        }
+
+        /// <summary>Plays the live operation end to end (phases advance on their own), then "what if there was no curtain?".
+        /// Saves op_*.png during each phase and op_test.json next to the executable, then quits.</summary>
+        IEnumerator OperationTest()
+        {
+            string dir = Path.GetDirectoryName(Application.dataPath);
+            void Shot(string n) => ScreenCapture.CaptureScreenshot(Path.Combine(dir, (Array.IndexOf(Environment.GetCommandLineArgs(), "-early") >= 0 ? "opE_" : "op_") + n + ".png"));
+            yield return new WaitForSecondsRealtime(4f);
+            var op = Operation.I; float t0 = Time.realtimeSinceStartup;
+            op.Begin(Array.IndexOf(Environment.GetCommandLineArgs(), "-early") >= 0);
+            int last = -1; float phaseStart = 0;
+            var times = new System.Text.StringBuilder(); var fps = new System.Text.StringBuilder();
+            int frames = 0; float fpsT0 = Time.realtimeSinceStartup;
+            while (op.Phase < 6 && Time.realtimeSinceStartup - t0 < 400f)
+            {
+                frames++;
+                if (op.Phase != last)
+                {
+                    if (last >= 0) fps.Append($"{last + 1}:{frames / Mathf.Max(0.01f, Time.realtimeSinceStartup - fpsT0):F0} ");
+                    frames = 0; fpsT0 = Time.realtimeSinceStartup;
+                    last = op.Phase; phaseStart = Time.realtimeSinceStartup; times.Append($"{op.Phase + 1}:{phaseStart - t0:F0} ");
+                }
+                else if (phaseStart > 0 && Time.realtimeSinceStartup - phaseStart > (op.Phase == 2 ? 9f : 6f)) { Shot($"{op.Phase + 1}"); phaseStart = -1; }
+                yield return null;
+            }
+            yield return new WaitForSecondsRealtime(3f); Shot("7"); yield return null;
+            var cv = FindFirstObjectByType<CurtainView>();
+            string clear = string.Format(CultureInfo.InvariantCulture, "\"held\": {0:F3}, \"released\": {1}, \"units_with_curtain\": {2}, ", cv.Sim.HeldShare, cv.Released, cv.UnitsOnline);
+            op.SendMessage("StartWithoutForTest");
+            yield return new WaitForSecondsRealtime(20f); Shot("8_without"); yield return null;
+            while (!op.PhaseDone && Time.realtimeSinceStartup - t0 < 500f) yield return null;
+            yield return new WaitForSecondsRealtime(1f); Shot("9_without_end"); yield return null;
+            File.WriteAllText(Path.Combine(dir, op.Early ? "op_test_early.json" : "op_test.json"), "{" + clear + string.Format(CultureInfo.InvariantCulture,
+                "\"units_without\": {0}, \"passed_without\": {1}, \"phase_start_s\": \"{2}\", \"phase_avg_fps\": \"{5}\", \"total_s\": {3:F0}, \"voice_lines\": {6}, \"voice_missing\": {7}, \"sounds\": \"{8}\", \"errors\": {4}}}",
+                cv.UnitsOnline, cv.Sim.Entered, times.ToString().Trim(), Time.realtimeSinceStartup - t0, errors, fps.ToString().Trim(),
+                StandAudio.VoiceLines, StandAudio.VoiceMissing, string.Join(", ", System.Linq.Enumerable.Select(StandAudio.Counts, kv => kv.Key + " x" + kv.Value))));
+            yield return null; yield return null;
+            Application.Quit();
+        }
+
+        /// <summary>Clicks every scenario button and both sliders the way a visitor would (same methods the UI calls),
+        /// lets each run 15 s, and records what changed: air, approach, bubbles on, held share, passed. Saves sc_*.png and
+        /// scenario_test.json next to the executable, then quits.</summary>
+        IEnumerator ScenarioTest()
+        {
+            string dir = Path.GetDirectoryName(Application.dataPath);
+            var cv = FindFirstObjectByType<CurtainView>();
+            var sb = new System.Text.StringBuilder("{\"scenarios\": [");
+            yield return new WaitForSecondsRealtime(4f);
+            string Row(string name, string banner = null)
+            {
+                int on = 0; foreach (var s in cv.Sim.SectionOn) if (s) on++;
+                return string.Format(CultureInfo.InvariantCulture,
+                    "{{\"name\": \"{0}\", \"air\": {1:F2}, \"approach\": {2:F3}, \"sections_on\": {3}, \"held\": {4:F3}, \"passed\": {5}, \"units\": {6}, \"banner\": \"{7}\"}}",
+                    name, cv.Sim.AirflowLps, cv.Sim.ApproachSpeed, on, cv.Sim.HeldShare, cv.Sim.Entered, cv.UnitsOnline, (banner ?? cv.AlertText).Replace("\"", "'"));
+            }
+            for (int k = 0; k < Qandeel.Core.Scenario.All.Length; k++)
+            {
+                cv.LoadScenario(k);
+                yield return new WaitForSecondsRealtime(15f);
+                ScreenCapture.CaptureScreenshot(Path.Combine(dir, $"sc_{k}.png")); yield return null;
+                sb.Append(Row(Qandeel.Core.Scenario.All[k].Name)).Append(", ");
+            }
+            cv.LoadScenario(0); yield return new WaitForSecondsRealtime(3f);
+            cv.SetAirflow(1.0); yield return new WaitForSecondsRealtime(3f); string bannerAir = cv.AlertText; yield return new WaitForSecondsRealtime(12f);
+            ScreenCapture.CaptureScreenshot(Path.Combine(dir, "sc_air_1.png")); yield return null;
+            sb.Append(Row("slider: air 1.0", bannerAir)).Append(", ");
+            cv.LoadScenario(0); yield return new WaitForSecondsRealtime(3f);
+            cv.SetApproach(0.35); yield return new WaitForSecondsRealtime(3f); string bannerAppr = cv.AlertText; yield return new WaitForSecondsRealtime(12f);
+            ScreenCapture.CaptureScreenshot(Path.Combine(dir, "sc_approach_035.png")); yield return null;
+            sb.Append(Row("slider: approach 0.35", bannerAppr)).Append(", ");
+            cv.LoadScenario(0); cv.SetHighAir(true); yield return new WaitForSecondsRealtime(3f);
+            sb.Append(Row("high air"));
+            sb.Append($"], \"errors\": {errors}}}");
+            File.WriteAllText(Path.Combine(dir, "scenario_test.json"), sb.ToString());
             yield return null; yield return null;
             Application.Quit();
         }

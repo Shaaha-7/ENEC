@@ -7,7 +7,7 @@ using UnityEngine.Rendering.HighDefinition;
 
 namespace Qandeel.EditorTools
 {
-    /// <summary>Renders stills of the Barakah scene to unity/previews/ without building a player.
+    /// <summary>Renders stills of the power plant scene to unity/previews/ without building a player.
     /// Render: the stand view. Diagnose: exposure sweep, test sphere and an HDRP-made sun, to find lighting problems.
     /// Unity.exe -batchmode -quit -projectPath ... -executeMethod Qandeel.EditorTools.PreviewRenderer.Render</summary>
     public static class PreviewRenderer
@@ -16,7 +16,7 @@ namespace Qandeel.EditorTools
 
         public static void Render()
         {
-            EditorSceneManager.OpenScene("Assets/Scenes/Barakah.unity");
+            EditorSceneManager.OpenScene("Assets/Scenes/PowerPlant.unity");
             Directory.CreateDirectory(Dir);
             Shot(Camera.main, "stand_view.png");
             var cam = Camera.main;
@@ -26,7 +26,7 @@ namespace Qandeel.EditorTools
 
         public static void Diagnose()
         {
-            EditorSceneManager.OpenScene("Assets/Scenes/Barakah.unity");
+            EditorSceneManager.OpenScene("Assets/Scenes/PowerPlant.unity");
             Directory.CreateDirectory(Dir);
             var cam = Camera.main;
             var vol = Object.FindFirstObjectByType<Volume>();

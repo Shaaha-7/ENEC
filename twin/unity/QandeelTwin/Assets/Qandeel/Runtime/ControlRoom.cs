@@ -67,7 +67,7 @@ namespace Qandeel
             for (int i = 0; i < scenBtns.Length; i++)
             {
                 int k = i;
-                var b = new Button(() => view.Load(k)) { text = Scenario.All[i].Name };
+                var b = new Button(() => view.LoadScenario(k)) { text = Scenario.All[i].Name };
                 b.AddToClassList("btn"); b.AddToClassList("btn--scenario");
                 scenariosBox.Add(b); scenBtns[i] = b;
             }
@@ -77,8 +77,8 @@ namespace Qandeel
             autoAir = root.Q<Toggle>("auto-air");
             autoAir.RegisterValueChangedCallback(e => view.autoAir = e.newValue);
             inAir = root.Q<Slider>("in-air"); inApproach = root.Q<Slider>("in-approach");
-            inAir.RegisterValueChangedCallback(e => { view.autoAir = false; view.Sim.AirflowLps = e.newValue; });
-            inApproach.RegisterValueChangedCallback(e => view.Sim.ApproachSpeed = e.newValue);
+            inAir.RegisterValueChangedCallback(e => view.SetAirflow(e.newValue));
+            inApproach.RegisterValueChangedCallback(e => view.SetApproach(e.newValue));
 
             // Demo controls (operating rules on top of the physics)
             demoDeep = root.Q<Button>("demo-deep"); demoDeep.clicked += () => view.SetDeepSwarm(!view.DeepSwarm);
@@ -182,7 +182,7 @@ namespace Qandeel
             failSection.EnableInClassList("btn--on", !sim.SectionOn[4]);
             failCamera.EnableInClassList("btn--on", view.CameraOff);
             var fails = new System.Collections.Generic.List<string>();
-            if (view.BlowersTripped > 0) fails.Add($"{Operations.RunningBlowers(view.BlowersTripped)} of 2 duty blowers running · air {sim.AirflowLps:F1} L/s/m" +
+            if (view.BlowersTripped > 0) fails.Add($"{3 - view.BlowersTripped} of 3 blowers available · air {sim.AirflowLps:F1} L/s/m" +
                                                    (view.BlowersTripped == 1 ? " (standby took over, no loss)" : ""));
             if (!sim.SectionOn[4]) fails.Add($"Gap at section 5: {sim.Entered} passed to the existing screens (last layer)");
             if (view.CameraOff) fails.Add("Camera off: the forecast still switches the curtain on (+13 h for 15 km NNW)");
@@ -205,6 +205,7 @@ namespace Qandeel
 
         void ToggleTour() { if (tour != null) StopTour(); else StartTour(); }
 
+        public void StopTourIfRunning() { if (tour != null) StopTour(); }
         public void StartTour() { lastInput = Time.unscaledTime; panels?.Show(""); tour = StartCoroutine(Tour()); }
 
         /// <summary>Opens a panel by tab name ("" closes); used by the benchmark screenshots.</summary>

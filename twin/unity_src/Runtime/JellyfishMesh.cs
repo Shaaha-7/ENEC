@@ -9,7 +9,7 @@ namespace Qandeel
     /// </summary>
     public static class JellyfishMesh
     {
-        public const int Frames = 6;
+        public const int Frames = 10;
 
         /// <summary>One frame of the swim cycle: phase 0..1 drives the bell pulse (contract/relax) and the arm sway.</summary>
         public static Mesh Build(float bellDiameter = 0.38f, float phase = 0f)

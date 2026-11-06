@@ -1,6 +1,6 @@
 """Record the guided-tour narration with ElevenLabs for the Unity simulator.
 
-Reads the tour lines word for word from data/narration_lines.json and writes unity_site/voice/<key>.mp3.
+Reads the tour lines word for word from data/narration_lines.json (and the challenge lines from data/challenge_lines.json) and writes unity_site/voice/<key>.mp3.
 A clip is only re-recorded when its text, voice or model changed (hash in voice_manifest.json).
 The API key is read from the ELEVENLABS_API_KEY environment variable only; it is never written to a file.
 Run: python tools/make_voice_unity.py [--voice VOICE_ID]
@@ -27,6 +27,8 @@ if not key:
     sys.exit("Set ELEVENLABS_API_KEY in your environment first (never in a file).")
 
 text = json.loads((ROOT / "data/narration_lines.json").read_text(encoding="utf-8"))
+text.update(json.loads((ROOT / "data/challenge_lines.json").read_text(encoding="utf-8")))  # operator challenge + attract lines
+LINES += [k for k in text if k.startswith("ch.")]
 out = ROOT / "unity_site/voice"; out.mkdir(parents=True, exist_ok=True)
 man_path = out / "voice_manifest.json"
 manifest = json.loads(man_path.read_text()) if man_path.exists() else {}

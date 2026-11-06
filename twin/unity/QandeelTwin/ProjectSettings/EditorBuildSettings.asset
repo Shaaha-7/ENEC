@@ -6,6 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Barakah.unity
-    guid: 76e8f16efde5403439861aecf9e636dd
+    path: Assets/Scenes/PowerPlant.unity
+    guid: f07e524b40bf4c04091ef0c21b91c1ca
   m_configObjects: {}

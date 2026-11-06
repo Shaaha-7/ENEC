@@ -10,7 +10,7 @@ using UnityEngine.Rendering.HighDefinition;
 namespace Qandeel.EditorTools
 {
     /// <summary>
-    /// Builds Assets/Scenes/Barakah.unity from unity_site/ (made by tools/make_unity_site.py): the real Sentinel-2 site as terrain,
+    /// Builds Assets/Scenes/PowerPlant.unity from unity_site/ (made by tools/make_unity_site.py): the real Sentinel-2 site as terrain,
     /// an HDRP ocean at sea level, sun, camera and the 10 curtain sections across the measured mouth.
     /// World frame: metres, origin at the mouth centre, x = east, z = north, y = up (sea level 0).
     /// Unity.exe -batchmode -quit -projectPath ... -executeMethod Qandeel.EditorTools.SiteBuilder.Build
@@ -25,7 +25,7 @@ namespace Qandeel.EditorTools
             public float[] terrain_origin_xz, tip_a_xz, tip_b_xz;
         }
 
-        [MenuItem("Qandeel/Rebuild Barakah scene")]
+        [MenuItem("Qandeel/Rebuild power plant scene")]
         public static void Build()
         {
             var site = JsonUtility.FromJson<SiteJson>(File.ReadAllText(Path.Combine(SiteDir, "site_unity.json")));
@@ -58,9 +58,9 @@ namespace Qandeel.EditorTools
             };
             AssetDatabase.CreateAsset(layer, "Assets/Site/Satellite.terrainlayer");
             td.terrainLayers = new[] { layer };
-            AssetDatabase.CreateAsset(td, "Assets/Site/BarakahTerrain.asset");
+            AssetDatabase.CreateAsset(td, "Assets/Site/PlantTerrain.asset");
             var terrainGo = Terrain.CreateTerrainGameObject(td);
-            terrainGo.name = "Barakah site (Sentinel-2, 1 Nov 2025; heights approximate)";
+            terrainGo.name = "Power plant site (Sentinel-2, 1 Nov 2025; heights approximate)";
             terrainGo.transform.position = new Vector3(site.terrain_origin_xz[0], site.height_min_m, site.terrain_origin_xz[1]);
             var terrain = terrainGo.GetComponent<Terrain>();
             terrain.heightmapPixelError = 3; terrain.basemapDistance = 30000;
@@ -157,6 +157,7 @@ namespace Qandeel.EditorTools
             // Live curtain physics and jellyfish markers
             var view = curtain.AddComponent<CurtainView>();
             view.tipA = a; view.tipB = b; view.sectionRenderers = sections; view.sectionOn = mat; view.sectionOff = offMat;
+            BuildAiCamera(a, b, terrain, terrainGo.transform.position.y);
             var tmp = GameObject.CreatePrimitive(PrimitiveType.Sphere);
             view.markerMesh = tmp.GetComponent<MeshFilter>().sharedMesh;
             UnityEngine.Object.DestroyImmediate(tmp);
@@ -187,8 +188,8 @@ namespace Qandeel.EditorTools
                 sections[i].enabled = false; // the boil shows the curtain now; the orange bars were placeholders
             }
             // Opaque bells: HDRP water refraction only shows opaque objects below the surface
-            view.heldMat = VisualBuilder.Lit("JellyBell", new Color(0.78f, 0.86f, 1f), 0.9f);
-            view.passedMat = VisualBuilder.Lit("JellyPassedBell", new Color(1f, 0.3f, 0.3f), 0.85f);
+            view.heldMat = VisualBuilder.Glow(VisualBuilder.Lit("JellyBell", new Color(0.78f, 0.86f, 1f), 0.9f), new Color(0.45f, 0.85f, 1f), 0.35f);
+            view.passedMat = VisualBuilder.Glow(VisualBuilder.Lit("JellyPassedBell", new Color(1f, 0.3f, 0.3f), 0.85f), new Color(1f, 0.15f, 0.1f), 0.9f);
             view.deepMat = VisualBuilder.Lit("JellyDeepBell", new Color(0.45f, 0.5f, 0.6f), 0.85f);
 
             // Workboat with tow bitt and A-frame, plant massing, and section 5 in detail for the underwater view
@@ -203,7 +204,7 @@ namespace Qandeel.EditorTools
             var boatGo = VisualBuilder.Model("Assets/Models/workboat.fbx", "Workboat (crewed, chartered, 9 m; drawn 3x)", "Tow_Bitt", "Wheelhouse");
             view.boat = boatGo.transform;
             // Four APR-1400-class units at their satellite positions (illustrative massing), turbine halls seaward (north)
-            var plant = new GameObject("Barakah Units 1-4 (illustrative massing at satellite positions)");
+            var plant = new GameObject("Plant units 1-4 (illustrative massing at satellite positions)");
             foreach (var px in new[] { 1229f, 1253f, 1294f, 1318f })
             {
                 var u = VisualBuilder.Model("Assets/Models/plant_unit.fbx", "Unit", "Auxiliary", "Turbine_Hall");
@@ -275,9 +276,9 @@ namespace Qandeel.EditorTools
             var bagGo = VisualBuilder.Model("Assets/Models/catch_bag.fbx", "Closed-bottom bag (4 x 3 m mouth, ~20 m3)", "Bag", "Rim");
             bagGo.SetActive(false); view.bagModel = bagGo.transform;
             view.bagFoam = VisualBuilder.FoamTrail("Net and bag drag foam", boomGo.transform, Vector3.zero, foamMat, 25f, 6f, 30f);
-            view.heldClear = VisualBuilder.Lit("JellyClear", new Color(0.78f, 0.88f, 1f, 0.42f), 0.95f, 0f, true);
+            view.heldClear = VisualBuilder.Glow(VisualBuilder.Lit("JellyClear", new Color(0.78f, 0.88f, 1f, 0.42f), 0.95f, 0f, true), new Color(0.5f, 0.85f, 1f), 0.25f);
             view.deepClear = VisualBuilder.Lit("JellyDeepClear", new Color(0.5f, 0.55f, 0.65f, 0.4f), 0.95f, 0f, true);
-            view.passedClear = VisualBuilder.Lit("JellyPassedClear", new Color(1f, 0.35f, 0.35f, 0.45f), 0.95f, 0f, true);
+            view.passedClear = VisualBuilder.Glow(VisualBuilder.Lit("JellyPassedClear", new Color(1f, 0.35f, 0.35f, 0.45f), 0.95f, 0f, true), new Color(1f, 0.2f, 0.15f), 0.6f);
 
             var buoy = VisualBuilder.Model("Assets/Models/marker_buoy.fbx", "Release point 3 km at 330 deg (lit marker buoy: design assumption)", "Float", "Mast");
             buoy.transform.position = new Vector3((float)rx, 0f, (float)rz); buoy.transform.localScale = Vector3.one * 3f; // drawn 3x
@@ -287,6 +288,7 @@ namespace Qandeel.EditorTools
             var cam = camGo.AddComponent<Camera>();
             cam.nearClipPlane = 1f; cam.farClipPlane = 40000f; cam.fieldOfView = 50f;
             camGo.AddComponent<HDAdditionalCameraData>();
+            camGo.AddComponent<AudioListener>();   // without a listener every voice line and sound plays silently
             var mid = (a + b) * 0.5f;
             camGo.transform.position = mid + seaward * 1100f + Vector3.up * 420f - along * 250f;
             camGo.transform.LookAt(mid + seaward * 120f);
@@ -323,6 +325,23 @@ namespace Qandeel.EditorTools
                 File.Copy(srcMp3, $"Assets/Audio/{k}.mp3", true); AssetDatabase.ImportAsset($"Assets/Audio/{k}.mp3");
                 return AssetDatabase.LoadAssetAtPath<AudioClip>($"Assets/Audio/{k}.mp3");
             }).ToArray();
+            // Stand sound (synthesised at runtime) + operator challenge voice lines (data/challenge_lines.json, ElevenLabs)
+            var audio = uiGo.AddComponent<StandAudio>();
+            audio.view = view;
+            var chKeys = System.Text.RegularExpressions.Regex.Matches(File.ReadAllText(Path.Combine(SiteDir, "../data/challenge_lines.json")), "\"(ch[.][a-z_]+)\"")
+                .Cast<System.Text.RegularExpressions.Match>().Select(m => m.Groups[1].Value.Replace('.', '_')).ToArray();
+            audio.voiceKeys = chKeys;
+            audio.voiceClips = chKeys.Select(k =>
+            {
+                var srcMp3 = Path.Combine(SiteDir, "voice", k + ".mp3");
+                if (!File.Exists(srcMp3)) { Debug.LogWarning("[Qandeel] voice line missing: " + k); return null; }
+                File.Copy(srcMp3, $"Assets/Audio/{k}.mp3", true); AssetDatabase.ImportAsset($"Assets/Audio/{k}.mp3");
+                return AssetDatabase.LoadAssetAtPath<AudioClip>($"Assets/Audio/{k}.mp3");
+            }).ToArray();
+            Debug.Log($"[Qandeel] challenge voice lines: {audio.voiceClips.Count(c => c != null)}/{chKeys.Length}");
+            var game = uiGo.AddComponent<Challenge>();
+            game.view = view;
+            uiGo.AddComponent<Operation>().view = view;
 
             // Panel data straight from the kit (no copies edited by hand)
             Directory.CreateDirectory("Assets/UI/Data");
@@ -353,10 +372,10 @@ namespace Qandeel.EditorTools
             room.aiImages = detFiles.Select(f => Copy<Texture2D>("data/ai/" + f, f)).ToArray();
             Debug.Log($"[Qandeel] panels: 3 forecast atlases, {room.aiImages.Length} AI images");
 
-            EditorSceneManager.SaveScene(scene, "Assets/Scenes/Barakah.unity");
-            EditorBuildSettings.scenes = new[] { new EditorBuildSettingsScene("Assets/Scenes/Barakah.unity", true) };
+            EditorSceneManager.SaveScene(scene, "Assets/Scenes/PowerPlant.unity");
+            EditorBuildSettings.scenes = new[] { new EditorBuildSettingsScene("Assets/Scenes/PowerPlant.unity", true) };
             AssetDatabase.SaveAssets();
-            Debug.Log("[Qandeel] Barakah scene built");
+            Debug.Log("[Qandeel] power plant scene built");
         }
 
         /// <summary>One value from the flat narration JSON (string values only).</summary>
@@ -416,13 +435,80 @@ namespace Qandeel.EditorTools
             PlayerSettings.productName = "Qandeel";
             var opts = new BuildPlayerOptions
             {
-                scenes = new[] { "Assets/Scenes/Barakah.unity" },
+                scenes = new[] { "Assets/Scenes/PowerPlant.unity" },
                 locationPathName = Path.GetFullPath(Path.Combine(Application.dataPath, "../Builds/Qandeel/Qandeel.exe")),
                 target = BuildTarget.StandaloneWindows64,
             };
             var report = BuildPipeline.BuildPlayer(opts);
             Debug.Log($"[Qandeel] build {report.summary.result}, {report.summary.totalSize / 1048576} MB");
             if (report.summary.result != UnityEditor.Build.Reporting.BuildResult.Succeeded) EditorApplication.Exit(3);
+        }
+            /// <summary>AI detector camera on the western breakwater head: mast, housing, lens, status lamp, solar panel and a
+        /// field-of-view wedge on the water (900 m, 70 degrees), drawn 3x real size like the boats.</summary>
+        static void BuildAiCamera(Vector3 a, Vector3 b, Terrain terrain, float terrainY)
+        {
+            Vector3 along = (b - a).normalized, seaward = Vector3.Cross(along, Vector3.up).normalized;
+            if (Vector3.Dot(seaward, Vector3.forward) < 0) seaward = -seaward;
+            Vector3 tip = a.x < b.x ? a : b, inward = (tip == a ? b - a : a - b).normalized;
+            Vector3 basePos = tip - inward * 12f - seaward * 25f;          // on the head, just back from the gap
+            basePos.y = Mathf.Max(terrain.SampleHeight(basePos) + terrainY, 2.5f);
+            const float S = 3f;                                            // drawn 3x real size (labelled on screen)
+
+            var white = VisualBuilder.Lit("CamWhite", new Color(0.92f, 0.94f, 0.96f), 0.7f);
+            var steel = VisualBuilder.Lit("CamSteel", new Color(0.55f, 0.58f, 0.6f), 0.6f, 0.9f);
+            var glass = VisualBuilder.Lit("CamLens", new Color(0.02f, 0.04f, 0.06f), 0.97f, 0.3f);
+            var solar = VisualBuilder.Lit("CamSolar", new Color(0.05f, 0.09f, 0.2f), 0.9f, 0.4f);
+            var lampIdle = VisualBuilder.Glow(VisualBuilder.Lit("CamLampIdle", new Color(0.3f, 1f, 0.6f), 0.8f), new Color(0.3f, 1f, 0.6f), 3f);
+            var lampAlarm = VisualBuilder.Glow(VisualBuilder.Lit("CamLampAlarm", new Color(1f, 0.15f, 0.1f), 0.8f), new Color(1f, 0.15f, 0.1f), 4f);
+            var coneIdle = VisualBuilder.Glow(VisualBuilder.Lit("CamConeIdle", new Color(0.3f, 0.85f, 0.95f, 0.07f), 0.9f, 0f, true), new Color(0.3f, 0.85f, 0.95f), 0.08f);
+            var coneAlarm = VisualBuilder.Glow(VisualBuilder.Lit("CamConeAlarm", new Color(1f, 0.25f, 0.15f, 0.12f), 0.9f, 0f, true), new Color(1f, 0.25f, 0.15f), 0.18f);
+
+            var root = new GameObject("AI detector camera (drawn 3x; western breakwater head)");
+            root.transform.position = basePos;
+            GameObject Part(PrimitiveType t, string n, Vector3 local, Vector3 scale, Material m, Transform parent = null)
+            {
+                var g = GameObject.CreatePrimitive(t); g.name = n;
+                g.transform.SetParent(parent != null ? parent : root.transform, false);
+                g.transform.localPosition = local; g.transform.localScale = scale;
+                g.GetComponent<Renderer>().sharedMaterial = m;
+                UnityEngine.Object.DestroyImmediate(g.GetComponent<Collider>());
+                return g;
+            }
+            Part(PrimitiveType.Cube, "Plinth", new Vector3(0, 0.3f * S, 0), new Vector3(1.4f, 0.6f, 1.4f) * S, steel);
+            Part(PrimitiveType.Cylinder, "Mast", new Vector3(0, 4.3f * S, 0), new Vector3(0.22f * S, 4f * S, 0.22f * S), white);
+            var panel = Part(PrimitiveType.Cube, "Solar panel", new Vector3(0, 6.2f * S, -0.5f * S), new Vector3(1.6f, 0.06f, 1.0f) * S, solar);
+            panel.transform.localRotation = Quaternion.Euler(-30f, 0, 0);
+            var head = new GameObject("Camera head").transform;
+            head.SetParent(root.transform, false); head.localPosition = new Vector3(0, 8.5f * S, 0);
+            Part(PrimitiveType.Cube, "Housing", new Vector3(0, 0, 0.25f * S), new Vector3(0.55f, 0.5f, 1.1f) * S, white, head);
+            Part(PrimitiveType.Cube, "Sun hood", new Vector3(0, 0.3f * S, 0.35f * S), new Vector3(0.65f, 0.06f, 1.3f) * S, white, head);
+            var lens = Part(PrimitiveType.Cylinder, "Lens", new Vector3(0, 0, 0.82f * S), new Vector3(0.36f, 0.06f, 0.36f) * S, glass, head);
+            lens.transform.localRotation = Quaternion.Euler(90f, 0, 0);
+            var lamp = Part(PrimitiveType.Sphere, "Status lamp", new Vector3(0, 0.45f * S, -0.2f * S), Vector3.one * 0.22f * S, lampIdle, head);
+
+            // field-of-view wedge on the water
+            var cone = new GameObject("Field of view (650 m, 70 deg)");
+            cone.transform.position = new Vector3(basePos.x, 0.6f, basePos.z);
+            cone.transform.rotation = Quaternion.LookRotation(seaward);
+            var mesh = new Mesh { name = "CamFov" };
+            int seg = 24; var v = new Vector3[seg + 2]; var tri = new int[seg * 3];
+            v[0] = Vector3.zero;
+            for (int i = 0; i <= seg; i++)
+            {
+                float ang = Mathf.Deg2Rad * (-35f + 70f * i / seg);
+                v[i + 1] = new Vector3(Mathf.Sin(ang), 0, Mathf.Cos(ang)) * 650f;
+            }
+            for (int i = 0; i < seg; i++) { tri[i * 3] = 0; tri[i * 3 + 1] = i + 1; tri[i * 3 + 2] = i + 2; }
+            mesh.vertices = v; mesh.triangles = tri; mesh.RecalculateNormals(); mesh.RecalculateBounds();
+            AssetDatabase.CreateAsset(mesh, "Assets/Site/CamFov.asset");
+            cone.AddComponent<MeshFilter>().sharedMesh = mesh;
+            var cr = cone.AddComponent<MeshRenderer>(); cr.sharedMaterial = coneIdle;
+            cr.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+
+            var cam = root.AddComponent<AiCameraMast>();
+            cam.head = head; cam.cone = cr; cam.lamp = lamp.GetComponent<Renderer>(); cam.seaward = seaward;
+            cam.coneIdle = coneIdle; cam.coneAlarm = coneAlarm; cam.lampIdle = lampIdle; cam.lampAlarm = lampAlarm;
+            Debug.Log($"[Qandeel] AI camera mast at {basePos} (western breakwater head)");
         }
     }
 }

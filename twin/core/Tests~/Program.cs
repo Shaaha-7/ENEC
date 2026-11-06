@@ -179,6 +179,9 @@ static class Program
             double h0 = CurtainHold.HeldShareOf(0.14, 3.0, seed: 0), h1 = CurtainHold.HeldShareOf(0.14, q1, seed: 0);
             Check("Demo failure: blower trip", Math.Abs(q1 - 3.0) < 1e-9 && h1 == h0 && Math.Abs(q2 - 1.5) < 0.01,
                   $"1 trip: standby takes over, {q1:F2} L/s/m, held {h1:P0} = {h0:P0}; 2 trips: {q2:F2} L/s/m");
+            double qh = Operations.AirflowAfterTrips(Operations.HighAirLps, 0), qh1 = Operations.AirflowAfterTrips(Operations.HighAirLps, 1);
+            Check("Demo: high air uses all 3 blowers", Math.Abs(qh - 4.5) < 0.01 && Math.Abs(qh1 - 3.0) < 0.01,
+                  $"high air {qh:F2} L/s/m with 3 blowers; after one trip {qh1:F2} L/s/m");
             var sim = Scenario.All[0].Create(seed: 0); sim.SectionOn[4] = false; sim.Run(3);
             Check("Demo failure: one section off", sim.Entered > 0 && sim.HeldShare < h0,
                   $"{sim.Entered} pass through the gap to the existing screens; held {sim.HeldShare:P0}");

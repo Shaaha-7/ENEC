@@ -5,7 +5,7 @@ using UnityEngine.Rendering.HighDefinition;
 
 namespace Qandeel.EditorTools
 {
-    /// <summary>Art pass for the Barakah scene: Gulf water, curtain foam, workboat, plant massing, underwater section.
+    /// <summary>Art pass for the power plant scene: Gulf water, curtain foam, workboat, plant massing, underwater section.
     /// Dimensions from the design files; anything not specified is labelled a design assumption or illustrative.</summary>
     public static class VisualBuilder
     {
@@ -16,6 +16,17 @@ namespace Qandeel.EditorTools
             if (transparent) { m.SetFloat("_SurfaceType", 1f); m.SetFloat("_BlendMode", 0f); }
             HDMaterial.ValidateMaterial(m);
             AssetDatabase.CreateAsset(m, $"Assets/Site/{name}.mat");
+            return m;
+        }
+
+        /// <summary>Soft self-glow that reads the same at any exposure (exposure weight 0): jellyfish stay visible
+        /// against bright water from the air and in the dim water under the surface.</summary>
+        public static Material Glow(Material m, Color c, float strength)
+        {
+            m.SetColor("_EmissiveColorLDR", c); m.SetFloat("_UseEmissiveIntensity", 0f);
+            m.SetColor("_EmissiveColor", c.linear * strength);
+            m.SetFloat("_EmissiveExposureWeight", 0f);
+            HDMaterial.ValidateMaterial(m); EditorUtility.SetDirty(m);
             return m;
         }
 
@@ -236,7 +247,7 @@ namespace Qandeel.EditorTools
         {
             var concrete = Lit("Concrete_Light", new Color(0.86f, 0.84f, 0.8f), 0.25f);
             var hall = Lit("Hall_Cladding", new Color(0.78f, 0.8f, 0.82f), 0.35f, 0.2f);
-            var root = new GameObject("Barakah Units 1-4 (illustrative massing at satellite positions)");
+            var root = new GameObject("Plant units 1-4 (illustrative massing at satellite positions)");
             // Image-pixel centres of the four reactor buildings read from the Sentinel-2 scene (x = (px-1000)*10, z = (1000-py)*10)
             float[] px = { 1229f, 1253f, 1294f, 1318f }; const float py = 1254f;
             foreach (var x in px)

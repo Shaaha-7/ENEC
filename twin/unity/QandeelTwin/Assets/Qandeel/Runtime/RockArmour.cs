@@ -6,7 +6,7 @@ namespace Qandeel
     /// <summary>
     /// Rock armour along the real breakwaters: rocks scattered on every point of data/breakwater.json (Sentinel-2 rock-armour
     /// pixels, 10 m), sitting on the terrain, drawn with GPU instancing. Unit shape and size are a generic quarry-rock
-    /// DESIGN ASSUMPTION (Barakah's concrete armour units are not verified), 2-4.5 m across.
+    /// DESIGN ASSUMPTION (the site's concrete armour units are not verified), 2-4.5 m across.
     /// </summary>
     public sealed class RockArmour : MonoBehaviour
     {

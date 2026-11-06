@@ -5,7 +5,7 @@
         <ui:VisualElement class="topbar">
             <ui:VisualElement class="brand">
                 <ui:Label text="QANDEEL" class="brand__name" />
-                <ui:Label text="Jellyfish swarm defence · Barakah seawater intake" class="brand__sub" />
+                <ui:Label text="Jellyfish swarm defence · power plant seawater intake" class="brand__sub" />
             </ui:VisualElement>
             <ui:VisualElement class="kpis">
                 <ui:VisualElement class="kpi"><ui:Label text="SEA TIME" class="kpi__k" /><ui:Label name="kpi-time" class="kpi__v" /></ui:VisualElement>

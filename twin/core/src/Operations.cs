@@ -20,11 +20,13 @@ namespace Qandeel.Core
         /// <summary>Each duty blower supplies half the normal flow (174 m3/min at 3 L/s/m over 967 m): ~87 m3/min.</summary>
         public static readonly double BlowerM3PerMin = 3.0 * Site.GapWidthM * 60.0 / 1000.0 / DutyBlowers;
 
-        /// <summary>Airflow (L/s per m) the blowers can still deliver after `tripped` units trip: the standby unit
-        /// takes over the first trip, so the curtain loses nothing until a second unit trips.</summary>
+        /// <summary>Airflow (L/s per m) the blowers can deliver for a demand after `tripped` units trip. Normal air needs
+        /// the 2 duty blowers and the standby covers the first trip; high air (4.5 L/s/m) needs all 3 blowers.</summary>
         public static double AirflowAfterTrips(double demandLps, int tripped)
         {
-            int running = Math.Min(DutyBlowers, Blowers - Math.Max(0, tripped));
+            double dutyLps = DutyBlowers * BlowerM3PerMin * 1000.0 / 60.0 / Site.GapWidthM;
+            int needed = demandLps > dutyLps + 1e-9 ? Blowers : DutyBlowers;
+            int running = Math.Min(needed, Blowers - Math.Max(0, tripped));
             double capLps = running * BlowerM3PerMin * 1000.0 / 60.0 / Site.GapWidthM;
             return Math.Min(demandLps, capLps);
         }
@@ -41,7 +43,7 @@ namespace Qandeel.Core
             return (DepthRisk.HeldWorst(DeepSwarmMeanM, layer), DepthRisk.HeldBest(DeepSwarmMeanM, layer));
         }
 
-        /// <summary>Plant response for the stand: Barakah has 4 units of ~1,400 MWe (5,600 MW). ILLUSTRATIVE, NOT MODELLED:
+        /// <summary>Plant response for the stand: The plant has 4 units of ~1,400 MWe (5,600 MW). ILLUSTRATIVE, NOT MODELLED:
         /// one unit is taken offline for every 10% of the modelled swarm that reaches the intake screens within an hour.
         /// Shows why holding the swarm matters; the real screen capacity and trip logic are the operator's.</summary>
         public const int PlantUnits = 4; public const double UnitMW = 1400.0, TripSharePerUnit = 0.10;

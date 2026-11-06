@@ -2,7 +2,7 @@
   "forcing": "Copernicus SMOC currents + ERA5 wind, 2025-06-01 to 2025-09-30",
   "site": {
     "_note": "Site settings. Measure the gap with: python -m qandeel.measure_gap --a 'lat, lon' --b 'lat, lon' (see README).",
-    "site_name": "Barakah intake channel mouth",
+    "site_name": "Power plant intake channel mouth",
     "lat": 23.96,
     "lon": 52.23,
     "_latlon_note": "Approximate public location of the plant; the data point used for currents is offset ~5 km offshore.",
@@ -12,7 +12,7 @@
     "gap_width_measured": true,
     "gap_depth_m": 9.5,
     "gap_depth_measured": false,
-    "gap_depth_source": "Public marine-works description of the Barakah intake channel: dredged to -5.5 to -9.5 m MSL; deepest value used (not a survey).",
+    "gap_depth_source": "Public marine-works description of the power plant intake channel: dredged to -5.5 to -9.5 m MSL; deepest value used (not a survey).",
     "gap_tip_a": [
       23.989877777777778,
       52.19934166666666
