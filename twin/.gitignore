@@ -21,3 +21,9 @@ unity/**/*.sln
 # secrets
 .env
 *.key
+
+# internal prompt files and the old web simulator: kept locally, not published
+PROMPT.md
+PROMPT_3D_MODELS.md
+PROMPT_CINEMATIC_FILM.md
+reference/previous_web_simulator.html

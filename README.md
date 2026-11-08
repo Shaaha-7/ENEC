@@ -275,7 +275,7 @@ ERA5 / Open-Meteo wind. Free and public.
 - **Deck:** `deck/Qandeel_Deck.pdf`, 10 slides (16:9). All its numbers come from `qandeel/outputs/results.json`.
 - **Video:** `media/Qandeel_explainer.mp4`, 1 min 42 s: a 3D animation (three.js) driven by the same results,
   with a real dashboard clip and narration from an open text-to-speech model (Kokoro-82M).
-- **Site map:** `media/barakah_site_plan.jpg`, satellite image (© Google) annotated by the team: intake mouth
+- **Site map:** `media/site_plan.jpg`, satellite image (© Google) annotated by the team: intake mouth
   (967 m, measured between the breakwater tips), curtain line, camera, compressor house, boat base, discharge.
 
 ---
