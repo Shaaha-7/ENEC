@@ -94,7 +94,7 @@ The curtain is sized for the 1% base case. At 3%, the worst 5% of hours reach 0.
   full-precision data with a free Copernicus Marine account.
 - The coast is modelled as a straight line through the intake mouth, and the curtain model has no depth: near the bed a bubble curtain draws water
   *toward* it, so deeper or night-time jellyfish could pass underneath. The sea pilot checks this.
-- Swim speeds and depths come from Australian studies of the same species; the species at Barakah and the
+- Swim speeds and depths come from Australian studies of the same species; the species at the plant and the
   weight of 30–45 cm adults (the mass formula was fitted on 2–20 cm animals) need confirming.
 - "Arrived" means within 2 km of the opening; within 500 m the 15 km NNW alert drops from 44% to 31%.
 
@@ -113,7 +113,7 @@ The curtain is sized for the 1% base case. At 3%, the worst 5% of hours reach 0.
 ENEC/
 ├── README.md              ← you are here
 ├── deck/                  the 10-slide proposal deck (PDF)
-├── media/                 the explainer video, the dashboard recording and the annotated Barakah site map
+├── media/                 the explainer video, the dashboard recording and the annotated site map
 ├── requirements.txt       Python packages needed
 ├── docs/DEPLOY.md         how to put the dashboard online
 └── qandeel/               the simulation (Python)
